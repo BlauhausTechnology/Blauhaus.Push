@@ -74,9 +74,10 @@ namespace Blauhaus.Push.Client.Common.Services
             var jsonString = uwpPayload.Replace("%22", "\'");
             var json = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonString);
 
-            var dataProperties = new Dictionary<string, object>();
+            var type = "";
             var title = "";
             var body = "";
+            var dataProperties = new Dictionary<string, object>();
 
             foreach (var child in json)
             {
@@ -88,7 +89,11 @@ namespace Blauhaus.Push.Client.Common.Services
                 {
                     body = child.Value.ToString();
                 }
-                if (int.TryParse(child.Value.ToString(), out var integerValue))
+                else if (child.Key.Equals("Template_Type", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    type = child.Value.ToString();
+                }
+                else if (int.TryParse(child.Value.ToString(), out var integerValue))
                 {
                     dataProperties[child.Key] = integerValue;
                 }
@@ -98,7 +103,7 @@ namespace Blauhaus.Push.Client.Common.Services
                 }
             }
             
-            var notification = new ClientPushNotification(dataProperties, title, body);
+            var notification = new PushNotification(type, dataProperties, title, body);
             
             AnalyticsService.TraceVerbose(this, "Notification processed", notification.ToObjectDictionary());
 

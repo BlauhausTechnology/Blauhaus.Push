@@ -11,9 +11,12 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.I
     public class HandleNotificationTappedAsyncTests : BasePushTest<IosPushNotificationsClientService>
     {
         private const string IosNotification =
-            "{\"exclusive\":\"Win!\",\"message\":\"This is the Message\",\"integer\":\"1\",\"aps\":{\"alert\":{\"title\":\"DefaultTitle\",\"body\":\"DefaultBody\"}}}";
-
-
+            "{\"exclusive\":\"Win!\"," +
+            "\"message\":\"This is the Message\"," +
+            "\"integer\":\"1\"," +
+            "\"Template_Type\":\"My Template\"" +
+            ",\"aps\":{\"alert\":{\"title\":\"DefaultTitle\",\"body\":\"DefaultBody\"}}}";
+        
         [Test]
         public async Task SHOULD_parse_and_publish_Notification()
         {
@@ -23,6 +26,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.I
             //Assert
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Title == "DefaultTitle")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Body == "DefaultBody")));
+            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Type == "My Template")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => 
                 (string) y.DataProperties["message"] == "This is the Message")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => 
