@@ -21,7 +21,7 @@ steps:
 
 - task: VSBuild@1
   inputs:
-    platform: 'x86'
+    platform: '$(buildPlatform)'
     solution: '$(solution)'
     configuration: '$(buildConfiguration)'
     msbuildArgs: '/t:restore;build;pack /p:PackageVersion=$(Build.SourceBranchName) /p:PackageOutputPath=$(build.artifactstagingdirectory)/public  /p:AssemblyFileVersion=$(Build.SourceBranchName)'
