@@ -35,14 +35,8 @@ namespace Blauhaus.Push.Server.Service
             _config = config.Value;
         }
 
-        public async Task<Result<IDeviceRegistration>> RegisterDeviceAsync(IDeviceRegistration deviceRegistration, CancellationToken token)
+        public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, CancellationToken token)
         {
-            //todo if device is already registered, see if and which properties get updated
-            // -- confirmed tags are added and removed
-            // -- confirmed template properties are added and removed
-            // -- confirmed PNS Handle modified
-
-
             if (deviceRegistration.IsNotValid(this, _analyticsService, out var validationError))
             {
                 return Result.Failure<IDeviceRegistration>(validationError);
@@ -123,10 +117,17 @@ namespace Blauhaus.Push.Server.Service
             using (var _ = _analyticsService.StartOperation(this, "Send push notification to user", new Dictionary<string, object>
                 {{nameof(IPushNotification), notification}, {"UserId", userId }}))
             {
+
                 var properties = notification.DataProperties.ToDictionary(notificationDataProperty => 
                     notificationDataProperty.Key, notificationDataProperty => notificationDataProperty.Value.ToString());
 
-                var tags = new List<string>{ $"UserId_{userId}" };
+                properties["Template_Type"] = notification.Type;
+
+                var tags = new List<string>
+                {
+                    notification.Type,
+                    $"UserId_{userId}"
+                };
 
                 if (!string.IsNullOrWhiteSpace(notification.Title))
                 {

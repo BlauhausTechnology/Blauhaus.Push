@@ -63,7 +63,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
             public async Task SHOULD_track_operation()
             {
                 //Act
-                var result = await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockAnalyticsService.VerifyStartOperation("Register device for push notifications");
@@ -77,7 +77,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.PushNotificationServiceHandle = string.Empty;
 
                 //Act
-                var result = await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(PushErrors.InvalidPnsHandle.ToString(), result.Error);
@@ -92,7 +92,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration = null;
 
                 //Act
-                var result = await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(PushErrors.InvalidDeviceRegistration.ToString(), result.Error);
@@ -103,7 +103,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
             public async Task SHOULD_invoke_hub_to_install_with_PushNotificationServiceHandle_as_PushChannel()
             {
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -114,7 +114,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
             public async Task SHOULD_invoke_hub_to_install_with_DeviceIdentifier_as_InstallationId()
             {
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -128,7 +128,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.DeviceIdentifier = null;
 
                 //Act
-                var result = await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -144,7 +144,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.DotNetCore;
 
                 //Act
-                var result = await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(PushErrors.InvalidPlatform.ToString(), result.Error);
@@ -158,7 +158,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Platform = null;
 
                 //Act
-                var result = await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(PushErrors.InvalidPlatform.ToString(), result.Error);
@@ -172,7 +172,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Templates = new List<INotificationTemplate>();
 
                 //Act
-                var result = await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(PushErrors.NoTemplateProvidedOnRegistration.ToString(), result.Error);
@@ -186,7 +186,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Tags = new List<string> {"ThingOne", "ThingTwo"};
 
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -203,7 +203,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.UserId = userId;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -218,7 +218,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.AccountId = accountId;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -235,7 +235,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.UWP;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -249,7 +249,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _visibleTemplateDeviceRegistration.Platform = RuntimePlatform.UWP;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 var expectedTemplate =
@@ -277,7 +277,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                     _visibleTemplateDeviceRegistration.Templates.First().DataProperties.Add(forbiddenString);
                     
                     //Act
-                    var result = await Sut.RegisterDeviceAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
+                    var result = await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
                     
                     //Assert
                     Assert.AreEqual(PushErrors.ReservedString(forbiddenString).ToString(), result.Error);
@@ -299,7 +299,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.iOS;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -313,7 +313,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _visibleTemplateDeviceRegistration.Platform = RuntimePlatform.iOS;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 const string expectedTemplate = 
@@ -336,7 +336,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.Android;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -350,7 +350,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.Android;
 
                 //Act
-                await Sut.RegisterDeviceAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, CancellationToken.None);
 
                 //Assert
                 const string expectedTemplate = 

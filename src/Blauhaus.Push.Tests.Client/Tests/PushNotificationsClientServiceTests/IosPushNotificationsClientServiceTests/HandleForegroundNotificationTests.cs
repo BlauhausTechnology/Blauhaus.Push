@@ -9,7 +9,11 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.I
     public class HandleForegroundNotificationTests : BasePushTest<IosPushNotificationsClientService>
     {
         private const string IosNotification =
-            "{\"exclusive\":\"Win!\",\"message\":\"This is the Message\",\"integer\":\"1\",\"aps\":{\"alert\":{\"title\":\"DefaultTitle\",\"body\":\"DefaultBody\"}}}";
+            "{\"exclusive\":\"Win!\"," +
+            "\"message\":\"This is the Message\"," +
+            "\"integer\":\"1\"," +
+            "\"Template_Type\":\"My Template\"" +
+            ",\"aps\":{\"alert\":{\"title\":\"DefaultTitle\",\"body\":\"DefaultBody\"}}}";
 
 
         [Test]
@@ -28,6 +32,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.I
             Assert.AreEqual(1, result.DataProperties["integer"]);
             Assert.AreEqual("DefaultTitle", result.Title);
             Assert.AreEqual("DefaultBody", result.Body);
+            Assert.AreEqual("My Template", result.Type);
         }
 
 

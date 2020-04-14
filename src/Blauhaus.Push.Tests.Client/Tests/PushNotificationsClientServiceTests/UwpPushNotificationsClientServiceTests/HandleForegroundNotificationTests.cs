@@ -20,6 +20,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.U
                 "Body:%22DefaultBody%22, " +
                 "message:%22This is the Message%22, " +
                 "exclusive:%22Win!%22, " +
+                "Template_Type:%22My Template%22, " +
                 "integer:%221%22" +
                 "}\">\r\n  <visual>\r\n    <binding template=\"ToastText01\">\r\n      <text id=\"1\">DefaultTitle</text>\r\n      <text id=\"2\">DefaultBody</text>\r\n    </binding>\r\n  </visual>\r\n</toast>";
 
@@ -34,24 +35,13 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.U
             var result = await PushNotificationAwaiter.Task;
 
             //Assert
+            Assert.AreEqual("DefaultTitle", result.Title);
+            Assert.AreEqual("DefaultBody", result.Body);
+            Assert.AreEqual("My Template", result.Type);
             Assert.AreEqual("This is the Message", result.DataProperties["message"]);
             Assert.AreEqual("Win!", result.DataProperties["exclusive"]);
             Assert.AreEqual(1, result.DataProperties["integer"]);
-        }
-
-        [Test]
-        public async Task SHOULD_parse_standard_Notification_properties_and_publish_Notification()
-        {
-            //Arrange
-            Sut.ObserveForegroundNotifications().Subscribe(notification => { PushNotificationAwaiter.SetResult(notification); });
-
-            //Act
-            Sut.HandleForegroundNotification(ForegroundNotificationWithProperties);
-            var result = await PushNotificationAwaiter.Task;
-
-            //Assert
-            Assert.AreEqual("DefaultTitle", result.Title);
-            Assert.AreEqual("DefaultBody", result.Body);
+            Assert.AreEqual(3, result.DataProperties.Count);
         }
 
         [Test]

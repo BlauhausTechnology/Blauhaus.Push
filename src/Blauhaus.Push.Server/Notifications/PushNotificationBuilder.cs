@@ -22,7 +22,7 @@ namespace Blauhaus.Push.Server.Notifications
 
         public IPushNotification Create()
         {
-            return new PushNotification(_dataProperties, _title, _body);
+            return new PushNotification(_template.Name, _dataProperties, _title, _body);
         }
 
         public PushNotificationBuilder WithDataProperty(string name, object value)
@@ -46,18 +46,6 @@ namespace Blauhaus.Push.Server.Notifications
 
 
 
-        private class PushNotification : IPushNotification
-        {
-            public PushNotification(Dictionary<string, object> dataProperties, string title, string body)
-            {
-                DataProperties = dataProperties;
-                Title = title;
-                Body = body;
-            }
 
-            public Dictionary<string, object> DataProperties { get; }
-            public string Title { get; }
-            public string Body { get; }
-        }
     }
 }

@@ -74,6 +74,7 @@ namespace Blauhaus.Push.Client.Common.Services
                 {"Raw Notification", payload }
             });
 
+            var type = "";
             var title = "";
             var body = "";
             var data = new Dictionary<string, object>();
@@ -95,6 +96,11 @@ namespace Blauhaus.Push.Client.Common.Services
                     body = notificationProperty.Value.ToString();
                 }
 
+                else if (string.Equals(notificationProperty.Key, "Template_Type", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    type = notificationProperty.Value.ToString();
+                }
+
                 else
                 {
                     if (int.TryParse(notificationProperty.Value.ToString(), out var integerValue))
@@ -108,7 +114,7 @@ namespace Blauhaus.Push.Client.Common.Services
                 }
             }
 
-            var pushNotification = new ClientPushNotification(data, title, body); 
+            var pushNotification = new PushNotification(type, data, title, body); 
             AnalyticsService.TraceVerbose(this, "Notification processed", pushNotification.ToObjectDictionary());
 
             return pushNotification;

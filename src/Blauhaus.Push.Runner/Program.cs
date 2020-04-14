@@ -98,7 +98,7 @@ namespace Blauhaus.Push.Runner
                     "integer"
                 });
 
-                await _pushNotificationsService.RegisterDeviceAsync(new DeviceRegistration
+                await _pushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
                 {
                     AccountId = "myAccountId",
                     UserId = "myUserId",
@@ -113,7 +113,7 @@ namespace Blauhaus.Push.Runner
                 }, CancellationToken.None);
 
                 //var installation = await _pushNotificationsService.LoadDeviceRegistrationAsync("myAndroidDeviceId", CancellationToken.None);
-                //var allRegistrations = await GetAllRegistrationsAsync(pnsHandle: PnsHandle);
+                var allRegistrations = await GetAllRegistrationsAsync(pnsHandle: PnsHandle);
 
                 // this will send out all templates. Missing fields will be there but empty
                 await _pushNotificationsService.SendNotificationToUserAsync(new PushNotificationBuilder(visibleTemplate)
@@ -180,7 +180,7 @@ namespace Blauhaus.Push.Runner
 
         private static async Task CreateInstallationAsync(string pnsHandle)
         {
-            var result = await _pushNotificationsService.RegisterDeviceAsync(new DeviceRegistration
+            var result = await _pushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
             {
                 Platform = RuntimePlatform.Android,
                 AccountId = "myAccountId",

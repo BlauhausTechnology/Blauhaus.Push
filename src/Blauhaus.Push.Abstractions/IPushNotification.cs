@@ -6,6 +6,7 @@ namespace Blauhaus.Push.Abstractions
     {
         Dictionary<string, object> DataProperties { get; }
 
+        string Type { get; }
         string Title { get; }
         string Body { get; }
     }

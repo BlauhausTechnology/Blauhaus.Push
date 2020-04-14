@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Server.Notifications;
 using Blauhaus.Push.Server.Service;
 using Blauhaus.Push.Server.Templates;
 using Blauhaus.Push.Tests.Server.Tests._Base;
-using Microsoft.Azure.NotificationHubs;
 using Moq;
 using NUnit.Framework;
 
@@ -59,9 +56,12 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.SendNotificationAsync(
                 It.Is<Dictionary<string, string>>(y => 
+                    y["Template_Type"] == "MyTemplate" &&
                     y["PropertyOne"] == "ValueOne" &&
                     y["PropertyTwo"] == "ValueTwo"), 
-                It.Is<List<string>>(z => z.Contains("UserId_" + _userId)),
+                It.Is<List<string>>(z => 
+                    z.Contains("UserId_" + _userId) && 
+                    z.Contains("MyTemplate")),      
                 It.IsAny<CancellationToken>()));
         }
 
