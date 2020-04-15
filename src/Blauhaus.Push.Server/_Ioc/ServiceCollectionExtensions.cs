@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Blauhaus.Analytics.Console._Ioc;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Server;
+using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Server.Service;
 using Microsoft.Extensions.DependencyInjection;

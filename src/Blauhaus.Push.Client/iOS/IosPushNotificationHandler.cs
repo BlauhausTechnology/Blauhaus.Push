@@ -15,23 +15,24 @@ using Blauhaus.Push.Client.Common;
 using Xamarin.Forms.Platform.iOS;
 using Blauhaus.Push.Client.Common.Services;
 using Newtonsoft.Json;
+using Blauhaus.Push.Client.Common._Config;
 
 namespace Blauhaus.Push.Client.iOS
 {
     public class IosPushNotificationHandler
     {
         private readonly IAnalyticsService _analyticsService;
-        private readonly PushNotificationsClientConfig _config;
+        private readonly IPushNotificationsClientConfig _config;
         private readonly IosPushNotificationsClientService _pushNotificationsService;
 
         public IosPushNotificationHandler(
             IAnalyticsService analyticsService, 
             IPushNotificationsClientService pushNotificationsService,
-            IOptions<PushNotificationsClientConfig> options)
+            IPushNotificationsClientConfig config)
         {
             _pushNotificationsService = (IosPushNotificationsClientService) pushNotificationsService;
             _analyticsService = analyticsService;
-            _config = options.Value;
+            _config = config;
         }
 
 
