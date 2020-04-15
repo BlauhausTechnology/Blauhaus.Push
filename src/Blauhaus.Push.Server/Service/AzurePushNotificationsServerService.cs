@@ -16,7 +16,6 @@ using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Options;
-using PushNotificationsServerConfig = Blauhaus.Push.Server._Config.PushNotificationsServerConfig;
 
 namespace Blauhaus.Push.Server.Service
 {
