@@ -3,9 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Server._Config;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Options;
-using PushNotificationsServerConfig = Blauhaus.Push.Server._Ioc.PushNotificationsServerConfig;
+using PushNotificationsServerConfig = Blauhaus.Push.Server._Config.PushNotificationsServerConfig;
 
 namespace Blauhaus.Push.Server.HubClientProxy
 {
@@ -13,12 +14,12 @@ namespace Blauhaus.Push.Server.HubClientProxy
     {
         private readonly NotificationHubClient _hubClient;
 
-        public NotificationHubClientProxy(IOptions<PushNotificationsServerConfig> config, IBuildConfig buildConfig)
+        public NotificationHubClientProxy(IPushNotificationsServerConfig config, IBuildConfig buildConfig)
         {
             var enableTestSend = (BuildConfig) buildConfig == BuildConfig.Debug;
 
             _hubClient = NotificationHubClient.CreateClientFromConnectionString(
-                config.Value.ConnectionString, config.Value.NotificationHubName, enableTestSend);
+                config.ConnectionString, config.NotificationHubName, enableTestSend);
         }
 
 

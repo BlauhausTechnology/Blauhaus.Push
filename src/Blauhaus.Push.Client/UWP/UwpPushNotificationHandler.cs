@@ -11,6 +11,7 @@ using Windows.UI.Core;
 using System.Diagnostics;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Abstractions.Client;
+using Blauhaus.Push.Client.Common._Config;
 
 namespace Blauhaus.Push.Client.UWP
 {
@@ -18,6 +19,7 @@ namespace Blauhaus.Push.Client.UWP
     {
         
         private readonly IAnalyticsService _analyticsService;
+        private readonly IPushNotificationsClientConfig _config;
         private readonly UwpPushNotificationsClientService _pushNotificationsService;
         private bool _appIsActive;
         private static bool _appIsInitialized;
@@ -25,10 +27,12 @@ namespace Blauhaus.Push.Client.UWP
 
         public UwpPushNotificationHandler(
             IAnalyticsService analyticsService, 
-            IPushNotificationsClientService pushNotificationsService)
+            IPushNotificationsClientService pushNotificationsService,
+            IPushNotificationsClientConfig config)
         {
             _pushNotificationsService = (UwpPushNotificationsClientService)pushNotificationsService;
             _analyticsService = analyticsService;
+            _config = config;
         }
 
         public async Task InitializeAsync()

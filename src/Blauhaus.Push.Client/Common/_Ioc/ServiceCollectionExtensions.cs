@@ -1,6 +1,7 @@
 ﻿using System;
 using Blauhaus.DeviceServices.Common._Ioc;
 using Blauhaus.Push.Abstractions.Client;
+using Blauhaus.Push.Client.Common._Config;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -8,38 +9,30 @@ namespace Blauhaus.Push.Client.Common._Ioc
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddPushNotificationsClient(this IServiceCollection services, Action<PushNotificationsClientConfig> options)
+        public static IServiceCollection AddPushNotificationsClient<TConfig, TPushNotificationHandler>(this IServiceCollection services)
+            where TPushNotificationHandler : class, IPushNotificationTapHandler 
+            where TConfig : class, IPushNotificationsClientConfig
         {
-            return services.AddPushNotificationsClient<EmptyPushNotificationTapHandler>(options);
-        } 
-
-        public static IServiceCollection AddPushNotificationsClient<TPushNotificationHandler>(this IServiceCollection services, Action<PushNotificationsClientConfig> options) where TPushNotificationHandler : class, IPushNotificationTapHandler
-        {
-            services.Configure(options);
-            services.AddDeviceServices();
-
-            services.TryAddSingleton<TPushNotificationHandler>();
-            services.AddSingleton<IPushNotificationTapHandler, TPushNotificationHandler>();
             
-            return services;
+            return services.AddClient<TConfig, TPushNotificationHandler>();
         } 
-        public static IServiceCollection AddPushNotificationTapHandler<TPushNotificationHandler>(this IServiceCollection services) where TPushNotificationHandler : class, IPushNotificationTapHandler
+
+        public static IServiceCollection AddPushNotificationsClient<TConfig>(this IServiceCollection services) 
+            where TConfig : class, IPushNotificationsClientConfig
         {
-            services.AddSingleton<IPushNotificationTapHandler, TPushNotificationHandler>();
-            return services;
-        } 
+            return services.AddClient<TConfig, EmptyPushNotificationTapHandler>();
+        }
 
-        public static IServiceCollection AddPushNotificationsClient(this IServiceCollection services, PushNotificationsClientConfig config)
+        private static IServiceCollection AddClient<TConfig, THandler>(this IServiceCollection services) 
+            where TConfig : class, IPushNotificationsClientConfig 
+            where THandler : class,  IPushNotificationTapHandler
         {
-            Action<PushNotificationsClientConfig> options = clientConfig =>
-            {
-                clientConfig.ConnectionString = config.ConnectionString;
-                clientConfig.NotificationHubName = config.NotificationHubName;
-            };
-
-            services.Configure(options);
-
+            
+            services.AddDeviceServices();
+            services.TryAddSingleton<THandler>();
+            services.AddSingleton<IPushNotificationTapHandler, THandler>();
+            services.AddTransient<IPushNotificationsClientConfig, TConfig>();
             return services;
-        } 
+        }
     }
 }
