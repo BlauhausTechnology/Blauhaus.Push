@@ -9,6 +9,7 @@ using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Server;
+using Blauhaus.Push.Runner.Config;
 using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.Notifications;
 using Blauhaus.Push.Server.Service;
@@ -80,11 +81,8 @@ namespace Blauhaus.Push.Runner
 
             var services = new ServiceCollection();
             services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
-            services.AddPushNotificationsServer(x =>
-            {
-                x.ConnectionString = ConnectionString;
-                x.NotificationHubName = NotificationHubPath;
-            }, new ConsoleTraceListener());
+
+            services.AddPushNotificationsServer<DevAdmin>(new ConsoleTraceListener());
 
             var serviceProvider = services.BuildServiceProvider();
             _pushNotificationsService = serviceProvider.GetService<IPushNotificationsServerService>();

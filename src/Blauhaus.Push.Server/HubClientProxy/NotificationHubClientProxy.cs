@@ -19,7 +19,7 @@ namespace Blauhaus.Push.Server.HubClientProxy
             var enableTestSend = (BuildConfig) buildConfig == BuildConfig.Debug;
 
             _hubClient = NotificationHubClient.CreateClientFromConnectionString(
-                config.ConnectionString, config.NotificationHubName, enableTestSend);
+                config.NotificationHubConnectionString, config.NotificationHubName, enableTestSend);
         }
 
 

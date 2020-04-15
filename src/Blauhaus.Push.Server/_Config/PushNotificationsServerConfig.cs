@@ -5,10 +5,10 @@
         public PushNotificationsServerConfig(string notificationHubName, string connectionString)
         {
             NotificationHubName = notificationHubName;
-            ConnectionString = connectionString;
+            NotificationHubConnectionString = connectionString;
         }
 
         public string NotificationHubName { get; }
-        public string ConnectionString { get; }
+        public string NotificationHubConnectionString { get; }
     }
 }

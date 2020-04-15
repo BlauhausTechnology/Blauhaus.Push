@@ -3,6 +3,6 @@
     public interface IPushNotificationsServerConfig
     {
         string NotificationHubName { get; }
-        string ConnectionString { get; }
+        string NotificationHubConnectionString { get; }
     }
 }
