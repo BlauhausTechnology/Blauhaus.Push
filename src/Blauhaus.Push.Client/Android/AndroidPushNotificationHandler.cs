@@ -17,6 +17,7 @@ using Firebase.Messaging;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Abstractions.Client;
 using Newtonsoft.Json;
+using Blauhaus.Push.Client.Common._Config;
 
 namespace Blauhaus.Push.Client.Android
 {
@@ -24,17 +25,17 @@ namespace Blauhaus.Push.Client.Android
     {
 
         private readonly IAnalyticsService _analyticsService;
-        private readonly PushNotificationsClientConfig _config;
+        private readonly IPushNotificationsClientConfig _config;
         private readonly AndroidPushNotificationsClientService _pushNotificationsService;
 
         public AndroidPushNotificationHandler(
             IAnalyticsService analyticsService, 
             IPushNotificationsClientService pushNotificationsService,
-            IOptions<PushNotificationsClientConfig> options)
+            IPushNotificationsClientConfig config)
         {
             _pushNotificationsService = (AndroidPushNotificationsClientService)pushNotificationsService;
             _analyticsService = analyticsService;
-            _config = options.Value;
+            _config = config;
         }
 
         

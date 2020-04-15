@@ -1,6 +1,7 @@
 ﻿using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Analytics.TestHelpers;
 using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Tests.Server.MockBuilders;
@@ -25,7 +26,7 @@ namespace Blauhaus.Push.Tests.Server.Tests._Base
             Services.AddSingleton(x => MockAnalyticsService.Object);
         }
 
-        protected MockBuilder<IOptions<PushNotificationsServerConfig>> MockPushNotificationsServerConfig => Mocks.AddMock<IOptions<PushNotificationsServerConfig>>().Invoke();
+        protected MockBuilder<IPushNotificationsServerConfig> MockPushNotificationsServerConfig => Mocks.AddMock<IPushNotificationsServerConfig>().Invoke();
         protected NotificationHubClientProxyMockBuilder MockNotificationHubClientProxy => Mocks.AddMock<NotificationHubClientProxyMockBuilder, INotificationHubClientProxy>().Invoke();
         protected AnalyticsServiceMockBuilder MockAnalyticsService => Mocks.AddMock<AnalyticsServiceMockBuilder, IAnalyticsService>().Invoke();
     }

@@ -10,12 +10,13 @@ using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Server;
+using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.Options;
-using PushNotificationsServerConfig = Blauhaus.Push.Server._Ioc.PushNotificationsServerConfig;
+using PushNotificationsServerConfig = Blauhaus.Push.Server._Config.PushNotificationsServerConfig;
 
 namespace Blauhaus.Push.Server.Service
 {
@@ -23,16 +24,16 @@ namespace Blauhaus.Push.Server.Service
     {
         private readonly IAnalyticsService _analyticsService;
         private readonly INotificationHubClientProxy _hubClientProxy;
-        private readonly PushNotificationsServerConfig _config;
+        private readonly IPushNotificationsServerConfig _config;
 
         public AzurePushNotificationsServerService(
             IAnalyticsService analyticsService,
             INotificationHubClientProxy hubClientProxy,
-            IOptions<PushNotificationsServerConfig> config)
+            IPushNotificationsServerConfig config)
         {
             _analyticsService = analyticsService;
             _hubClientProxy = hubClientProxy;
-            _config = config.Value;
+            _config = config;
         }
 
         public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, CancellationToken token)
