@@ -10,6 +10,7 @@ using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
+using Blauhaus.Push.Runner.Config.Admin;
 using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.Notifications;
 using Blauhaus.Push.Server.Service;
@@ -22,17 +23,26 @@ namespace Blauhaus.Push.Runner
 {
     internal class Program
     {
-        private static IPushNotificationsServerService _pushNotificationsService;
+
+
+        private static string NotificationHubPath;
+        private static string PnsHandle;
+        private static IRuntimePlatform Platform;
+        private static string DeviceId;
+        private static string ConnectionString;
+
+        private static IPushNotificationsServerService PushNotificationsService;
+
 
         #region dev admin ios sandbox
 
-        private const string ConnectionString =
-            "Endpoint=sb://minegamedevadminiossandbox.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=kDIla2IiV9ESJWsmoyWbse4i9dGq2HlVA2dIaNH1m/k=;" +
-            "EntityPath=minegamedevadminiossandbox";
-        private const string NotificationHubPath = "minegamedevadminiossandbox";
-        private const string PnsHandle = "458060045B18CDBD4C20ACA5561D9C7DCBF726D69A135A1CCB86DDEA087B6B53";
-        private static readonly IRuntimePlatform Platform = RuntimePlatform.iOS;
-        private const string DeviceId = "myIosDeviceId";
+        //private const string ConnectionString =
+        //    "Endpoint=sb://minegamedevadminiossandbox.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=kDIla2IiV9ESJWsmoyWbse4i9dGq2HlVA2dIaNH1m/k=;" +
+        //    "EntityPath=minegamedevadminiossandbox";
+        //private const string NotificationHubPath = "minegamedevadminiossandbox";
+        //private const string PnsHandle = "458060045B18CDBD4C20ACA5561D9C7DCBF726D69A135A1CCB86DDEA087B6B53";
+        //private static readonly IRuntimePlatform Platform = RuntimePlatform.iOS;
+        //private const string DeviceId = "myIosDeviceId";
 
         #endregion
 
@@ -76,16 +86,30 @@ namespace Blauhaus.Push.Runner
 
         #endregion
 
+
+        private static IPushNotificationsServerService Setup<TConfig>() where TConfig : PushRunnerConfig, new()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
+
+            var setup = new TConfig();
+            services.AddPushNotificationsServer<TConfig>(new ConsoleTraceListener());
+            NotificationHubPath = setup.NotificationHubName;
+            DeviceId = setup.DeviceId;
+            PnsHandle = setup.PnsHandle;
+            ConnectionString = setup.NotificationHubConnectionString;
+            Platform = setup.Platform;
+
+            return services.BuildServiceProvider().GetRequiredService<IPushNotificationsServerService>();
+        }
+
+
         private static async Task Main(string[] args)
         {
 
-            var services = new ServiceCollection();
-            services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
+            PushNotificationsService = Setup<DevAdminAndroid>();
 
-            services.AddPushNotificationsServer<DevAdmin>(new ConsoleTraceListener());
-
-            var serviceProvider = services.BuildServiceProvider();
-            _pushNotificationsService = serviceProvider.GetService<IPushNotificationsServerService>();
 
             try
             {
@@ -96,7 +120,7 @@ namespace Blauhaus.Push.Runner
                     "integer"
                 });
 
-                await _pushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+                await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
                 {
                     AccountId = "myAccountId",
                     UserId = "myUserId",
@@ -113,8 +137,8 @@ namespace Blauhaus.Push.Runner
                 //var installation = await _pushNotificationsService.LoadDeviceRegistrationAsync("myAndroidDeviceId", CancellationToken.None);
                 var allRegistrations = await GetAllRegistrationsAsync(pnsHandle: PnsHandle);
 
-                // this will send out all templates. Missing fields will be there but empty
-                await _pushNotificationsService.SendNotificationToUserAsync(new PushNotificationBuilder(visibleTemplate)
+
+                await PushNotificationsService.SendNotificationToUserAsync(new PushNotificationBuilder(visibleTemplate)
                     .WithDataProperty("message", "This is the Message")
                     .WithDataProperty("exclusive", "Win!")
                     .WithDataProperty("integer", "1")
@@ -178,7 +202,7 @@ namespace Blauhaus.Push.Runner
 
         private static async Task CreateInstallationAsync(string pnsHandle)
         {
-            var result = await _pushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+            var result = await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
             {
                 Platform = RuntimePlatform.Android,
                 AccountId = "myAccountId",
