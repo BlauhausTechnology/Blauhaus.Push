@@ -10,7 +10,7 @@ namespace Blauhaus.Push.Server.Extensions
 {
     public static class MessageNotificationTemplateExtensions
     {
-        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this INotificationTemplate template, IRuntimePlatform platform)
+        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this IPushNotificationTemplate template, IRuntimePlatform platform)
         {
             if (platform.Value == RuntimePlatform.Android.Value)
                 return new KeyValuePair<string, InstallationTemplate>(template.NotificationName, ToAndroid(template));
@@ -24,7 +24,7 @@ namespace Blauhaus.Push.Server.Extensions
             throw new ArgumentException($"{platform.Value} is not supported");
         }
 
-        private static InstallationTemplate ToUwp(INotificationTemplate template)
+        private static InstallationTemplate ToUwp(IPushNotificationTemplate template)
         {
             var launchProperties = new StringBuilder();
 
@@ -69,7 +69,7 @@ namespace Blauhaus.Push.Server.Extensions
             };
         }
 
-        private static InstallationTemplate ToIos(INotificationTemplate template)
+        private static InstallationTemplate ToIos(IPushNotificationTemplate template)
         {
             var body = new StringBuilder();
 
@@ -108,7 +108,7 @@ namespace Blauhaus.Push.Server.Extensions
             return new InstallationTemplate{ Body = body.ToString()};
         }
 
-        private static InstallationTemplate ToAndroid(INotificationTemplate template)
+        private static InstallationTemplate ToAndroid(IPushNotificationTemplate template)
         {
             var body = new StringBuilder();
 

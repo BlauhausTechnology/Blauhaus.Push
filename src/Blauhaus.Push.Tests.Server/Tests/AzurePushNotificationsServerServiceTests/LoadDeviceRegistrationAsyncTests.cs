@@ -14,6 +14,7 @@ using NUnit.Framework;
 
 namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTests
 {
+    [TestFixture]
     public class LoadDeviceRegistrationAsyncTests : BasePushNotificationsServerTest<AzurePushNotificationsServerService>
     {
         private Installation _installation;
@@ -54,8 +55,8 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 await Sut.LoadDeviceRegistrationAsync(_installation.InstallationId, CancellationToken.None);
 
                 //Assert
-                MockAnalyticsService.VerifyStartOperation("Load push notification registration for device");
-                MockAnalyticsService.VerifyStartOperationProperty("DeviceIdentifier", _installation.InstallationId);
+                MockAnalyticsService.VerifyContinueOperation("Load push notification registration for device");
+                MockAnalyticsService.VerifyContinueOperationProperty("DeviceIdentifier", _installation.InstallationId);
             }
 
             [Test]

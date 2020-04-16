@@ -3,10 +3,10 @@ using Blauhaus.Push.Abstractions.Server;
 
 namespace Blauhaus.Push.Server.PushNotificationTemplates
 {
-    public class PushNotificationTemplate : INotificationTemplate
+    public class PushPushNotificationTemplate : IPushNotificationTemplate
     {
 
-        public PushNotificationTemplate(string notificationName, string defaultTitle, string defaultBody, List<string> properties = null) 
+        public PushPushNotificationTemplate(string notificationName, string defaultTitle, string defaultBody, List<string> properties = null) 
         {
             NotificationName = notificationName;
             DefaultTitle = defaultTitle;

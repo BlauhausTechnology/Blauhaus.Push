@@ -13,7 +13,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 {
     public class SendNotificationToUserAsyncTests : BasePushNotificationsServerTest<AzurePushNotificationsServerService>
     {
-        private PushNotificationTemplate _notificationTemplate;
+        private PushPushNotificationTemplate _pushNotificationTemplate;
         private string _userId;
         private IPushNotification _notification;
 
@@ -22,12 +22,12 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
         {
             base.SetUp();
             _userId = Guid.NewGuid().ToString();
-            _notificationTemplate = new PushNotificationTemplate("MyTemplate", "My Title", "My Body", new List<string>
+            _pushNotificationTemplate = new PushPushNotificationTemplate("MyTemplate", "My Title", "My Body", new List<string>
             {
                 "PropertyOne",
                 "PropertyTwo"
             });
-            _notification = new PushNotificationBuilder(_notificationTemplate)
+            _notification = new PushNotificationBuilder(_pushNotificationTemplate)
                 .WithDataProperty("PropertyOne", "ValueOne")
                 .WithDataProperty("PropertyTwo", "ValueTwo")
                 .Create();
@@ -40,9 +40,9 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
             await Sut.SendNotificationToUserAsync(_notification, _userId, CancellationToken.None);
 
             //Assert
-            MockAnalyticsService.VerifyStartOperation("Send push notification to user");
-            MockAnalyticsService.VerifyStartOperationProperty(nameof(IPushNotification), _notification);
-            MockAnalyticsService.VerifyStartOperationProperty("UserId", _userId);
+            MockAnalyticsService.VerifyContinueOperation("Send push notification to user");
+            MockAnalyticsService.VerifyContinueOperationProperty(nameof(IPushNotification), _notification);
+            MockAnalyticsService.VerifyContinueOperationProperty("UserId", _userId);
         }
 
 

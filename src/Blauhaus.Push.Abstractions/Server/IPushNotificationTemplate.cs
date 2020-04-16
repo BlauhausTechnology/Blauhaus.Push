@@ -2,7 +2,7 @@
 
 namespace Blauhaus.Push.Abstractions.Server
 {
-    public interface INotificationTemplate
+    public interface IPushNotificationTemplate
     {
 
         string NotificationName { get; }

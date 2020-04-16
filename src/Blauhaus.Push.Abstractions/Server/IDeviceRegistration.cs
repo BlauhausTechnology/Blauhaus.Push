@@ -11,6 +11,6 @@ namespace Blauhaus.Push.Abstractions.Server
         string? UserId { get; set; }
         string? AccountId { get; set; }
         List<string> Tags { get; set; }
-        List<INotificationTemplate> Templates { get; set; }
+        List<IPushNotificationTemplate> Templates { get; set; }
     }
 }

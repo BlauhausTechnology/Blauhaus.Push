@@ -8,12 +8,12 @@ namespace Blauhaus.Push.Tests.Server.Tests
     public class PushNotificationBuilderTests
     {
 
-        private PushNotificationTemplate _visibleTemplate;
+        private PushPushNotificationTemplate _visibleTemplate;
 
         [SetUp]
         public void Setup()
         {
-            _visibleTemplate = new PushNotificationTemplate("Visible Template", "DefaultTitle", "DefaultBody", new List<string>
+            _visibleTemplate = new PushPushNotificationTemplate("Visible Template", "DefaultTitle", "DefaultBody", new List<string>
             {
                 "PropertyOne",
                 "PropertyTwo"

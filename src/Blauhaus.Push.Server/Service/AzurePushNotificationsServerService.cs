@@ -39,7 +39,7 @@ namespace Blauhaus.Push.Server.Service
                 return Result.Failure<IDeviceRegistration>(validationError);
             }
 
-            using (var _ = _analyticsService.StartOperation(this, "Register device for push notifications", deviceRegistration.ToObjectDictionary()))
+            using (var _ = _analyticsService.ContinueOperation(this, "Register device for push notifications", deviceRegistration.ToObjectDictionary()))
             {
                 var installation = new Installation
                 {
@@ -80,7 +80,7 @@ namespace Blauhaus.Push.Server.Service
 
         public async Task<Result<IDeviceRegistration>> LoadDeviceRegistrationAsync(string deviceIdentifier, CancellationToken token)
         {
-            using (var _ = _analyticsService.StartOperation(this, "Load push notification registration for device", new Dictionary<string, object>{{"DeviceIdentifier", deviceIdentifier}}))
+            using (var _ = _analyticsService.ContinueOperation(this, "Load push notification registration for device", new Dictionary<string, object>{{"DeviceIdentifier", deviceIdentifier}}))
             {
                 var installationExists = await _hubClientProxy.InstallationExistsAsync(deviceIdentifier, token);
 
@@ -111,7 +111,7 @@ namespace Blauhaus.Push.Server.Service
         public async Task SendNotificationToUserAsync(IPushNotification notification, string userId, CancellationToken token)
         {
 
-            using (var _ = _analyticsService.StartOperation(this, "Send push notification to user", new Dictionary<string, object>
+            using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to user", new Dictionary<string, object>
                 {{nameof(IPushNotification), notification}, {"UserId", userId }}))
             {
 
