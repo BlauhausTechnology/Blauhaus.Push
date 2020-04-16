@@ -33,7 +33,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 Platform = RuntimePlatform.iOS,
                 Templates = new List<IPushNotificationTemplate>
                 {
-                    new PushPushNotificationTemplate("DummyTemplate", "Dummy Title", "Dummy Body", new List<string>
+                    new PushNotificationTemplate("DummyTemplate", "Dummy Title", "Dummy Body", new List<string>
                     {
                         "DummyPropertyOne",
                         "DummyPropertyTwo"
@@ -48,7 +48,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 Platform = RuntimePlatform.Android,
                 Templates = new List<IPushNotificationTemplate>
                 {
-                    new PushPushNotificationTemplate("VisibleTemplate", "Title", "Body", new List<string>
+                    new PushNotificationTemplate("VisibleTemplate", "Title", "Body", new List<string>
                     {
                         "VisibleTemplateProperty",
                         "SecondVisibleTemplateProperty"

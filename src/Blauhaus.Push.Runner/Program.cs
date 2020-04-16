@@ -109,7 +109,7 @@ namespace Blauhaus.Push.Runner
 
             try
             {
-                var visibleTemplate = new PushPushNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
+                var visibleTemplate = new PushNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
                 {
                     "message",
                     "exclusive",
@@ -208,7 +208,7 @@ namespace Blauhaus.Push.Runner
                 Tags = new List<string>{"RandomTaggage"},
                 Templates = new List<IPushNotificationTemplate>
                 {
-                    new PushPushNotificationTemplate("default", "Test", "Test", new List<string>
+                    new PushNotificationTemplate("default", "Test", "Test", new List<string>
                     {
                         "message"
                     })

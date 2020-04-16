@@ -7,12 +7,12 @@ namespace Blauhaus.Push.Server.PushNotificationTemplates
 
     public class PushNotificationBuilder 
     {
-        private readonly PushPushNotificationTemplate _template;
+        private readonly PushNotificationTemplate _template;
         private readonly Dictionary<string, object> _dataProperties = new Dictionary<string, object>();
         private string _title;
         private string _body;
 
-        public PushNotificationBuilder(PushPushNotificationTemplate template)
+        public PushNotificationBuilder(PushNotificationTemplate template)
         {
             _template = template;
             _title = template.DefaultTitle;

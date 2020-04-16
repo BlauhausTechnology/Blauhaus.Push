@@ -13,7 +13,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 {
     public class SendNotificationToUserAsyncTests : BasePushNotificationsServerTest<AzurePushNotificationsServerService>
     {
-        private PushPushNotificationTemplate _pushNotificationTemplate;
+        private PushNotificationTemplate _pushNotificationTemplate;
         private string _userId;
         private IPushNotification _notification;
 
@@ -22,7 +22,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
         {
             base.SetUp();
             _userId = Guid.NewGuid().ToString();
-            _pushNotificationTemplate = new PushPushNotificationTemplate("MyTemplate", "My Title", "My Body", new List<string>
+            _pushNotificationTemplate = new PushNotificationTemplate("MyTemplate", "My Title", "My Body", new List<string>
             {
                 "PropertyOne",
                 "PropertyTwo"

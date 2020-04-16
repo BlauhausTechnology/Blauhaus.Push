@@ -84,7 +84,7 @@ namespace Blauhaus.Push.Server.Extensions
             }
             
             //todo extract default title and body
-            return new PushPushNotificationTemplate(templateName, "", "", templateProperties);
+            return new PushNotificationTemplate(templateName, "", "", templateProperties);
         }
 
         private static IPushNotificationTemplate ExtractUwpPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
@@ -110,7 +110,7 @@ namespace Blauhaus.Push.Server.Extensions
                 }
 
                 //todo extract default title and body
-                return new PushPushNotificationTemplate(templateName, "", "", templateProperties);
+                return new PushNotificationTemplate(templateName, "", "", templateProperties);
 
             }
 
@@ -136,7 +136,7 @@ namespace Blauhaus.Push.Server.Extensions
             }
             
             //todo extract default title and body
-            return new PushPushNotificationTemplate(templateName, "", "", templateProperties);
+            return new PushNotificationTemplate(templateName, "", "", templateProperties);
         }
     }
 }
