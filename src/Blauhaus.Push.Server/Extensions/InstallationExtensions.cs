@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates._Base;
+using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.PushNotificationTemplates;
 using Microsoft.Azure.NotificationHubs;
 using Newtonsoft.Json.Linq;
@@ -84,7 +84,7 @@ namespace Blauhaus.Push.Server.Extensions
             }
             
             //todo extract default title and body
-            return new MessageNotificationTemplate(templateName, "", "", templateProperties);
+            return new PushNotificationTemplate(templateName, "", "", templateProperties);
         }
 
         private static INotificationTemplate ExtractUwpPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
@@ -110,7 +110,7 @@ namespace Blauhaus.Push.Server.Extensions
                 }
 
                 //todo extract default title and body
-                return new MessageNotificationTemplate(templateName, "", "", templateProperties);
+                return new PushNotificationTemplate(templateName, "", "", templateProperties);
 
             }
 
@@ -136,7 +136,7 @@ namespace Blauhaus.Push.Server.Extensions
             }
             
             //todo extract default title and body
-            return new MessageNotificationTemplate(templateName, "", "", templateProperties);
+            return new PushNotificationTemplate(templateName, "", "", templateProperties);
         }
     }
 }

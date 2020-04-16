@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates;
+using Blauhaus.Push.Abstractions.Server;
 using Microsoft.Azure.NotificationHubs;
 
 namespace Blauhaus.Push.Server.Extensions
 {
     public static class MessageNotificationTemplateExtensions
     {
-        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this IMessageNotificationTemplate template, IRuntimePlatform platform)
+        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this INotificationTemplate template, IRuntimePlatform platform)
         {
             if (platform.Value == RuntimePlatform.Android.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.NotificationType, ToAndroid(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationName, ToAndroid(template));
             
             if (platform.Value == RuntimePlatform.iOS.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.NotificationType, ToIos(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationName, ToIos(template));
             
             if (platform.Value == RuntimePlatform.UWP.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.NotificationType, ToUwp(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationName, ToUwp(template));
 
             throw new ArgumentException($"{platform.Value} is not supported");
         }
 
-        private static InstallationTemplate ToUwp(IMessageNotificationTemplate template)
+        private static InstallationTemplate ToUwp(INotificationTemplate template)
         {
             var launchProperties = new StringBuilder();
 
@@ -69,7 +69,7 @@ namespace Blauhaus.Push.Server.Extensions
             };
         }
 
-        private static InstallationTemplate ToIos(IMessageNotificationTemplate template)
+        private static InstallationTemplate ToIos(INotificationTemplate template)
         {
             var body = new StringBuilder();
 
@@ -108,7 +108,7 @@ namespace Blauhaus.Push.Server.Extensions
             return new InstallationTemplate{ Body = body.ToString()};
         }
 
-        private static InstallationTemplate ToAndroid(IMessageNotificationTemplate template)
+        private static InstallationTemplate ToAndroid(INotificationTemplate template)
         {
             var body = new StringBuilder();
 

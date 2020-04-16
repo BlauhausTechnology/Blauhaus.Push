@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Blauhaus.Push.Abstractions.Common.PushNotifications
+namespace Blauhaus.Push.Abstractions.Common
 {
     public class PushNotification : IPushNotification
     {

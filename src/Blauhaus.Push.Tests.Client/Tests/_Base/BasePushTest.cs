@@ -6,7 +6,7 @@ using Blauhaus.Analytics.TestHelpers;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.DeviceServices.TestHelpers.MockBuilders;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Abstractions.Common.PushNotifications;
+using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.TestHelpers.MockBuilders;
 using Blauhaus.TestHelpers.BaseTests;

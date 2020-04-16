@@ -191,7 +191,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.NotificationType);
+                Assert.AreEqual("DummyTemplate", template.NotificationName);
                 Assert.AreEqual(1, template.DataProperties.Count);
                 Assert.That(template.DataProperties.Contains("VisibleTemplateProperty"));
             }
@@ -208,7 +208,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.NotificationType);
+                Assert.AreEqual("DummyTemplate", template.NotificationName);
                 Assert.AreEqual(2, template.DataProperties.Count);
                 Assert.That(template.DataProperties.Contains("DummyPropertyOne"));
                 Assert.That(template.DataProperties.Contains("DummyPropertyTwo"));
@@ -272,7 +272,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.NotificationType);
+                Assert.AreEqual("DummyTemplate", template.NotificationName);
                 Assert.AreEqual(1, template.DataProperties.Count);
                 Assert.That(template.DataProperties.Contains("VisibleTemplateProperty"));
             }

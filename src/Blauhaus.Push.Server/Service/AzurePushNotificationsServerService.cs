@@ -7,8 +7,6 @@ using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
-using Blauhaus.Push.Abstractions.Common.PushNotifications;
-using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extensions;
@@ -64,14 +62,7 @@ namespace Blauhaus.Push.Server.Service
 
                 foreach (var template in deviceRegistration.Templates)
                 {
-                    if (template is IMessageNotificationTemplate messageTemplate)
-                    {
-                        installation.Templates.Add(messageTemplate.ToPlatform(deviceRegistration.Platform));
-                    }
-                    else
-                    {
-                        throw new Exception("Only Message templates are supported at this time");
-                    }
+                    installation.Templates.Add(template.ToPlatform(deviceRegistration.Platform));
                 }
 
                 try

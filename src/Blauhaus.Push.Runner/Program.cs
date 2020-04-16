@@ -6,12 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
 using Blauhaus.Push.Runner.Config.Admin;
 using Blauhaus.Push.Server._Ioc;
-using Blauhaus.Push.Server.Notifications;
 using Blauhaus.Push.Server.PushNotificationTemplates;
 using Blauhaus.Push.Server.Service;
 using Microsoft.Azure.NotificationHubs;
@@ -111,7 +109,7 @@ namespace Blauhaus.Push.Runner
 
             try
             {
-                var visibleTemplate = new MessageNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
+                var visibleTemplate = new PushNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
                 {
                     "message",
                     "exclusive",
@@ -210,7 +208,7 @@ namespace Blauhaus.Push.Runner
                 Tags = new List<string>{"RandomTaggage"},
                 Templates = new List<INotificationTemplate>
                 {
-                    new MessageNotificationTemplate("default", "Test", "Test", new List<string>
+                    new PushNotificationTemplate("default", "Test", "Test", new List<string>
                     {
                         "message"
                     })

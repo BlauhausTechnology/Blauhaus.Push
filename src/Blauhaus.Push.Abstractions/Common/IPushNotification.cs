@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Blauhaus.Push.Abstractions.Common.PushNotifications
+namespace Blauhaus.Push.Abstractions.Common
 {
     public interface IPushNotification
     {

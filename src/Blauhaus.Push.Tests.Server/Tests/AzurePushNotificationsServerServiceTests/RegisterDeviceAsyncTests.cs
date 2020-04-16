@@ -7,8 +7,7 @@ using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
-using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates;
-using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates._Base;
+using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.PushNotificationTemplates;
 using Blauhaus.Push.Server.Service;
 using Blauhaus.Push.Tests.Server.Tests._Base;
@@ -34,7 +33,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 Platform = RuntimePlatform.iOS,
                 Templates = new List<INotificationTemplate>
                 {
-                    new MessageNotificationTemplate("DummyTemplate", "Dummy Title", "Dummy Body", new List<string>
+                    new PushNotificationTemplate("DummyTemplate", "Dummy Title", "Dummy Body", new List<string>
                     {
                         "DummyPropertyOne",
                         "DummyPropertyTwo"
@@ -49,7 +48,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
                 Platform = RuntimePlatform.Android,
                 Templates = new List<INotificationTemplate>
                 {
-                    new MessageNotificationTemplate("VisibleTemplate", "Title", "Body", new List<string>
+                    new PushNotificationTemplate("VisibleTemplate", "Title", "Body", new List<string>
                     {
                         "VisibleTemplateProperty",
                         "SecondVisibleTemplateProperty"

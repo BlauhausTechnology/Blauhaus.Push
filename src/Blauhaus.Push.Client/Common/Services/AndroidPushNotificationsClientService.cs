@@ -5,7 +5,7 @@ using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Abstractions.Common.PushNotifications;
+using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Client.Common._Base;
 
 namespace Blauhaus.Push.Client.Common.Services
