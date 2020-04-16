@@ -87,7 +87,7 @@ namespace Blauhaus.Push.Client.Common.Services
                 {
                     body = child.Value.ToString();
                 }
-                else if (child.Key.Equals("Template_Type", StringComparison.InvariantCultureIgnoreCase))
+                else if (child.Key.Equals("Template_Name", StringComparison.InvariantCultureIgnoreCase))
                 {
                     type = child.Value.ToString();
                 }

@@ -118,11 +118,11 @@ namespace Blauhaus.Push.Server.Service
                 var properties = notification.DataProperties.ToDictionary(notificationDataProperty => 
                     notificationDataProperty.Key, notificationDataProperty => notificationDataProperty.Value.ToString());
 
-                properties["Template_Type"] = notification.NotificationType;
+                properties["Template_Name"] = notification.Name;
 
                 var tags = new List<string>
                 {
-                    notification.NotificationType,
+                    notification.Name,
                     $"UserId_{userId}"
                 };
 

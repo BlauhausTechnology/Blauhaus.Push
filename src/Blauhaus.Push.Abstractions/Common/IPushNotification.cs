@@ -6,7 +6,7 @@ namespace Blauhaus.Push.Abstractions.Common
     {
         Dictionary<string, object> DataProperties { get; }
 
-        string NotificationType { get; }
+        string Name { get; }
         string Title { get; }
         string Body { get; }
     }

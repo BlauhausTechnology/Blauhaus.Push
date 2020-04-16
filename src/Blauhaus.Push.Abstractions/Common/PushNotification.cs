@@ -8,13 +8,13 @@ namespace Blauhaus.Push.Abstractions.Common
         public PushNotification(string type, Dictionary<string, object> dataProperties, string title = "", string body = "")
         {
             DataProperties = dataProperties;
-            NotificationType = type;
+            Name = type;
             Title = title;
             Body = body;
         }
         
         public Dictionary<string, object> DataProperties { get; }
-        public string NotificationType { get; }
+        public string Name { get; }
         public string Title { get; }
         public string Body { get; }
 

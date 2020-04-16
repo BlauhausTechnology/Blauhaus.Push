@@ -95,7 +95,7 @@ namespace Blauhaus.Push.Client.Common.Services
                     body = notificationProperty.Value.ToString();
                 }
 
-                else if (string.Equals(notificationProperty.Key, "Template_Type", StringComparison.InvariantCultureIgnoreCase))
+                else if (string.Equals(notificationProperty.Key, "Template_Name", StringComparison.InvariantCultureIgnoreCase))
                 {
                     type = notificationProperty.Value.ToString();
                 }

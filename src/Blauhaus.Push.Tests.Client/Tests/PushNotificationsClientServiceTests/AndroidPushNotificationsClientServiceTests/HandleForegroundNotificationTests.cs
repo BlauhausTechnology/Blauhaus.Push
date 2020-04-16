@@ -16,7 +16,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
             {"message", "This is the Message" },
             {"Title", "DefaultTitle" },
             {"Body", "DefaultBody" },
-            {"Template_Type", "My Template Name" },
+            {"Template_Name", "My Template Name" },
         };
 
         [Test]
@@ -36,7 +36,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
             Assert.AreEqual(1, result.DataProperties["integer"]);
             Assert.AreEqual("DefaultTitle", result.Title);
             Assert.AreEqual("DefaultBody", result.Body);
-            Assert.AreEqual("My Template Name", result.NotificationType);
+            Assert.AreEqual("My Template Name", result.Name);
         }
 
 
