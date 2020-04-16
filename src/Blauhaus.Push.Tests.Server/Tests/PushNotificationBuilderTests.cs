@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Blauhaus.Push.Server.Notifications;
-using Blauhaus.Push.Server.Templates;
-using Blauhaus.TestHelpers.BaseTests;
+using Blauhaus.Push.Server.PushNotificationTemplates;
 using NUnit.Framework;
 
 namespace Blauhaus.Push.Tests.Server.Tests
@@ -10,12 +9,12 @@ namespace Blauhaus.Push.Tests.Server.Tests
     public class PushNotificationBuilderTests
     {
 
-        private NotificationTemplate _visibleTemplate;
+        private MessageNotificationTemplate _visibleTemplate;
 
         [SetUp]
         public void Setup()
         {
-            _visibleTemplate = new NotificationTemplate("Visible Template", "DefaultTitle", "DefaultBody", new List<string>
+            _visibleTemplate = new MessageNotificationTemplate("Visible Template", "DefaultTitle", "DefaultBody", new List<string>
             {
                 "PropertyOne",
                 "PropertyTwo"

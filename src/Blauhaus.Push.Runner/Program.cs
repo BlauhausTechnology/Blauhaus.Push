@@ -4,18 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Analytics.Console._Ioc;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
 using Blauhaus.Push.Runner.Config.Admin;
 using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.Notifications;
+using Blauhaus.Push.Server.PushNotificationTemplates;
 using Blauhaus.Push.Server.Service;
-using Blauhaus.Push.Server.Templates;
-using Blauhaus.Push.Server.Templates._Base;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -113,7 +111,7 @@ namespace Blauhaus.Push.Runner
 
             try
             {
-                var visibleTemplate = new NotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
+                var visibleTemplate = new MessageNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
                 {
                     "message",
                     "exclusive",
@@ -212,7 +210,7 @@ namespace Blauhaus.Push.Runner
                 Tags = new List<string>{"RandomTaggage"},
                 Templates = new List<INotificationTemplate>
                 {
-                    new NotificationTemplate("default", "Test", "Test", new List<string>
+                    new MessageNotificationTemplate("default", "Test", "Test", new List<string>
                     {
                         "message"
                     })

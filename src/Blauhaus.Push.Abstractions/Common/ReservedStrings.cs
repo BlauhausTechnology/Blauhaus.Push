@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 
-namespace Blauhaus.Push.Abstractions
+namespace Blauhaus.Push.Abstractions.Common
 {
     public static class ReservedStrings
     {

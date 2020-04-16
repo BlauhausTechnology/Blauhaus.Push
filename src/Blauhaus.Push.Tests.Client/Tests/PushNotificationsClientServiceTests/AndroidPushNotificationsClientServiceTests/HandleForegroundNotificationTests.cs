@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Tests.Client.Tests._Base;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.AndroidPushNotificationsClientServiceTests
 {
@@ -37,7 +36,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
             Assert.AreEqual(1, result.DataProperties["integer"]);
             Assert.AreEqual("DefaultTitle", result.Title);
             Assert.AreEqual("DefaultBody", result.Body);
-            Assert.AreEqual("My Template Name", result.Type);
+            Assert.AreEqual("My Template Name", result.NotificationType);
         }
 
 

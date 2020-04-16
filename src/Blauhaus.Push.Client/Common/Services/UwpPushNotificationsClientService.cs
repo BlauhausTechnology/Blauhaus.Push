@@ -5,12 +5,10 @@ using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.Utils.Extensions;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Abstractions.Extensions;
+using Blauhaus.Push.Abstractions.Common.PushNotifications;
 using Blauhaus.Push.Client.Common._Base;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Blauhaus.Push.Client.Common.Services
 {

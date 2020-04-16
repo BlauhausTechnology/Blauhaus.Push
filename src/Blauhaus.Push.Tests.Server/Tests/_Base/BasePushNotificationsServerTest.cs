@@ -1,14 +1,11 @@
 ﻿using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Analytics.TestHelpers;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Server._Config;
-using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Tests.Server.MockBuilders;
 using Blauhaus.TestHelpers.BaseTests;
 using Blauhaus.TestHelpers.MockBuilders;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using NUnit.Framework;
 
 namespace Blauhaus.Push.Tests.Server.Tests._Base

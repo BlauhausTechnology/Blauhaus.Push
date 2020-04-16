@@ -1,7 +1,7 @@
 ﻿using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Push.Abstractions.Client;
 using System.Threading.Tasks;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.PushNotifications;
 
 namespace Blauhaus.Push.Client.Common._Ioc
 {

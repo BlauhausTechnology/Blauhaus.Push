@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.PushNotifications;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Tests.Client.Tests._Base;
 using Moq;
@@ -30,7 +30,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.U
             //Assert
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Title == "DefaultTitle")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Body == "DefaultBody")));
-            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Type == "My Template")));
+            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.NotificationType == "My Template")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => 
                 (string) y.DataProperties["message"] == "This is the Message")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => 

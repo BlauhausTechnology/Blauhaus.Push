@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Blauhaus.Push.Abstractions.Common.PushNotifications;
 using CSharpFunctionalExtensions;
 
 namespace Blauhaus.Push.Abstractions.Server

@@ -32,7 +32,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.I
             Assert.AreEqual(1, result.DataProperties["integer"]);
             Assert.AreEqual("DefaultTitle", result.Title);
             Assert.AreEqual("DefaultBody", result.Body);
-            Assert.AreEqual("My Template", result.Type);
+            Assert.AreEqual("My Template", result.NotificationType);
         }
 
 

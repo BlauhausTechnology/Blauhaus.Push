@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Server.Service;
 using Blauhaus.Push.Tests.Server.Tests._Base;
 using Microsoft.Azure.NotificationHubs;
@@ -190,7 +191,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.Name);
+                Assert.AreEqual("DummyTemplate", template.NotificationType);
                 Assert.AreEqual(1, template.DataProperties.Count);
                 Assert.That(template.DataProperties.Contains("VisibleTemplateProperty"));
             }
@@ -207,7 +208,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.Name);
+                Assert.AreEqual("DummyTemplate", template.NotificationType);
                 Assert.AreEqual(2, template.DataProperties.Count);
                 Assert.That(template.DataProperties.Contains("DummyPropertyOne"));
                 Assert.That(template.DataProperties.Contains("DummyPropertyTwo"));
@@ -271,7 +272,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.Name);
+                Assert.AreEqual("DummyTemplate", template.NotificationType);
                 Assert.AreEqual(1, template.DataProperties.Count);
                 Assert.That(template.DataProperties.Contains("VisibleTemplateProperty"));
             }

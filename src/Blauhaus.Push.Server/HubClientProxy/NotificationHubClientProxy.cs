@@ -2,11 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Server._Config;
 using Microsoft.Azure.NotificationHubs;
-using Microsoft.Extensions.Options;
-using PushNotificationsServerConfig = Blauhaus.Push.Server._Config.PushNotificationsServerConfig;
 
 namespace Blauhaus.Push.Server.HubClientProxy
 {

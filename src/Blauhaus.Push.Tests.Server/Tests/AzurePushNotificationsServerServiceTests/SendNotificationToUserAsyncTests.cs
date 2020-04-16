@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.PushNotifications;
 using Blauhaus.Push.Server.Notifications;
+using Blauhaus.Push.Server.PushNotificationTemplates;
 using Blauhaus.Push.Server.Service;
-using Blauhaus.Push.Server.Templates;
 using Blauhaus.Push.Tests.Server.Tests._Base;
 using Moq;
 using NUnit.Framework;
@@ -14,7 +14,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
 {
     public class SendNotificationToUserAsyncTests : BasePushNotificationsServerTest<AzurePushNotificationsServerService>
     {
-        private NotificationTemplate _notificationTemplate;
+        private MessageNotificationTemplate _notificationTemplate;
         private string _userId;
         private IPushNotification _notification;
 
@@ -23,7 +23,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTe
         {
             base.SetUp();
             _userId = Guid.NewGuid().ToString();
-            _notificationTemplate = new NotificationTemplate("MyTemplate", "My Title", "My Body", new List<string>
+            _notificationTemplate = new MessageNotificationTemplate("MyTemplate", "My Title", "My Body", new List<string>
             {
                 "PropertyOne",
                 "PropertyTwo"

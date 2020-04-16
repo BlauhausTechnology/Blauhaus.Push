@@ -1,35 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Text;
-using System.Xml;
-using System.Xml.Linq;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
-using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server.Templates._Base;
+using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates;
 using Microsoft.Azure.NotificationHubs;
 
 namespace Blauhaus.Push.Server.Extensions
 {
-    public static class PushNotificationTemplateExtensions
+    public static class MessageNotificationTemplateExtensions
     {
-        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this INotificationTemplate template, IRuntimePlatform platform)
+        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this IMessageNotificationTemplate template, IRuntimePlatform platform)
         {
             if (platform.Value == RuntimePlatform.Android.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.Name, ToAndroid(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationType, ToAndroid(template));
             
             if (platform.Value == RuntimePlatform.iOS.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.Name, ToIos(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationType, ToIos(template));
             
             if (platform.Value == RuntimePlatform.UWP.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.Name, ToUwp(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationType, ToUwp(template));
 
             throw new ArgumentException($"{platform.Value} is not supported");
         }
 
-        private static InstallationTemplate ToUwp(INotificationTemplate template)
+        private static InstallationTemplate ToUwp(IMessageNotificationTemplate template)
         {
             var launchProperties = new StringBuilder();
 
@@ -74,7 +69,7 @@ namespace Blauhaus.Push.Server.Extensions
             };
         }
 
-        private static InstallationTemplate ToIos(INotificationTemplate template)
+        private static InstallationTemplate ToIos(IMessageNotificationTemplate template)
         {
             var body = new StringBuilder();
 
@@ -113,7 +108,7 @@ namespace Blauhaus.Push.Server.Extensions
             return new InstallationTemplate{ Body = body.ToString()};
         }
 
-        private static InstallationTemplate ToAndroid(INotificationTemplate template)
+        private static InstallationTemplate ToAndroid(IMessageNotificationTemplate template)
         {
             var body = new StringBuilder();
 

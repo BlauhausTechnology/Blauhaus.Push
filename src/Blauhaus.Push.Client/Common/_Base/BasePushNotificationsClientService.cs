@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Client;
+using Blauhaus.Push.Abstractions.Common.PushNotifications;
 
 namespace Blauhaus.Push.Client.Common._Base
 {

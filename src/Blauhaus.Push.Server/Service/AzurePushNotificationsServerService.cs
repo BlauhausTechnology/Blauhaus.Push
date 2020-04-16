@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Common.ValueObjects.BuildConfigs;
-using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common;
+using Blauhaus.Push.Abstractions.Common.PushNotifications;
+using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
-using Microsoft.Extensions.Options;
 
 namespace Blauhaus.Push.Server.Service
 {
@@ -65,7 +64,14 @@ namespace Blauhaus.Push.Server.Service
 
                 foreach (var template in deviceRegistration.Templates)
                 {
-                    installation.Templates.Add(template.ToPlatform(deviceRegistration.Platform));
+                    if (template is IMessageNotificationTemplate messageTemplate)
+                    {
+                        installation.Templates.Add(messageTemplate.ToPlatform(deviceRegistration.Platform));
+                    }
+                    else
+                    {
+                        throw new Exception("Only Message templates are supported at this time");
+                    }
                 }
 
                 try
@@ -121,11 +127,11 @@ namespace Blauhaus.Push.Server.Service
                 var properties = notification.DataProperties.ToDictionary(notificationDataProperty => 
                     notificationDataProperty.Key, notificationDataProperty => notificationDataProperty.Value.ToString());
 
-                properties["Template_Type"] = notification.Type;
+                properties["Template_Type"] = notification.NotificationType;
 
                 var tags = new List<string>
                 {
-                    notification.Type,
+                    notification.NotificationType,
                     $"UserId_{userId}"
                 };
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates;
+using Blauhaus.Push.Abstractions.Common.PushNotificationTemplates._Base;
 using Blauhaus.Push.Abstractions.Server;
 
 namespace Blauhaus.Push.Server.Service
