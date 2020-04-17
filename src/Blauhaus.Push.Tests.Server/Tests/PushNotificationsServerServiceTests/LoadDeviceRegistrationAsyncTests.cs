@@ -237,18 +237,21 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 _installation.Templates = new Dictionary<string, InstallationTemplate>
                 {
                     {
-                        "DummyTemplate", new InstallationTemplate
+                        "Visible", new InstallationTemplate
                         {
-                            Body = "<toast><visual><binding template=\"ToastText01\">" +
-                            "<text id=\"1\">$(Title)</text>" +
-                            "<text id=\"2\">$(Body)</text>" +
-                            "<text id=\"payload\">" +
-                            "{ \"VisibleTemplateProperty\" : \"$(VisibleTemplateProperty)\" }" +
-                            "</text>" +
-                            "</binding></visual></toast>"
+                            Body = "<toast launch=\"" +
+                                   "{'{' + " +
+                                   "'Title' + ':' + '%22' + $(Title) + '%22' + ', ' + " +
+                                   "'Body' + ':' + '%22' + $(Body) + '%22' + ', ' + " +
+                                   "'message' + ':' + '%22' + $(message) + '%22' + ', ' + " +
+                                   "'exclusive' + ':' + '%22' + $(exclusive) + '%22' + ', ' + " +
+                                   "'integer' + ':' + '%22' + $(integer) + '%22' +" +
+                                   " '}'}" +
+                                   "\"><visual><binding template=\"ToastText01\"><text id=\"1\">$(Title)</text><text id=\"2\">$(Body)</text></binding></visual></toast>"
                         }
                     }
                 };
+
             }
 
             [Test]
@@ -272,9 +275,12 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.NotificationName);
-                Assert.AreEqual(1, template.DataProperties.Count);
-                Assert.That(template.DataProperties.Contains("VisibleTemplateProperty"));
+                Assert.AreEqual("Visible", template.NotificationName);
+                Assert.AreEqual(3, template.DataProperties.Count);
+                Assert.That(template.DataProperties.Contains("message"));
+                Assert.That(template.DataProperties.Contains("exclusive"));
+                Assert.That(template.DataProperties.Contains("integer"));
+                Assert.That(template.DataProperties.Count, Is.EqualTo(3));
             }
 
         }

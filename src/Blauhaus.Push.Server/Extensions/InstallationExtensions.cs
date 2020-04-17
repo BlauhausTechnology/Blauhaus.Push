@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using Blauhaus.Common.Utils.Extensions;
 using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Microsoft.Azure.NotificationHubs;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Blauhaus.Push.Server.Extensions
@@ -92,30 +94,30 @@ namespace Blauhaus.Push.Server.Extensions
         {
             var templateName = installationTemplate.Key;
             var templateProperties = new List<string>();
+            var title = "";
+            var body = "";
 
-            var xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(installationTemplate.Value.Body);
-
-            var nodeContents = xmlDoc.SelectNodes("/toast/visual/binding");
-            if (nodeContents != null && nodeContents.Count > 0)
+            var uwpPayload = installationTemplate.Value.Body.ExtractValueBetweenText("<toast launch=\"", "\">");
+            var split = uwpPayload.Split('(', ')');
+            foreach (var sub in split)
             {
-                var content = nodeContents[0];
-                var payload = content.ChildNodes[content.ChildNodes.Count - 1];
-                var json = payload.InnerText;
-
-                var templateBody = JObject.Parse(json);
-
-                foreach (var dataProperty in templateBody)
+                if (!sub.Contains("'%22'"))
                 {
-                    templateProperties.Add(dataProperty.Key);
+                    if (sub.Equals("Title", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        title = sub;
+                    }
+                    else if (sub.Equals("Body", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        body = sub;
+                    }
+                    else
+                    {
+                        templateProperties.Add(sub);
+                    }
                 }
-
-                //todo extract default title and body
-                return new PushNotificationTemplate(templateName, "", "", templateProperties);
-
             }
-
-            throw new Exception("Unable to parse UWP Installation Template");
+            return new PushNotificationTemplate(templateName, title, body, templateProperties);
         }
 
         private static IPushNotificationTemplate ExtractAndroidPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
