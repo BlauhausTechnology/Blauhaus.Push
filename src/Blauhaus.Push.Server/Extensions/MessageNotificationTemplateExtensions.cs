@@ -38,7 +38,8 @@ namespace Blauhaus.Push.Server.Extensions
 
                 launchProperties
                     .Append("'Title'").Append(" + ':' + ").Append("'%22' + ").Append("$(Title)").Append(" + '%22'").Append(" + ', ' + ")
-                    .Append("'Body'").Append(" + ':' + ").Append("'%22' + ").Append("$(Body)").Append(" + '%22'").Append(" + ', ' + ");
+                    .Append("'Body'").Append(" + ':' + ").Append("'%22' + ").Append("$(Body)").Append(" + '%22'").Append(" + ', ' + ")
+                    .Append("'Template_Name'").Append(" + ':' + ").Append("'%22' + ").Append(template.NotificationName).Append(" + '%22'").Append(" + ', ' + ");
 
                 for (var i = 0; i < template.DataProperties.Count; i++)
                 {
@@ -84,7 +85,9 @@ namespace Blauhaus.Push.Server.Extensions
             body.Append("\"body\" : \"$(Body)\"");
                 
             body.Append(" }");
-            body.Append(" }");
+            body.Append(" }, ");
+            
+            body.Append("\"Template_Name\" : ").Append($"\"{template.NotificationName}\"");
 
             if (template.DataProperties.Count > 0)
             {
@@ -120,6 +123,7 @@ namespace Blauhaus.Push.Server.Extensions
 
             body.Append("\"Title\" : ").Append("\"$(Title)\"").Append(", ");
             body.Append("\"Body\" : ").Append("\"$(Body)\"").Append(", ");
+            body.Append("\"Template_Name\" : ").Append($"\"{template.NotificationName}\"").Append(", ");
 
             for (var i = 0; i < template.DataProperties.Count; i++)
             {

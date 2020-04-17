@@ -106,7 +106,7 @@ namespace Blauhaus.Push.Runner
         private static async Task Main(string[] args)
         {
 
-            PushNotificationsService = Setup<AspersUwpConfig>();
+            PushNotificationsService = Setup<AspersAndroidConfig>();
 
 
             try
@@ -132,9 +132,9 @@ namespace Blauhaus.Push.Runner
                     }
                 }, CancellationToken.None);
 
-                var installation = await PushNotificationsService.LoadDeviceRegistrationAsync(DeviceId, CancellationToken.None);
-                //var allRegistrations = await GetAllRegistrationsAsync(pnsHandle: PnsHandle);
 
+                var reg = PushNotificationsService.LoadDeviceRegistrationAsync(DeviceId, CancellationToken.None);
+                
 
                 await PushNotificationsService.SendNotificationToUserAsync(new PushNotificationBuilder(visibleTemplate)
                     .WithDataProperty("message", "This is the Message")

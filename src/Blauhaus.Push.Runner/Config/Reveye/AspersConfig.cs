@@ -24,7 +24,7 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class AspersAndroidConfig : BaseAspersConfig
     {
         public AspersAndroidConfig() : base(RuntimePlatform.Android, 
-                "fEBRy1cvWn4:APA91bFxA2L48sFcNFeOAuGuVs7JRcprVeuRAmWZFczMxoIDD1DR6Ahlyf8uF8mMHbm8VY_QtYda1sOUPbp3y5pz_MLfTUMyCwGU-M2ISYMlzmQKRraW-GFMnJ7ObKOUPVYLBcsiQMhM")
+            "dY-7NPUmQxc:APA91bF5pIKH_0iWDYk__Qc9IgNJnW2uWGu00-ymdrZvQ9PPKDev4grtCjvuczr3wTIIIPzHQvxzFU3zsggSGhwJPXu_LLyD5HHPQ9pv48evQqw5x8fKLRTO4lf0VurPO86EuwFGMjH5")
         {
         }
     }

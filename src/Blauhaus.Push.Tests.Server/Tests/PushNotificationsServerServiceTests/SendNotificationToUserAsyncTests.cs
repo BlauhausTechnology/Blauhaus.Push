@@ -55,7 +55,6 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.SendNotificationAsync(
                 It.Is<Dictionary<string, string>>(y => 
-                    y["Template_Name"] == "MyTemplate" &&
                     y["PropertyOne"] == "ValueOne" &&
                     y["PropertyTwo"] == "ValueTwo"), 
                 It.Is<List<string>>(z => 

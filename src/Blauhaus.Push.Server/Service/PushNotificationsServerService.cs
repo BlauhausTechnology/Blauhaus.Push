@@ -105,6 +105,9 @@ namespace Blauhaus.Push.Server.Service
                     Templates = installation.ExtractTemplates()
                 };
 
+                //todo test
+                _analyticsService.TraceVerbose(this, "Device registration loaded", deviceRegistration.ToObjectDictionary());
+
                 return Result.Success<IDeviceRegistration>(deviceRegistration); 
             }
         }
@@ -118,8 +121,6 @@ namespace Blauhaus.Push.Server.Service
 
                 var properties = notification.DataProperties.ToDictionary(notificationDataProperty => 
                     notificationDataProperty.Key, notificationDataProperty => notificationDataProperty.Value.ToString());
-
-                properties["Template_Name"] = notification.Name;
 
                 var tags = new List<string>
                 {

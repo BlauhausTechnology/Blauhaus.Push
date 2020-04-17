@@ -16,7 +16,7 @@ using NUnit.Framework;
 namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 {
     [TestFixture]
-    public class RegisterDeviceAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
+    public class UpdateDeviceRegistrationAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
     {
         private DeviceRegistration _dataOnlyDeviceRegistration;
         private DeviceRegistration _visibleTemplateDeviceRegistration;
@@ -55,7 +55,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             };
         }
 
-        public class AllPlatformsDeviceRegistration : RegisterDeviceAsyncTests
+        public class AllPlatformsDeviceRegistration : UpdateDeviceRegistrationAsyncTests
         {
             [Test]
             public async Task SHOULD_track_operation()
@@ -224,7 +224,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             }
         }
 
-        public class UwpDeviceRegistration : RegisterDeviceAsyncTests
+        public class UwpDeviceRegistration : UpdateDeviceRegistrationAsyncTests
         {
             [Test]
             public async Task SHOULD_convert_UWP_RuntimePlatform_to_WNS_push_notification_service()
@@ -254,6 +254,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                     "<toast launch=\"{'{' + " +
                     "'Title' + ':' + '%22' + $(Title) + '%22' + ', ' + " +
                     "'Body' + ':' + '%22' + $(Body) + '%22' + ', ' + " +
+                    "'Template_Name' + ':' + '%22' + VisibleTemplate + '%22' + ', ' + " +
                     "'VisibleTemplateProperty' + ':' + '%22' + $(VisibleTemplateProperty) + '%22' + ', ' + " +
                     "'SecondVisibleTemplateProperty' + ':' + '%22' + $(SecondVisibleTemplateProperty) + '%22' + '}'}\">" +
                     "<visual><binding template=\"ToastText01\">" +
@@ -288,7 +289,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
         }
         
-        public class IosDeviceRegistration : RegisterDeviceAsyncTests
+        public class IosDeviceRegistration : UpdateDeviceRegistrationAsyncTests
         {
             [Test]
             public async Task SHOULD_convert_iOS_RuntimePlatform_to_APNS_push_notification_service()
@@ -316,6 +317,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 //Assert
                 const string expectedTemplate = 
                     "{ \"aps\" : { \"alert\" : { \"title\" : \"$(Title)\", \"body\" : \"$(Body)\" } }, " +
+                    "\"Template_Name\" : \"VisibleTemplate\", " +
                     "\"VisibleTemplateProperty\" : \"$(VisibleTemplateProperty)\", " +
                     "\"SecondVisibleTemplateProperty\" : \"$(SecondVisibleTemplateProperty)\" }";
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
@@ -325,7 +327,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
         }
 
-        public class AndroidDeviceRegistration : RegisterDeviceAsyncTests
+        public class AndroidDeviceRegistration : UpdateDeviceRegistrationAsyncTests
         {
             [Test]
             public async Task SHOULD_convert_Android_RuntimePlatform_to_FCM_push_notification_service()
@@ -355,6 +357,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                     "{ \"data\" : { " +
                     "\"Title\" : \"$(Title)\", " +
                     "\"Body\" : \"$(Body)\", " +
+                    "\"Template_Name\" : \"VisibleTemplate\", " +
                     "\"VisibleTemplateProperty\" : \"$(VisibleTemplateProperty)\", " +
                     "\"SecondVisibleTemplateProperty\" : \"$(SecondVisibleTemplateProperty)\" " +
                     "}, \"notification\" : { \"title\" : \"$(Title)\", \"body\" : \"$(Body)\" } }";
