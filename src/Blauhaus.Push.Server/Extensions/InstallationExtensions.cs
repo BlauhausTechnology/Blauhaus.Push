@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server.PushNotificationTemplates;
 using Microsoft.Azure.NotificationHubs;
 using Newtonsoft.Json.Linq;
 

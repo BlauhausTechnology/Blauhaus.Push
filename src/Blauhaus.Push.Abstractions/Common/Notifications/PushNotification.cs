@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 
-namespace Blauhaus.Push.Abstractions.Common
+namespace Blauhaus.Push.Abstractions.Common.Notifications
 {
     public class PushNotification : IPushNotification
     {
@@ -11,6 +12,15 @@ namespace Blauhaus.Push.Abstractions.Common
             Name = type;
             Title = title;
             Body = body;
+        }
+
+        public PushNotification(PushNotificationBuilder builder)
+        {
+            var notification = builder.Create();
+            DataProperties = notification.DataProperties;
+            Name = notification.Name;
+            Title = notification.Title;
+            Body = notification.Body;
         }
         
         public Dictionary<string, object> DataProperties { get; }

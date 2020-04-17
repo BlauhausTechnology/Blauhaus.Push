@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Blauhaus.Push.Abstractions.Server;
 
-namespace Blauhaus.Push.Server.PushNotificationTemplates
+namespace Blauhaus.Push.Abstractions.Common.Templates._Base
 {
     public class PushNotificationTemplate : IPushNotificationTemplate
     {

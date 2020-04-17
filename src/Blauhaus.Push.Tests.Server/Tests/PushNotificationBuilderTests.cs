@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Blauhaus.Push.Server.PushNotificationTemplates;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using NUnit.Framework;
 
 namespace Blauhaus.Push.Tests.Server.Tests

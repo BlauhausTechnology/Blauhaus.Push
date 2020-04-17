@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Blauhaus.Push.Abstractions.Server
+namespace Blauhaus.Push.Abstractions.Common.Templates._Base
 {
     public interface IPushNotificationTemplate
     {

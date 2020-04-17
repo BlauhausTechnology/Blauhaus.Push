@@ -6,11 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
 using Blauhaus.Push.Runner.Config.Admin;
+using Blauhaus.Push.Runner.Config.Reveye;
 using Blauhaus.Push.Server._Ioc;
-using Blauhaus.Push.Server.PushNotificationTemplates;
 using Blauhaus.Push.Server.Service;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
@@ -104,7 +106,7 @@ namespace Blauhaus.Push.Runner
         private static async Task Main(string[] args)
         {
 
-            PushNotificationsService = Setup<DevAdminAndroid>();
+            PushNotificationsService = Setup<AspersAndroid>();
 
 
             try
@@ -130,7 +132,7 @@ namespace Blauhaus.Push.Runner
                     }
                 }, CancellationToken.None);
 
-                //var installation = await _pushNotificationsService.LoadDeviceRegistrationAsync("myAndroidDeviceId", CancellationToken.None);
+                var installation = await PushNotificationsService.LoadDeviceRegistrationAsync(DeviceId, CancellationToken.None);
                 var allRegistrations = await GetAllRegistrationsAsync(pnsHandle: PnsHandle);
 
 
