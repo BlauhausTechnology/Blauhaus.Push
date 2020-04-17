@@ -15,7 +15,7 @@ namespace Blauhaus.Push.Server._Ioc
         {
             services.AddTransient<IPushNotificationsServerConfig, TConfig>();
             services.RegisterConsoleLoggerService(traceListener);
-            services.AddScoped<IPushNotificationsServerService, AzurePushNotificationsServerService>();
+            services.AddScoped<IPushNotificationsServerService, PushNotificationsServerService>();
             services.AddScoped<INotificationHubClientProxy, NotificationHubClientProxy>();
             return services;
         }

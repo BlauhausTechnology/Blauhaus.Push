@@ -17,13 +17,13 @@ using Microsoft.Azure.NotificationHubs;
 
 namespace Blauhaus.Push.Server.Service
 {
-    public class AzurePushNotificationsServerService : IPushNotificationsServerService
+    public class PushNotificationsServerService : IPushNotificationsServerService
     {
         private readonly IAnalyticsService _analyticsService;
         private readonly INotificationHubClientProxy _hubClientProxy;
         private readonly IPushNotificationsServerConfig _config;
 
-        public AzurePushNotificationsServerService(
+        public PushNotificationsServerService(
             IAnalyticsService analyticsService,
             INotificationHubClientProxy hubClientProxy,
             IPushNotificationsServerConfig config)

@@ -5,21 +5,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
-using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
-using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Service;
 using Blauhaus.Push.Tests.Server.Tests._Base;
 using Microsoft.Azure.NotificationHubs;
 using Moq;
 using NUnit.Framework;
 
-namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTests
+namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 {
     [TestFixture]
-    public class RegisterDeviceAsyncTests : BasePushNotificationsServerTest<AzurePushNotificationsServerService>
+    public class RegisterDeviceAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
     {
         private DeviceRegistration _dataOnlyDeviceRegistration;
         private DeviceRegistration _visibleTemplateDeviceRegistration;

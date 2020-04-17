@@ -15,6 +15,7 @@ namespace Blauhaus.Push.Client.Common._Base
     {
         private const string PnsHandleKey = "PnsHandle";
         private string _currentPnsHandle;
+        private static int _subscriberCount = 0;
 
         protected readonly IAnalyticsService AnalyticsService;
         private readonly ISecureStorageService _secureStorageService;
@@ -84,6 +85,7 @@ namespace Blauhaus.Push.Client.Common._Base
 
                 void HandleNewNotification(object sender, NewNotificationEventArgs e)
                 {
+                    AnalyticsService.TraceVerbose(this, "Foreground notification being published");
                     observer.OnNext(e.NewNotification);
                 } 
                 

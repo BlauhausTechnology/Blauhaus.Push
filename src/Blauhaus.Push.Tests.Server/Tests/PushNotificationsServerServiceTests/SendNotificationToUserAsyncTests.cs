@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
-using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Server.Service;
 using Blauhaus.Push.Tests.Server.Tests._Base;
 using Moq;
 using NUnit.Framework;
 
-namespace Blauhaus.Push.Tests.Server.Tests.AzurePushNotificationsServerServiceTests
+namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 {
-    public class SendNotificationToUserAsyncTests : BasePushNotificationsServerTest<AzurePushNotificationsServerService>
+    public class SendNotificationToUserAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
     {
         private PushNotificationTemplate _pushNotificationTemplate;
         private string _userId;

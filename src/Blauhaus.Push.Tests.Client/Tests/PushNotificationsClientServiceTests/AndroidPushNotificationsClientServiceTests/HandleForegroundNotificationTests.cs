@@ -54,6 +54,23 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
         }
 
         [Test]
+        public void SHOULD_trace_number_of_subscribers()
+        {
+            //Arrange
+            Sut.ObserveForegroundNotifications().Subscribe();
+
+            //Test
+            Sut.HandleForegroundNotification(AndroidMessageProperties);
+
+            //Assert
+            MockAnalyticsService.VerifyStartOperation("Foreground Push Notification");
+            MockAnalyticsService.VerifyTrace("Extracting push notification");
+            MockAnalyticsService.VerifyTraceProperty("Raw Notification", AndroidMessageProperties);
+            MockAnalyticsService.VerifyTrace("Notification processed");
+            MockAnalyticsService.VerifyTrace("Foreground notification being published");
+        }
+
+        [Test]
         public void IF_exception_is_thrown_SHOULD_log()
         {
             //Act
