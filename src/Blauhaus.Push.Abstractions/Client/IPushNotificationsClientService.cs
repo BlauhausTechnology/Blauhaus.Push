@@ -9,6 +9,9 @@ namespace Blauhaus.Push.Abstractions.Client
     {
         IObservable<IPushNotification> ObserveForegroundNotifications();
 
+        //maybe temporary
+        event EventHandler<NewNotificationEventArgs> NewNotificationEvent;
+
         ValueTask<string> GetPushNotificationServiceHandleAsync();
 
 

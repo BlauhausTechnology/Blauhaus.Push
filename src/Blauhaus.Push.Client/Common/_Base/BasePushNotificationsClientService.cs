@@ -101,17 +101,7 @@ namespace Blauhaus.Push.Client.Common._Base
 
         #region New Notification event
 
-        internal class NewNotificationEventArgs : EventArgs
-        {
-            public NewNotificationEventArgs(IPushNotification newNotification)
-            {
-                NewNotification = newNotification;
-            }
-
-            public IPushNotification NewNotification { get; }
-        }
-
-        private event EventHandler<NewNotificationEventArgs> NewNotificationEvent;
+        public event EventHandler<NewNotificationEventArgs> NewNotificationEvent;
         
         protected void PublishNotification(IPushNotification notification)
         {
