@@ -2,9 +2,10 @@
 
 namespace Blauhaus.Push.Runner.Config.Reveye
 {
-    public abstract class BaseAspersHub : PushRunnerHub
+    public abstract class BaseAspersHub : BasePushRunnerHub
     {
-        protected BaseAspersHub(IRuntimePlatform platform, string pnsHandle)
+        protected BaseAspersHub(IRuntimePlatform platform, string pnsHandle) 
+            : base(platform, pnsHandle)
         {
             NotificationHubConnectionString =
                 "Endpoint=sb://reveye-push.servicebus.windows.net/;" +
@@ -13,12 +14,7 @@ namespace Blauhaus.Push.Runner.Config.Reveye
                 "EntityPath=reveye-push-aspers";
 
             NotificationHubName = "reveye-push-aspers";
-            
-            DeviceId = platform.Value + "_deviceId";
-            Platform = platform;
-            PnsHandle = pnsHandle;
         }
-
     }
 
     public class AspersAndroidHub : BaseAspersHub
@@ -28,7 +24,6 @@ namespace Blauhaus.Push.Runner.Config.Reveye
         {
         }
     }
-
     
     public class AspersUwpHub : BaseAspersHub
     {

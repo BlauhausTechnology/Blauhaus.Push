@@ -10,7 +10,6 @@ using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
-using Blauhaus.Push.Runner.Config.Admin;
 using Blauhaus.Push.Runner.Config.Reveye;
 using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.Service;
@@ -85,7 +84,7 @@ namespace Blauhaus.Push.Runner
         #endregion
 
 
-        private static IPushNotificationsServerService Setup<TConfig>() where TConfig : PushRunnerHub, new()
+        private static IPushNotificationsServerService Setup<TConfig>() where TConfig : BasePushRunnerHub, new()
         {
             var services = new ServiceCollection();
 
