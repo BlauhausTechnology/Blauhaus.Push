@@ -21,19 +21,19 @@ namespace Blauhaus.Push.Server.Service
     {
         private readonly IAnalyticsService _analyticsService;
         private readonly INotificationHubClientProxy _hubClientProxy;
-        private readonly IPushNotificationsServerConfig _config;
 
         public PushNotificationsServerService(
             IAnalyticsService analyticsService,
-            INotificationHubClientProxy hubClientProxy,
-            IPushNotificationsServerConfig config)
+            INotificationHubClientProxy hubClientProxy)
         {
             _analyticsService = analyticsService;
             _hubClientProxy = hubClientProxy;
-            _config = config;
         }
 
-        public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, CancellationToken token)
+        public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(
+            IDeviceRegistration deviceRegistration, 
+            IPushNotificationsHub hub,
+            CancellationToken token)
         {
             if (deviceRegistration.IsNotValid(this, _analyticsService, out var validationError))
             {
@@ -79,7 +79,10 @@ namespace Blauhaus.Push.Server.Service
             }
         }
 
-        public async Task<Result<IDeviceRegistration>> LoadDeviceRegistrationAsync(string deviceIdentifier, CancellationToken token)
+        public async Task<Result<IDeviceRegistration>> LoadDeviceRegistrationAsync(
+            string deviceIdentifier, 
+            IPushNotificationsHub hub,
+            CancellationToken token)
         {
             using (var _ = _analyticsService.ContinueOperation(this, "Load push notification registration for device", new Dictionary<string, object>{{"DeviceIdentifier", deviceIdentifier}}))
             {
@@ -112,7 +115,11 @@ namespace Blauhaus.Push.Server.Service
             }
         }
 
-        public async Task SendNotificationToUserAsync(IPushNotification notification, string userId, CancellationToken token)
+        public async Task SendNotificationToUserAsync(
+            IPushNotification notification, 
+            string userId, 
+            IPushNotificationsHub hub,
+            CancellationToken token)
         {
 
             using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to user", new Dictionary<string, object>

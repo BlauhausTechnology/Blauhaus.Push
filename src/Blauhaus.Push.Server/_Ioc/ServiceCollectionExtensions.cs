@@ -10,13 +10,11 @@ namespace Blauhaus.Push.Server._Ioc
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddPushNotificationsServer<TConfig>(this IServiceCollection services, TraceListener traceListener) 
-            where TConfig : class, IPushNotificationsServerConfig
+        public static IServiceCollection AddPushNotificationsServer(this IServiceCollection services, TraceListener traceListener) 
         {
-            services.AddTransient<IPushNotificationsServerConfig, TConfig>();
             services.RegisterConsoleLoggerService(traceListener);
-            services.AddScoped<IPushNotificationsServerService, PushNotificationsServerService>();
-            services.AddScoped<INotificationHubClientProxy, NotificationHubClientProxy>();
+            services.AddTransient<IPushNotificationsServerService, PushNotificationsServerService>();
+            services.AddTransient<INotificationHubClientProxy, NotificationHubClientProxy>();
             return services;
         }
     }

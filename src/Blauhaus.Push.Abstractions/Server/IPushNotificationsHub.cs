@@ -1,6 +1,6 @@
-﻿namespace Blauhaus.Push.Server._Config
+﻿namespace Blauhaus.Push.Abstractions.Server
 {
-    public interface IPushNotificationsServerConfig
+    public interface IPushNotificationsHub
     {
         string NotificationHubName { get; }
         string NotificationHubConnectionString { get; }

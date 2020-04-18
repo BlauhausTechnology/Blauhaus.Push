@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
+using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server._Config;
 using Microsoft.Azure.NotificationHubs;
 
@@ -9,16 +10,20 @@ namespace Blauhaus.Push.Server.HubClientProxy
 {
     public class NotificationHubClientProxy : INotificationHubClientProxy
     {
-        private readonly NotificationHubClient _hubClient;
+        private NotificationHubClient _hubClient;
+        private readonly bool _enableTestSend;
 
-        public NotificationHubClientProxy(IPushNotificationsServerConfig config, IBuildConfig buildConfig)
+        public NotificationHubClientProxy(IBuildConfig buildConfig)
         {
-            var enableTestSend = (BuildConfig) buildConfig == BuildConfig.Debug;
-
-            _hubClient = NotificationHubClient.CreateClientFromConnectionString(
-                config.NotificationHubConnectionString, config.NotificationHubName, enableTestSend);
+             _enableTestSend = (BuildConfig) buildConfig == BuildConfig.Debug;
         }
 
+        public INotificationHubClientProxy Initialize(IPushNotificationsHub hub)
+        {
+            _hubClient = NotificationHubClient.CreateClientFromConnectionString(
+                hub.NotificationHubConnectionString, hub.NotificationHubName, _enableTestSend);
+            return this;
+        }
 
         public Task CreateOrUpdateInstallationAsync(Installation installation, CancellationToken cancellationToken)
         {

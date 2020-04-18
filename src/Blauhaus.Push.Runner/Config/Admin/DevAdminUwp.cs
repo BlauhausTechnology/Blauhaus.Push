@@ -2,7 +2,7 @@
 
 namespace Blauhaus.Push.Runner.Config.Admin
 {
-    public class DevAdminUwp : PushRunnerConfig
+    public class DevAdminUwp : PushRunnerHub
     {
         public DevAdminUwp()
         {

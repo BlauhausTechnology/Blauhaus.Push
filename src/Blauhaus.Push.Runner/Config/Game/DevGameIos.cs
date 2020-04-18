@@ -2,7 +2,7 @@
 
 namespace Blauhaus.Push.Runner.Config.Game
 {
-    public class DevGameIos : PushRunnerConfig
+    public class DevGameIos : PushRunnerHub
     {
         public DevGameIos()
         {

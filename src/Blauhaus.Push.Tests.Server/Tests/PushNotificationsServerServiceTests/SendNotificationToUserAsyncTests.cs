@@ -37,7 +37,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         public async Task SHOULD_track_operation()
         {
             //Act
-            await Sut.SendNotificationToUserAsync(_notification, _userId, CancellationToken.None);
+            await Sut.SendNotificationToUserAsync(_notification, _userId, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             MockAnalyticsService.VerifyContinueOperation("Send push notification to user");
@@ -50,7 +50,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         public async Task SHOULD_invoke_send_on_hub_client()
         {
             //Act
-            await Sut.SendNotificationToUserAsync(_notification, _userId, CancellationToken.None);
+            await Sut.SendNotificationToUserAsync(_notification, _userId, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.SendNotificationAsync(

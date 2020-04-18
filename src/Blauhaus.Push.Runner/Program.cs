@@ -85,14 +85,14 @@ namespace Blauhaus.Push.Runner
         #endregion
 
 
-        private static IPushNotificationsServerService Setup<TConfig>() where TConfig : PushRunnerConfig, new()
+        private static IPushNotificationsServerService Setup<TConfig>() where TConfig : PushRunnerHub, new()
         {
             var services = new ServiceCollection();
 
             services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
 
             var setup = new TConfig();
-            services.AddPushNotificationsServer<TConfig>(new ConsoleTraceListener());
+            services.AddPushNotificationsServer(new ConsoleTraceListener());
             NotificationHubPath = setup.NotificationHubName;
             DeviceId = setup.DeviceId;
             PnsHandle = setup.PnsHandle;
@@ -106,8 +106,8 @@ namespace Blauhaus.Push.Runner
         private static async Task Main(string[] args)
         {
 
-            PushNotificationsService = Setup<AspersAndroidConfig>();
-
+            PushNotificationsService = Setup<AspersAndroidHub>();
+            var hub = new AspersAndroidHub();
 
             try
             {
@@ -130,17 +130,17 @@ namespace Blauhaus.Push.Runner
                     {
                         visibleTemplate
                     }
-                }, CancellationToken.None);
+                }, hub, CancellationToken.None);
 
 
-                var reg = PushNotificationsService.LoadDeviceRegistrationAsync(DeviceId, CancellationToken.None);
+                var reg = PushNotificationsService.LoadDeviceRegistrationAsync(DeviceId, hub, CancellationToken.None);
                 
 
                 await PushNotificationsService.SendNotificationToUserAsync(new PushNotificationBuilder(visibleTemplate)
                     .WithDataProperty("message", "This is the Message")
                     .WithDataProperty("exclusive", "Win!")
                     .WithDataProperty("integer", "1")
-                    .Create(), "myUserId", CancellationToken.None);
+                    .Create(), "myUserId", hub, CancellationToken.None);
 
             }
             catch (Exception e)
@@ -172,51 +172,51 @@ namespace Blauhaus.Push.Runner
             return registrations.ToList();
         }
 
-        private static async Task<List<RegistrationDescription>> DeleteAllRegistrationsAsync()
-        {
-            //TODO NB when deleting a registration you cannot use the same device Id again, so we should actually never do this in production
+        //private static async Task<List<RegistrationDescription>> DeleteAllRegistrationsAsync()
+        //{
+        //    //TODO NB when deleting a registration you cannot use the same device Id again, so we should actually never do this in production
 
-            var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
-            var registrations = await client.GetAllRegistrationsAsync(100);
-            var count = 0;
-            try
-            {
+        //    var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
+        //    var registrations = await client.GetAllRegistrationsAsync(100);
+        //    var count = 0;
+        //    try
+        //    {
                             
-                foreach (var reg in registrations)
-                {
-                    await client.DeleteRegistrationAsync(reg.RegistrationId);
-                }
+        //        foreach (var reg in registrations)
+        //        {
+        //            await client.DeleteRegistrationAsync(reg.RegistrationId);
+        //        }
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        throw;
+        //    }
 
 
-            return registrations.ToList();
-        }
+        //    return registrations.ToList();
+        //}
 
-        private static async Task CreateInstallationAsync(string pnsHandle)
-        {
-            var result = await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
-            {
-                Platform = RuntimePlatform.Android,
-                AccountId = "myAccountId",
-                UserId = "myUserId",
-                DeviceIdentifier = "myNewDeviceId",
-                PushNotificationServiceHandle = pnsHandle,
-                Tags = new List<string>{"RandomTaggage"},
-                Templates = new List<IPushNotificationTemplate>
-                {
-                    new PushNotificationTemplate("default", "Test", "Test", new List<string>
-                    {
-                        "message"
-                    })
-                }
-            }, CancellationToken.None);
+        //private static async Task CreateInstallationAsync(string pnsHandle)
+        //{
+        //    var result = await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+        //    {
+        //        Platform = RuntimePlatform.Android,
+        //        AccountId = "myAccountId",
+        //        UserId = "myUserId",
+        //        DeviceIdentifier = "myNewDeviceId",
+        //        PushNotificationServiceHandle = pnsHandle,
+        //        Tags = new List<string>{"RandomTaggage"},
+        //        Templates = new List<IPushNotificationTemplate>
+        //        {
+        //            new PushNotificationTemplate("default", "Test", "Test", new List<string>
+        //            {
+        //                "message"
+        //            })
+        //        }
+        //    }, CancellationToken.None);
 
-        }
+        //}
     }
 }

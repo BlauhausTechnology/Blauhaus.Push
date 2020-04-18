@@ -2,7 +2,7 @@
 
 namespace Blauhaus.Push.Runner.Config.Admin
 {
-    public class DevAdminIos : PushRunnerConfig
+    public class DevAdminIos : PushRunnerHub
     {
         public DevAdminIos()
         {

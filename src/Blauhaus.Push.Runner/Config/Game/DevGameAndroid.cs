@@ -2,7 +2,7 @@
 
 namespace Blauhaus.Push.Runner.Config.Game
 {
-    public class DevGameAndroid : PushRunnerConfig
+    public class DevGameAndroid : PushRunnerHub
     {
         public DevGameAndroid()
         {
