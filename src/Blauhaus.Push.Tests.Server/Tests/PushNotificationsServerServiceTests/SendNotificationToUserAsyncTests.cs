@@ -31,6 +31,16 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 .WithDataProperty("PropertyOne", "ValueOne")
                 .WithDataProperty("PropertyTwo", "ValueTwo")
                 .Create();
+        } 
+        
+        [Test]
+        public async Task SHOULD_initialize_client()
+        {
+            //Act
+            await Sut.SendNotificationToUserAsync(_notification, _userId, MockNotificationHub.Object, CancellationToken.None);
+
+            //Assert
+            MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
         }
 
         [Test]

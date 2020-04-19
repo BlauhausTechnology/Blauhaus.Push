@@ -55,6 +55,16 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             };
         }
 
+        [Test]
+        public async Task SHOULD_initialize_client()
+        {
+            //Act
+            var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+
+            //Assert
+            MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
+        }
+
         public class AllPlatformsDeviceRegistration : UpdateDeviceRegistrationAsyncTests
         {
             [Test]

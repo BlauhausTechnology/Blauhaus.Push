@@ -42,6 +42,8 @@ namespace Blauhaus.Push.Server.Service
 
             using (var _ = _analyticsService.ContinueOperation(this, "Register device for push notifications", deviceRegistration.ToObjectDictionary()))
             {
+                _hubClientProxy.Initialize(hub);
+
                 var installation = new Installation
                 {
                     PushChannel = deviceRegistration.PushNotificationServiceHandle,
@@ -86,6 +88,8 @@ namespace Blauhaus.Push.Server.Service
         {
             using (var _ = _analyticsService.ContinueOperation(this, "Load push notification registration for device", new Dictionary<string, object>{{"DeviceIdentifier", deviceIdentifier}}))
             {
+                _hubClientProxy.Initialize(hub);
+
                 var installationExists = await _hubClientProxy.InstallationExistsAsync(deviceIdentifier, token);
 
                 if (!installationExists)
@@ -121,6 +125,8 @@ namespace Blauhaus.Push.Server.Service
             IPushNotificationsHub hub,
             CancellationToken token)
         {
+            
+            _hubClientProxy.Initialize(hub);
 
             using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to user", new Dictionary<string, object>
                 {{nameof(IPushNotification), notification}, {"UserId", userId }}))

@@ -59,6 +59,16 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             }
 
             [Test]
+            public async Task SHOULD_initialize_client()
+            {
+                //Act
+                var result = await Sut.LoadDeviceRegistrationAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+
+                //Assert
+                MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
+            }
+
+            [Test]
             public async Task IF_installation_does_not_exist_SHOULD_fail()
             {
                 //Arrange
