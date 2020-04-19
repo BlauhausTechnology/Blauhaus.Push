@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Tests.Client.Tests._Base;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.AndroidPushNotificationsClientServiceTests
 {
@@ -17,7 +16,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
             {"message", "This is the Message" },
             {"Title", "DefaultTitle" },
             {"Body", "DefaultBody" },
-            {"Template_Type", "My Template Name" },
+            {"Template_Name", "My Template Name" },
         };
 
         [Test]
@@ -37,7 +36,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
             Assert.AreEqual(1, result.DataProperties["integer"]);
             Assert.AreEqual("DefaultTitle", result.Title);
             Assert.AreEqual("DefaultBody", result.Body);
-            Assert.AreEqual("My Template Name", result.Type);
+            Assert.AreEqual("My Template Name", result.Name);
         }
 
 
@@ -52,6 +51,23 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
             MockAnalyticsService.VerifyTrace("Extracting push notification");
             MockAnalyticsService.VerifyTraceProperty("Raw Notification", AndroidMessageProperties);
             MockAnalyticsService.VerifyTrace("Notification processed");
+        }
+
+        [Test]
+        public void SHOULD_trace_number_of_subscribers()
+        {
+            //Arrange
+            Sut.ObserveForegroundNotifications().Subscribe();
+
+            //Test
+            Sut.HandleForegroundNotification(AndroidMessageProperties);
+
+            //Assert
+            MockAnalyticsService.VerifyStartOperation("Foreground Push Notification");
+            MockAnalyticsService.VerifyTrace("Extracting push notification");
+            MockAnalyticsService.VerifyTraceProperty("Raw Notification", AndroidMessageProperties);
+            MockAnalyticsService.VerifyTrace("Notification processed");
+            MockAnalyticsService.VerifyTrace("Foreground notification being published");
         }
 
         [Test]

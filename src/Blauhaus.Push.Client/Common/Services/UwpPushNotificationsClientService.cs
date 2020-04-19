@@ -5,12 +5,11 @@ using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.Utils.Extensions;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Abstractions.Extensions;
+using Blauhaus.Push.Abstractions.Common;
+using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Client.Common._Base;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Blauhaus.Push.Client.Common.Services
 {
@@ -89,7 +88,7 @@ namespace Blauhaus.Push.Client.Common.Services
                 {
                     body = child.Value.ToString();
                 }
-                else if (child.Key.Equals("Template_Type", StringComparison.InvariantCultureIgnoreCase))
+                else if (child.Key.Equals("Template_Name", StringComparison.InvariantCultureIgnoreCase))
                 {
                     type = child.Value.ToString();
                 }

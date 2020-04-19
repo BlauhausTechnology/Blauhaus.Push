@@ -11,6 +11,7 @@ using Foundation;
 using UserNotifications;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Client.Common;
 using Xamarin.Forms.Platform.iOS;
 using Blauhaus.Push.Client.Common.Services;

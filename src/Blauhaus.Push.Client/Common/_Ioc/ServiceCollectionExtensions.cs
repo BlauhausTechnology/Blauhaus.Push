@@ -1,5 +1,4 @@
-﻿using System;
-using Blauhaus.DeviceServices.Common._Ioc;
+﻿using Blauhaus.DeviceServices.Common._Ioc;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common._Config;
 using Microsoft.Extensions.DependencyInjection;

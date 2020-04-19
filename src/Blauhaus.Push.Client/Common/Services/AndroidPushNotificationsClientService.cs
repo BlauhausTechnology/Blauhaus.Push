@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Client;
+using Blauhaus.Push.Abstractions.Common;
+using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Client.Common._Base;
-using Newtonsoft.Json;
 
 namespace Blauhaus.Push.Client.Common.Services
 {
@@ -96,7 +96,7 @@ namespace Blauhaus.Push.Client.Common.Services
                     body = notificationProperty.Value.ToString();
                 }
 
-                else if (string.Equals(notificationProperty.Key, "Template_Type", StringComparison.InvariantCultureIgnoreCase))
+                else if (string.Equals(notificationProperty.Key, "Template_Name", StringComparison.InvariantCultureIgnoreCase))
                 {
                     type = notificationProperty.Value.ToString();
                 }

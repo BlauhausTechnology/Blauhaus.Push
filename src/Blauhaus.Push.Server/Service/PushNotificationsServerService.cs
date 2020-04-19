@@ -1,50 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Common.ValueObjects.BuildConfigs;
-using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common;
+using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
-using Microsoft.Extensions.Options;
-using PushNotificationsServerConfig = Blauhaus.Push.Server._Config.PushNotificationsServerConfig;
 
 namespace Blauhaus.Push.Server.Service
 {
-    public class AzurePushNotificationsServerService : IPushNotificationsServerService
+    public class PushNotificationsServerService : IPushNotificationsServerService
     {
         private readonly IAnalyticsService _analyticsService;
         private readonly INotificationHubClientProxy _hubClientProxy;
-        private readonly IPushNotificationsServerConfig _config;
 
-        public AzurePushNotificationsServerService(
+        public PushNotificationsServerService(
             IAnalyticsService analyticsService,
-            INotificationHubClientProxy hubClientProxy,
-            IPushNotificationsServerConfig config)
+            INotificationHubClientProxy hubClientProxy)
         {
             _analyticsService = analyticsService;
             _hubClientProxy = hubClientProxy;
-            _config = config;
         }
 
-        public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, CancellationToken token)
+        public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(
+            IDeviceRegistration deviceRegistration, 
+            IPushNotificationsHub hub,
+            CancellationToken token)
         {
             if (deviceRegistration.IsNotValid(this, _analyticsService, out var validationError))
             {
                 return Result.Failure<IDeviceRegistration>(validationError);
             }
 
-            using (var _ = _analyticsService.StartOperation(this, "Register device for push notifications", deviceRegistration.ToObjectDictionary()))
+            using (var _ = _analyticsService.ContinueOperation(this, "Register device for push notifications", deviceRegistration.ToObjectDictionary()))
             {
+                _hubClientProxy.Initialize(hub);
+
                 var installation = new Installation
                 {
                     PushChannel = deviceRegistration.PushNotificationServiceHandle,
@@ -82,10 +81,15 @@ namespace Blauhaus.Push.Server.Service
             }
         }
 
-        public async Task<Result<IDeviceRegistration>> LoadDeviceRegistrationAsync(string deviceIdentifier, CancellationToken token)
+        public async Task<Result<IDeviceRegistration>> LoadDeviceRegistrationAsync(
+            string deviceIdentifier, 
+            IPushNotificationsHub hub,
+            CancellationToken token)
         {
-            using (var _ = _analyticsService.StartOperation(this, "Load push notification registration for device", new Dictionary<string, object>{{"DeviceIdentifier", deviceIdentifier}}))
+            using (var _ = _analyticsService.ContinueOperation(this, "Load push notification registration for device", new Dictionary<string, object>{{"DeviceIdentifier", deviceIdentifier}}))
             {
+                _hubClientProxy.Initialize(hub);
+
                 var installationExists = await _hubClientProxy.InstallationExistsAsync(deviceIdentifier, token);
 
                 if (!installationExists)
@@ -108,25 +112,32 @@ namespace Blauhaus.Push.Server.Service
                     Templates = installation.ExtractTemplates()
                 };
 
+                //todo test
+                _analyticsService.TraceVerbose(this, "Device registration loaded", deviceRegistration.ToObjectDictionary());
+
                 return Result.Success<IDeviceRegistration>(deviceRegistration); 
             }
         }
 
-        public async Task SendNotificationToUserAsync(IPushNotification notification, string userId, CancellationToken token)
+        public async Task SendNotificationToUserAsync(
+            IPushNotification notification, 
+            string userId, 
+            IPushNotificationsHub hub,
+            CancellationToken token)
         {
+            
+            _hubClientProxy.Initialize(hub);
 
-            using (var _ = _analyticsService.StartOperation(this, "Send push notification to user", new Dictionary<string, object>
+            using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to user", new Dictionary<string, object>
                 {{nameof(IPushNotification), notification}, {"UserId", userId }}))
             {
 
                 var properties = notification.DataProperties.ToDictionary(notificationDataProperty => 
                     notificationDataProperty.Key, notificationDataProperty => notificationDataProperty.Value.ToString());
 
-                properties["Template_Type"] = notification.Type;
-
                 var tags = new List<string>
                 {
-                    notification.Type,
+                    notification.Name,
                     $"UserId_{userId}"
                 };
 

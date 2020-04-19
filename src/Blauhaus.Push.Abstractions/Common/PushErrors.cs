@@ -1,6 +1,6 @@
 ﻿using Blauhaus.Common.ValueObjects.Errors;
 
-namespace Blauhaus.Push.Abstractions
+namespace Blauhaus.Push.Abstractions.Common
 {
     public static class PushErrors
     {

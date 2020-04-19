@@ -1,7 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Blauhaus.Analytics.Console._Ioc;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.HubClientProxy;
@@ -12,13 +10,11 @@ namespace Blauhaus.Push.Server._Ioc
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddPushNotificationsServer(this IServiceCollection services, Action<PushNotificationsServerConfig> options, TraceListener traceListener) 
+        public static IServiceCollection AddPushNotificationsServer(this IServiceCollection services, TraceListener traceListener) 
         {
-            services.Configure(options);
-
             services.RegisterConsoleLoggerService(traceListener);
-            services.AddScoped<IPushNotificationsServerService, AzurePushNotificationsServerService>();
-            services.AddScoped<INotificationHubClientProxy, NotificationHubClientProxy>();
+            services.AddTransient<IPushNotificationsServerService, PushNotificationsServerService>();
+            services.AddTransient<INotificationHubClientProxy, NotificationHubClientProxy>();
             return services;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 
 namespace Blauhaus.Push.Server.Service
@@ -13,7 +14,7 @@ namespace Blauhaus.Push.Server.Service
         public string? UserId { get; set; }
         public string? AccountId { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
-        public List<INotificationTemplate> Templates { get; set; } = new List<INotificationTemplate>();
+        public List<IPushNotificationTemplate> Templates { get; set; } = new List<IPushNotificationTemplate>();
 
     }
 }

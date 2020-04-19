@@ -83,7 +83,7 @@ namespace Blauhaus.Push.Client.UWP
             }
             else
             {
-                _analyticsService.TraceWarning(this, "Received a non-toast push notification, ignoring...", "NotificationType", args.NotificationType.ToString());
+                _analyticsService.TraceWarning(this, "Received a non-toast push notification, ignoring...", "Name", args.NotificationType.ToString());
             }
         }
 

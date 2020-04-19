@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server.Service;
-using CSharpFunctionalExtensions;
 
 namespace Blauhaus.Push.Server.Extensions
 {

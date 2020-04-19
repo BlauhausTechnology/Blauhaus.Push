@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using Blauhaus.Push.Abstractions;
-using Blauhaus.Push.Server.Templates;
+using Blauhaus.Push.Abstractions.Common.Notifications;
 
-namespace Blauhaus.Push.Server.Notifications
+namespace Blauhaus.Push.Abstractions.Common.Templates._Base
 {
 
     public class PushNotificationBuilder 
     {
-        private readonly NotificationTemplate _template;
+        private readonly IPushNotificationTemplate _template;
         private readonly Dictionary<string, object> _dataProperties = new Dictionary<string, object>();
         private string _title;
         private string _body;
 
-        public PushNotificationBuilder(NotificationTemplate template)
+        public PushNotificationBuilder(IPushNotificationTemplate template)
         {
             _template = template;
             _title = template.DefaultTitle;
@@ -22,7 +21,7 @@ namespace Blauhaus.Push.Server.Notifications
 
         public IPushNotification Create()
         {
-            return new PushNotification(_template.Name, _dataProperties, _title, _body);
+            return new PushNotification(_template.NotificationName, _dataProperties, _title, _body);
         }
 
         public PushNotificationBuilder WithDataProperty(string name, object value)
