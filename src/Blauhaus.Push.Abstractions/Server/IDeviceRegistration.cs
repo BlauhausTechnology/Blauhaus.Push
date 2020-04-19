@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 
 namespace Blauhaus.Push.Abstractions.Server
 {
@@ -11,6 +13,6 @@ namespace Blauhaus.Push.Abstractions.Server
         string? UserId { get; set; }
         string? AccountId { get; set; }
         List<string> Tags { get; set; }
-        List<INotificationTemplate> Templates { get; set; }
+        List<IPushNotificationTemplate> Templates { get; set; }
     }
 }

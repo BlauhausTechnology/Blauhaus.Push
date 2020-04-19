@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common;
+using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Tests.Client.Tests._Base;
 using Moq;
@@ -17,7 +18,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.U
             "Body:%22DefaultBody%22, " +
             "message:%22This is the Message%22, " +
             "exclusive:%22Win!%22, " +
-            "Template_Type:%22My Template%22, " +
+            "Template_Name:%22My Template%22, " +
             "integer:%221%22" +
             "}";
             
@@ -30,7 +31,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.U
             //Assert
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Title == "DefaultTitle")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Body == "DefaultBody")));
-            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Type == "My Template")));
+            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => y.Name == "My Template")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => 
                 (string) y.DataProperties["message"] == "This is the Message")));
             MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.Is<IPushNotification>(y => 

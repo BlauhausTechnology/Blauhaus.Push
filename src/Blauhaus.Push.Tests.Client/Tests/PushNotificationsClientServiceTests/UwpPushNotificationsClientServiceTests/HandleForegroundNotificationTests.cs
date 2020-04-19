@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Blauhaus.Push.Abstractions;
-using Blauhaus.Push.Client.Common;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Tests.Client.Tests._Base;
-using Moq;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 
 namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.UwpPushNotificationsClientServiceTests
@@ -20,7 +15,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.U
                 "Body:%22DefaultBody%22, " +
                 "message:%22This is the Message%22, " +
                 "exclusive:%22Win!%22, " +
-                "Template_Type:%22My Template%22, " +
+                "Template_Name:%22My Template%22, " +
                 "integer:%221%22" +
                 "}\">\r\n  <visual>\r\n    <binding template=\"ToastText01\">\r\n      <text id=\"1\">DefaultTitle</text>\r\n      <text id=\"2\">DefaultBody</text>\r\n    </binding>\r\n  </visual>\r\n</toast>";
 
@@ -37,7 +32,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.U
             //Assert
             Assert.AreEqual("DefaultTitle", result.Title);
             Assert.AreEqual("DefaultBody", result.Body);
-            Assert.AreEqual("My Template", result.Type);
+            Assert.AreEqual("My Template", result.Name);
             Assert.AreEqual("This is the Message", result.DataProperties["message"]);
             Assert.AreEqual("Win!", result.DataProperties["exclusive"]);
             Assert.AreEqual(1, result.DataProperties["integer"]);

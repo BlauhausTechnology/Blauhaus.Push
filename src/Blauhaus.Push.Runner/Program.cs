@@ -4,16 +4,17 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Analytics.Console._Ioc;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.Notifications;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
+using Blauhaus.Push.Runner.Config;
+using Blauhaus.Push.Runner.Config.MineGame;
+using Blauhaus.Push.Runner.Config.Reveye;
 using Blauhaus.Push.Server._Ioc;
-using Blauhaus.Push.Server.Notifications;
 using Blauhaus.Push.Server.Service;
-using Blauhaus.Push.Server.Templates;
-using Blauhaus.Push.Server.Templates._Base;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,84 +22,58 @@ namespace Blauhaus.Push.Runner
 {
     internal class Program
     {
-        private static IPushNotificationsServerService _pushNotificationsService;
 
-        #region dev admin ios sandbox
 
-        private const string ConnectionString =
-            "Endpoint=sb://minegamedevadminiossandbox.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=kDIla2IiV9ESJWsmoyWbse4i9dGq2HlVA2dIaNH1m/k=;" +
-            "EntityPath=minegamedevadminiossandbox";
-        private const string NotificationHubPath = "minegamedevadminiossandbox";
-        private const string PnsHandle = "458060045B18CDBD4C20ACA5561D9C7DCBF726D69A135A1CCB86DDEA087B6B53";
-        private static readonly IRuntimePlatform Platform = RuntimePlatform.iOS;
-        private const string DeviceId = "myIosDeviceId";
+        private static string NotificationHubPath;
+        private static string PnsHandle;
+        private static IRuntimePlatform Platform;
+        private static string DeviceId;
+        private static string ConnectionString;
+        private static BasePushRunnerHub Hub;
 
-        #endregion
+        private static IPushNotificationsServerService PushNotificationsService;
 
-        #region dev admin 
+        private static readonly PushNotificationTemplate VisibleTemplate = new PushNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
+        {
+            "message",
+            "exclusive",
+            "integer"
+        });
 
-        //private const string ConnectionString =
-        //    "Endpoint=sb://minegamedevadmin.servicebus.windows.net/;SharedAccessKeyName=DefaultFullSharedAccessSignature;SharedAccessKey=6ULhJh6mDzlRr6r0dZ2T6dL8MZHHve10nMq2V36c2T0=;" +
-        //    "EntityPath=minegamedevadmin";
-        //private const string NotificationHubPath = "minegamedevadmin";
+        private static IPushNotification VisibleNotification = new PushNotificationBuilder(VisibleTemplate)
+            .WithDataProperty("message", "This is the Message")
+            .WithDataProperty("exclusive", "Win!")
+            .WithDataProperty("integer", "1")
+            .Create();
 
-        //////Android
-        //private static readonly IRuntimePlatform Platform = RuntimePlatform.Android;
-        //private const string DeviceId = "myAndroidDeviceId";
-        //private const string PnsHandle = "d51fpqa0o-k:APA91bFwzZ5OuJzLl3qY8Ty39AkEt--tV4q1RGPineWKMGaqK954V0EKOT951iZiMtebnxtC2CZrlPj5_7vaU3UKFkcERcsGlSWuXX7FJyyMY-kCotzqz5EJrou8abo3pO2W51l31yuo";
 
-        //UWP
-        //private const string PnsHandle = "https://db5p.notify.windows.com/?token=AwYAAAB6THR%2b7ABipdeJ33UM7Ljd9ctnj8MQkfgr29zWrZVq7BsnVzMpGKDi7hcBVF16h%2bIiq%2fVvBBbNO8JRiSDEUfoiHC1Q1IQ9OY%2fghcad84Sy0ocQrZYRODk2jaymcOGm04wLnGeVWQcyqMc6Q3YHkwDJ";
-        //private static readonly IRuntimePlatform Platform = RuntimePlatform.UWP;
-        //private const string DeviceId = "myUwpDeviceId";
+        private static IPushNotificationsServerService Setup(BasePushRunnerHub hub)  
+        {
+            var services = new ServiceCollection();
 
-        #endregion
+            services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
 
-        #region dev game
+            services.AddPushNotificationsServer(new ConsoleTraceListener());
+            NotificationHubPath = hub.NotificationHubName;
+            DeviceId = hub.DeviceId;
+            PnsHandle = hub.PnsHandle;
+            ConnectionString = hub.NotificationHubConnectionString;
+            Platform = hub.Platform;
+            Hub = hub;
 
-        //private const string ConnectionString =
-        //    "Endpoint=sb://minegamedevhub.servicebus.windows.net/;" +
-        //    "SharedAccessKeyName=DefaultFullSharedAccessSignature;" +
-        //    "SharedAccessKey=fa802OEeFAWRmXRWTsBzXTRcHk4i3UOiwIgfj68O2Zk=;" +
-        //    "EntityPath=minegamedevhub";
-        //private const string NotificationHubPath = "minegamedevhub";
+            return services.BuildServiceProvider().GetRequiredService<IPushNotificationsServerService>();
+        }
 
-        ////UWP
-        //private const string PnsHandle = "https://am3p.notify.windows.com/?token=AwYAAABAz1jFcb6Csv4nmNuxMyHlD%2fWL5nxTfKEt4Y3z7y2bhNiCTHkiSlDCd3U%2fPS5cQVKlu22CYL8x6RUcQd3yEu561iZlYkd4txi25TUqXMAOh3ngoboGDsdFNeaqt8YcSS1YS5IZfUORqV%2bII7qpR2q%2b";
-        //private static readonly IRuntimePlatform Platform = RuntimePlatform.UWP;
-        //private const string DeviceId = "myUwpDeviceId";
-
-        ////Android
-        //private const string PnsHandle = "ezMgNtoZoUo:APA91bHEuSKwRvkQI8hN1GMo0Zq8tQWmYkUZ998A4p2fmZTgPUNjRSogLXJAVgeVnveZBf2LLfc4RTE-hyKgPytOfY9VdRMBym-jnxL3194f8d8qENDGFrHZTAtD_Dc_IuQ7oNrXaI3Y";
-        //private static readonly IRuntimePlatform Platform = RuntimePlatform.Android;
-        //private const string DeviceId = "myAndroidDeviceId";
-
-        #endregion
 
         private static async Task Main(string[] args)
         {
+            PushNotificationsService = Setup(new AdminIosHub());
 
-            var services = new ServiceCollection();
-            services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
-            services.AddPushNotificationsServer(x =>
-            {
-                x.ConnectionString = ConnectionString;
-                x.NotificationHubName = NotificationHubPath;
-            }, new ConsoleTraceListener());
-
-            var serviceProvider = services.BuildServiceProvider();
-            _pushNotificationsService = serviceProvider.GetService<IPushNotificationsServerService>();
+            var template = Templates.Message;
 
             try
             {
-                var visibleTemplate = new NotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
-                {
-                    "message",
-                    "exclusive",
-                    "integer"
-                });
-
-                await _pushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+                await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
                 {
                     AccountId = "myAccountId",
                     UserId = "myUserId",
@@ -106,21 +81,17 @@ namespace Blauhaus.Push.Runner
                     DeviceIdentifier = DeviceId,
                     PushNotificationServiceHandle = PnsHandle,
                     Tags = new List<string> { "RandomTaggage" },
-                    Templates = new List<INotificationTemplate>
+                    Templates = new List<IPushNotificationTemplate>
                     {
-                        visibleTemplate
+                        Templates.Message
                     }
-                }, CancellationToken.None);
+                }, Hub, CancellationToken.None);
 
-                //var installation = await _pushNotificationsService.LoadDeviceRegistrationAsync("myAndroidDeviceId", CancellationToken.None);
-                var allRegistrations = await GetAllRegistrationsAsync(pnsHandle: PnsHandle);
 
-                // this will send out all templates. Missing fields will be there but empty
-                await _pushNotificationsService.SendNotificationToUserAsync(new PushNotificationBuilder(visibleTemplate)
-                    .WithDataProperty("message", "This is the Message")
-                    .WithDataProperty("exclusive", "Win!")
-                    .WithDataProperty("integer", "1")
-                    .Create(), "myUserId", CancellationToken.None);
+                var reg = PushNotificationsService.LoadDeviceRegistrationAsync(DeviceId, Hub, CancellationToken.None);
+
+                await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
+                    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), "myUserId", Hub, CancellationToken.None);
 
             }
             catch (Exception e)
@@ -152,51 +123,51 @@ namespace Blauhaus.Push.Runner
             return registrations.ToList();
         }
 
-        private static async Task<List<RegistrationDescription>> DeleteAllRegistrationsAsync()
-        {
-            //TODO NB when deleting a registration you cannot use the same device Id again, so we should actually never do this in production
+        //private static async Task<List<RegistrationDescription>> DeleteAllRegistrationsAsync()
+        //{
+        //    //TODO NB when deleting a registration you cannot use the same device Id again, so we should actually never do this in production
 
-            var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
-            var registrations = await client.GetAllRegistrationsAsync(100);
-            var count = 0;
-            try
-            {
+        //    var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
+        //    var registrations = await client.GetAllRegistrationsAsync(100);
+        //    var count = 0;
+        //    try
+        //    {
                             
-                foreach (var reg in registrations)
-                {
-                    await client.DeleteRegistrationAsync(reg.RegistrationId);
-                }
+        //        foreach (var reg in registrations)
+        //        {
+        //            await client.DeleteRegistrationAsync(reg.RegistrationId);
+        //        }
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //        throw;
+        //    }
 
 
-            return registrations.ToList();
-        }
+        //    return registrations.ToList();
+        //}
 
-        private static async Task CreateInstallationAsync(string pnsHandle)
-        {
-            var result = await _pushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
-            {
-                Platform = RuntimePlatform.Android,
-                AccountId = "myAccountId",
-                UserId = "myUserId",
-                DeviceIdentifier = "myNewDeviceId",
-                PushNotificationServiceHandle = pnsHandle,
-                Tags = new List<string>{"RandomTaggage"},
-                Templates = new List<INotificationTemplate>
-                {
-                    new NotificationTemplate("default", "Test", "Test", new List<string>
-                    {
-                        "message"
-                    })
-                }
-            }, CancellationToken.None);
+        //private static async Task CreateInstallationAsync(string pnsHandle)
+        //{
+        //    var result = await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+        //    {
+        //        Platform = RuntimePlatform.Android,
+        //        AccountId = "myAccountId",
+        //        UserId = "myUserId",
+        //        DeviceIdentifier = "myNewDeviceId",
+        //        PushNotificationServiceHandle = pnsHandle,
+        //        Tags = new List<string>{"RandomTaggage"},
+        //        Templates = new List<IPushNotificationTemplate>
+        //        {
+        //            new PushNotificationTemplate("default", "Test", "Test", new List<string>
+        //            {
+        //                "message"
+        //            })
+        //        }
+        //    }, CancellationToken.None);
 
-        }
+        //}
     }
 }

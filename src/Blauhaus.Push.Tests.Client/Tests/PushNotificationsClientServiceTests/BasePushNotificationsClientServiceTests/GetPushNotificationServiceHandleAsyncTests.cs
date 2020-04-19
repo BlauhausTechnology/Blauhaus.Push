@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Push.Tests.Client.Tests._Base;
 using Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.BasePushNotificationsClientServiceTests._Base;
 using Microsoft.Extensions.DependencyInjection;

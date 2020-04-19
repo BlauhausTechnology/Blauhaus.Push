@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Common.Utils.Extensions;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server.Templates;
 using Microsoft.Azure.NotificationHubs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -52,9 +52,9 @@ namespace Blauhaus.Push.Server.Extensions
             return tags;
         }
 
-        public static List<INotificationTemplate> ExtractTemplates(this Installation installation)
+        public static List<IPushNotificationTemplate> ExtractTemplates(this Installation installation)
         {
-            var templates = new List<INotificationTemplate>();
+            var templates = new List<IPushNotificationTemplate>();
 
             foreach (var installationTemplate in installation.Templates)
             {
@@ -71,7 +71,7 @@ namespace Blauhaus.Push.Server.Extensions
             return templates;
         }
         
-        private static INotificationTemplate ExtractIosPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
+        private static IPushNotificationTemplate ExtractIosPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
         {
             var templateName = installationTemplate.Key;
             var templateProperties = new List<string>();
@@ -87,40 +87,40 @@ namespace Blauhaus.Push.Server.Extensions
             }
             
             //todo extract default title and body
-            return new NotificationTemplate(templateName, "", "", templateProperties);
+            return new PushNotificationTemplate(templateName, "", "", templateProperties);
         }
 
-        private static INotificationTemplate ExtractUwpPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
+        private static IPushNotificationTemplate ExtractUwpPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
         {
             var templateName = installationTemplate.Key;
             var templateProperties = new List<string>();
+            var title = "";
+            var body = "";
 
-            var xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(installationTemplate.Value.Body);
-
-            var nodeContents = xmlDoc.SelectNodes("/toast/visual/binding");
-            if (nodeContents != null && nodeContents.Count > 0)
+            var uwpPayload = installationTemplate.Value.Body.ExtractValueBetweenText("<toast launch=\"", "\">");
+            var split = uwpPayload.Split('(', ')');
+            foreach (var sub in split)
             {
-                var content = nodeContents[0];
-                var payload = content.ChildNodes[content.ChildNodes.Count - 1];
-                var json = payload.InnerText;
-
-                var templateBody = JObject.Parse(json);
-
-                foreach (var dataProperty in templateBody)
+                if (!sub.Contains("'%22'"))
                 {
-                    templateProperties.Add(dataProperty.Key);
+                    if (sub.Equals("Title", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        title = sub;
+                    }
+                    else if (sub.Equals("Body", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        body = sub;
+                    }
+                    else
+                    {
+                        templateProperties.Add(sub);
+                    }
                 }
-
-                //todo extract default title and body
-                return new NotificationTemplate(templateName, "", "", templateProperties);
-
             }
-
-            throw new Exception("Unable to parse UWP Installation Template");
+            return new PushNotificationTemplate(templateName, title, body, templateProperties);
         }
 
-        private static INotificationTemplate ExtractAndroidPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
+        private static IPushNotificationTemplate ExtractAndroidPushNotificationTemplate(KeyValuePair<string, InstallationTemplate> installationTemplate)
         {
             var templateName = installationTemplate.Key;
             var templateProperties = new List<string>();
@@ -139,7 +139,7 @@ namespace Blauhaus.Push.Server.Extensions
             }
             
             //todo extract default title and body
-            return new NotificationTemplate(templateName, "", "", templateProperties);
+            return new PushNotificationTemplate(templateName, "", "", templateProperties);
         }
     }
 }

@@ -1,20 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 
-namespace Blauhaus.Push.Abstractions
+namespace Blauhaus.Push.Abstractions.Common.Notifications
 {
     public class PushNotification : IPushNotification
     {
         public PushNotification(string type, Dictionary<string, object> dataProperties, string title = "", string body = "")
         {
             DataProperties = dataProperties;
-            Type = type;
+            Name = type;
             Title = title;
             Body = body;
         }
+
+        public PushNotification(PushNotificationBuilder builder)
+        {
+            var notification = builder.Create();
+            DataProperties = notification.DataProperties;
+            Name = notification.Name;
+            Title = notification.Title;
+            Body = notification.Body;
+        }
         
         public Dictionary<string, object> DataProperties { get; }
-        public string Type { get; }
+        public string Name { get; }
         public string Title { get; }
         public string Body { get; }
 

@@ -1,35 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Text;
-using System.Xml;
-using System.Xml.Linq;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
+using Blauhaus.Push.Abstractions.Common.Templates;
+using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server.Templates._Base;
 using Microsoft.Azure.NotificationHubs;
 
 namespace Blauhaus.Push.Server.Extensions
 {
-    public static class PushNotificationTemplateExtensions
+    public static class MessageNotificationTemplateExtensions
     {
-        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this INotificationTemplate template, IRuntimePlatform platform)
+        public static KeyValuePair<string, InstallationTemplate> ToPlatform(this IPushNotificationTemplate template, IRuntimePlatform platform)
         {
             if (platform.Value == RuntimePlatform.Android.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.Name, ToAndroid(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationName, ToAndroid(template));
             
             if (platform.Value == RuntimePlatform.iOS.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.Name, ToIos(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationName, ToIos(template));
             
             if (platform.Value == RuntimePlatform.UWP.Value)
-                return new KeyValuePair<string, InstallationTemplate>(template.Name, ToUwp(template));
+                return new KeyValuePair<string, InstallationTemplate>(template.NotificationName, ToUwp(template));
 
             throw new ArgumentException($"{platform.Value} is not supported");
         }
 
-        private static InstallationTemplate ToUwp(INotificationTemplate template)
+        private static InstallationTemplate ToUwp(IPushNotificationTemplate template)
         {
             var launchProperties = new StringBuilder();
 
@@ -41,7 +38,8 @@ namespace Blauhaus.Push.Server.Extensions
 
                 launchProperties
                     .Append("'Title'").Append(" + ':' + ").Append("'%22' + ").Append("$(Title)").Append(" + '%22'").Append(" + ', ' + ")
-                    .Append("'Body'").Append(" + ':' + ").Append("'%22' + ").Append("$(Body)").Append(" + '%22'").Append(" + ', ' + ");
+                    .Append("'Body'").Append(" + ':' + ").Append("'%22' + ").Append("$(Body)").Append(" + '%22'").Append(" + ', ' + ")
+                    .Append("'Template_Name'").Append(" + ':' + ").Append("'%22' + '").Append(template.NotificationName).Append("' + '%22'").Append(" + ', ' + ");
 
                 for (var i = 0; i < template.DataProperties.Count; i++)
                 {
@@ -74,7 +72,7 @@ namespace Blauhaus.Push.Server.Extensions
             };
         }
 
-        private static InstallationTemplate ToIos(INotificationTemplate template)
+        private static InstallationTemplate ToIos(IPushNotificationTemplate template)
         {
             var body = new StringBuilder();
 
@@ -87,7 +85,9 @@ namespace Blauhaus.Push.Server.Extensions
             body.Append("\"body\" : \"$(Body)\"");
                 
             body.Append(" }");
-            body.Append(" }");
+            body.Append(" }, ");
+            
+            body.Append("\"Template_Name\" : ").Append($"\"{template.NotificationName}\"");
 
             if (template.DataProperties.Count > 0)
             {
@@ -113,7 +113,7 @@ namespace Blauhaus.Push.Server.Extensions
             return new InstallationTemplate{ Body = body.ToString()};
         }
 
-        private static InstallationTemplate ToAndroid(INotificationTemplate template)
+        private static InstallationTemplate ToAndroid(IPushNotificationTemplate template)
         {
             var body = new StringBuilder();
 
@@ -123,6 +123,7 @@ namespace Blauhaus.Push.Server.Extensions
 
             body.Append("\"Title\" : ").Append("\"$(Title)\"").Append(", ");
             body.Append("\"Body\" : ").Append("\"$(Body)\"").Append(", ");
+            body.Append("\"Template_Name\" : ").Append($"\"{template.NotificationName}\"").Append(", ");
 
             for (var i = 0; i < template.DataProperties.Count; i++)
             {
