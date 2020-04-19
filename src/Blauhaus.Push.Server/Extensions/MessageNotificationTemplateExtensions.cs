@@ -39,7 +39,7 @@ namespace Blauhaus.Push.Server.Extensions
                 launchProperties
                     .Append("'Title'").Append(" + ':' + ").Append("'%22' + ").Append("$(Title)").Append(" + '%22'").Append(" + ', ' + ")
                     .Append("'Body'").Append(" + ':' + ").Append("'%22' + ").Append("$(Body)").Append(" + '%22'").Append(" + ', ' + ")
-                    .Append("'Template_Name'").Append(" + ':' + ").Append("'%22' + ").Append(template.NotificationName).Append(" + '%22'").Append(" + ', ' + ");
+                    .Append("'Template_Name'").Append(" + ':' + ").Append("'%22' + '").Append(template.NotificationName).Append("' + '%22'").Append(" + ', ' + ");
 
                 for (var i = 0; i < template.DataProperties.Count; i++)
                 {

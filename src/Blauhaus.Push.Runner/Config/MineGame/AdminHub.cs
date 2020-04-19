@@ -34,7 +34,7 @@ namespace Blauhaus.Push.Runner.Config.MineGame
 
     public class AdminIosHub : BaseAdminHub
     {
-        public AdminIosHub() : base(RuntimePlatform.iOS, "")
+        public AdminIosHub() : base(RuntimePlatform.iOS, "blah-blah")
         {
         }
     }

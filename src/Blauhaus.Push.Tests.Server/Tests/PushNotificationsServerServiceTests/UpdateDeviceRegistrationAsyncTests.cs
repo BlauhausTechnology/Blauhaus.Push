@@ -264,7 +264,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                     "<toast launch=\"{'{' + " +
                     "'Title' + ':' + '%22' + $(Title) + '%22' + ', ' + " +
                     "'Body' + ':' + '%22' + $(Body) + '%22' + ', ' + " +
-                    "'Template_Name' + ':' + '%22' + VisibleTemplate + '%22' + ', ' + " +
+                    "'Template_Name' + ':' + '%22' + 'VisibleTemplate' + '%22' + ', ' + " +
                     "'VisibleTemplateProperty' + ':' + '%22' + $(VisibleTemplateProperty) + '%22' + ', ' + " +
                     "'SecondVisibleTemplateProperty' + ':' + '%22' + $(SecondVisibleTemplateProperty) + '%22' + '}'}\">" +
                     "<visual><binding template=\"ToastText01\">" +
