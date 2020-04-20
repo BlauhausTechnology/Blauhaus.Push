@@ -4,8 +4,8 @@ namespace Blauhaus.Push.Runner.Config.MineGame
 {
     public abstract class AdminSandboxHub : BasePushRunnerHub
     {
-        protected AdminSandboxHub(string pnsHandle, string deviceId) 
-            : base(RuntimePlatform.iOS, pnsHandle, deviceId)
+        protected AdminSandboxHub(string pnsHandle, string deviceId, string userId) 
+            : base(RuntimePlatform.iOS, pnsHandle, deviceId, userId)
         {
             NotificationHubConnectionString =
                 "Endpoint=sb://minegamedevadminiossandbox.servicebus.windows.net/;" +
@@ -21,7 +21,7 @@ namespace Blauhaus.Push.Runner.Config.MineGame
 
     public class AdminSandboxIosHub : AdminSandboxHub
     {
-        public AdminSandboxIosHub() : base("", "")
+        public AdminSandboxIosHub() : base("", "", "")
         {
         }
     }

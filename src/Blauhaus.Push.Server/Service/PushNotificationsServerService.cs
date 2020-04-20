@@ -80,16 +80,21 @@ namespace Blauhaus.Push.Server.Service
             }
         }
 
-        public async Task<Result<IDeviceRegistration>> LoadRegistrationsForUserAsync(
-            string deviceIdentifier, 
-            IPushNotificationsHub hub,
-            CancellationToken token)
+        public async Task<Result<IDeviceRegistration>> LoadRegistrationForUserDeviceAsync(
+            string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
         {
-            using (var _ = _analyticsService.ContinueOperation(this, "Load push notification registration for device", new Dictionary<string, object>{{"DeviceIdentifier", deviceIdentifier}}))
+            using (var _ = _analyticsService.ContinueOperation(this, "Load push notification registration for user device", 
+                new Dictionary<string, object>
+                {
+                    {"DeviceIdentifier", deviceIdentifier},
+                    {"UserId", userId }
+                }))
             {
                 _hubClientProxy.Initialize(hub);
 
-                var installationExists = await _hubClientProxy.InstallationExistsAsync(deviceIdentifier, token);
+                var installationId = userId + "___" + deviceIdentifier;
+
+                var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId, token);
 
                 if (!installationExists)
                 {
@@ -98,7 +103,7 @@ namespace Blauhaus.Push.Server.Service
                     return Result.Failure<IDeviceRegistration>(_analyticsService.TraceError(this, PushErrors.RegistrationDoesNotExist));
                 }
 
-                var installation = await _hubClientProxy.GetInstallationAsync(deviceIdentifier, token);
+                var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
 
                 var deviceRegistration = new DeviceRegistration
                 {
@@ -119,10 +124,7 @@ namespace Blauhaus.Push.Server.Service
         }
 
         public async Task SendNotificationToUserAsync(
-            IPushNotification notification, 
-            string userId, 
-            IPushNotificationsHub hub,
-            CancellationToken token)
+            IPushNotification notification, string userId, IPushNotificationsHub hub, CancellationToken token)
         {
             
             _hubClientProxy.Initialize(hub);
@@ -153,5 +155,6 @@ namespace Blauhaus.Push.Server.Service
                 var result = await _hubClientProxy.SendNotificationAsync(properties, tags, token);
             }
         }
+         
     }
 }

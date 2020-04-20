@@ -68,6 +68,10 @@ namespace Blauhaus.Push.Server.Extensions
             error = string.Empty;
             return false;
         }
-         
+
+        public static string ExtractInstallationId(this IDeviceRegistration deviceRegistration)
+        {
+            return deviceRegistration.UserId + "___" + deviceRegistration.DeviceIdentifier;
+        }
     }
 }

@@ -14,7 +14,7 @@ using NUnit.Framework;
 namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 {
     [TestFixture]
-    public class LoadRegistrationsForUserAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
+    public class LoadRegistrationForUserDeviceAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
     {
         private Installation _installation;
 
@@ -25,7 +25,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
             _installation = new Installation
             {
-                InstallationId = "myDeviceId",
+                InstallationId = "myUserId___myDeviceId",
                 Platform = NotificationPlatform.Fcm,
                 ExpirationTime = null,
                 PushChannel = "myPnsHandle",
@@ -46,24 +46,25 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 .ReturnsAsync(_installation);
         }
 
-        public class NonPlatformSpecificRegistration : LoadRegistrationsForUserAsyncTests
+        public class NonPlatformSpecificRegistration : LoadRegistrationForUserDeviceAsyncTests
         {
             [Test]
             public async Task SHOULD_track_operation()
             {
                 //Act
-                await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                MockAnalyticsService.VerifyContinueOperation("Load push notification registration for user");
-                MockAnalyticsService.VerifyContinueOperationProperty("UserId", _installation.InstallationId);
+                MockAnalyticsService.VerifyContinueOperation("Load push notification registration for user device");
+                MockAnalyticsService.VerifyContinueOperationProperty("UserId", "myUserId");
+                MockAnalyticsService.VerifyContinueOperationProperty("DeviceIdentifier", "myDeviceId");
             }
 
             [Test]
             public async Task SHOULD_initialize_client()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
@@ -77,7 +78,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                     .ReturnsAsync(false);
 
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(PushErrors.RegistrationDoesNotExist.ToString(), result.Error);
@@ -89,7 +90,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             public async Task SHOULD_convert_InstallationId_to_DeviceIdentifier()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(result.Value.DeviceIdentifier, _installation.InstallationId);
@@ -102,7 +103,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 _installation.Tags.Add("UserId_MyUser");
 
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual("MyUser", result.Value.UserId);
@@ -112,7 +113,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             public async Task IF_there_is_no_UserId_tag_SHOULD_set_UserId_empty()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual("", result.Value.UserId);
@@ -125,7 +126,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 _installation.Tags.Add("AccountId_MyAccount");
 
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual("MyAccount", result.Value.AccountId);
@@ -135,7 +136,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             public async Task IF_there_is_no_AccountId_tag_SHOULD_set_AccountId_empty()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(string.Empty, result.Value.AccountId);
@@ -145,7 +146,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             public async Task SHOULD_extract_PnsHandle()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual("myPnsHandle", result.Value.PushNotificationServiceHandle);
@@ -155,7 +156,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             public async Task SHOULD_extract_Tags()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.True(result.Value.Tags.Contains("TagOne"));
@@ -164,7 +165,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             }
         }
 
-        public class LoadIosRegistration : LoadRegistrationsForUserAsyncTests
+        public class LoadIosRegistration : LoadRegistrationForUserDeviceAsyncTests
         {
             public override void SetUp()
             {
@@ -188,7 +189,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 _installation.Platform = NotificationPlatform.Apns;
 
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(result.Value.Platform, RuntimePlatform.iOS);
@@ -198,7 +199,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             public async Task SHOULD_Extract_Templates()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 var template = result.Value.Templates.First();
@@ -209,13 +210,13 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
         }
 
-        public class LoadAndroidRegistration : LoadRegistrationsForUserAsyncTests
+        public class LoadAndroidRegistration : LoadRegistrationForUserDeviceAsyncTests
         {
             [Test]
             public async Task IF_Platform_is_FCM_SHOULD_Extract_Templates()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 var template = result.Value.Templates.First();
@@ -232,14 +233,14 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 _installation.Platform = NotificationPlatform.Fcm;
 
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(result.Value.Platform, RuntimePlatform.Android);
             }
         }
 
-        public class LoadUwpRegistration : LoadRegistrationsForUserAsyncTests
+        public class LoadUwpRegistration : LoadRegistrationForUserDeviceAsyncTests
         {
             public override void SetUp()
             {
@@ -272,7 +273,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 _installation.Platform = NotificationPlatform.Wns;
 
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 Assert.AreEqual(result.Value.Platform, RuntimePlatform.UWP);
@@ -282,7 +283,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             public async Task SHOULD_Extract_Templates()
             {
                 //Act
-                var result = await Sut.LoadRegistrationsForUserAsync(_installation.InstallationId, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 var template = result.Value.Templates.First();

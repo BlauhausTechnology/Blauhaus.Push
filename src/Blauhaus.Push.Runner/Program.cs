@@ -28,6 +28,7 @@ namespace Blauhaus.Push.Runner
         private static string DeviceId;
         private static string ConnectionString;
         private static BasePushRunnerHub Hub;
+        private static string UserId;
 
         private static IPushNotificationsServerService PushNotificationsService;
 
@@ -62,7 +63,7 @@ namespace Blauhaus.Push.Runner
                     var regType = registrationDescription.GetType();
                 }
 
-                var reg = await PushNotificationsService.LoadRegistrationsForUserAsync(DeviceId, Hub, CancellationToken.None);
+                var reg = await PushNotificationsService.LoadRegistrationForUserDeviceAsync(UserId, DeviceId, Hub, CancellationToken.None);
 
                 await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
                     "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), "myUserId", Hub, CancellationToken.None);
@@ -92,6 +93,7 @@ namespace Blauhaus.Push.Runner
             .Create();
 
 
+
         private static IPushNotificationsServerService Setup(BasePushRunnerHub hub)  
         {
             var services = new ServiceCollection();
@@ -104,6 +106,8 @@ namespace Blauhaus.Push.Runner
             PnsHandle = hub.PnsHandle;
             ConnectionString = hub.NotificationHubConnectionString;
             Platform = hub.Platform;
+            UserId = hub.UserId;
+            
             Hub = hub;
 
             return services.BuildServiceProvider().GetRequiredService<IPushNotificationsServerService>();
