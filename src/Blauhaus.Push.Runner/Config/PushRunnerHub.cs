@@ -6,9 +6,9 @@ namespace Blauhaus.Push.Runner.Config
 {
     public abstract class BasePushRunnerHub : IPushNotificationsHub
     {
-        protected BasePushRunnerHub(IRuntimePlatform platform, string pnsHandle)
+        protected BasePushRunnerHub(IRuntimePlatform platform, string pnsHandle, string deviceId )
         {
-            DeviceId = platform.Value + "_deviceId";
+            DeviceId = deviceId =="" ? platform.Value + "_deviceId" : deviceId;
             Platform = platform;
             PnsHandle = pnsHandle;
         }

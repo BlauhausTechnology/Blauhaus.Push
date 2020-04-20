@@ -22,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.pipelines\azure-pipelines.yml = ..\.pipelines\azure-pipelines.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2607126B-8E12-4897-BC36-B72342742077}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,10 +58,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{5823C2EF-C5A7-48AD-BFAD-E5FE6509D4B5} = {2607126B-8E12-4897-BC36-B72342742077}
-		{53EA61A3-D99C-48CF-B28F-B036BD95A62C} = {2607126B-8E12-4897-BC36-B72342742077}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B7B9F5C6-1D64-45E5-B9B0-DFB2C7138418}

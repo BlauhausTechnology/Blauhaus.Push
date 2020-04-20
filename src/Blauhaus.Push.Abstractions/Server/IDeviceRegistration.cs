@@ -7,11 +7,11 @@ namespace Blauhaus.Push.Abstractions.Server
 {
     public interface IDeviceRegistration
     {
-        string PushNotificationServiceHandle { get; set; }
-        string? DeviceIdentifier { get; set; }
-        IRuntimePlatform Platform { get; set; }
-        string? UserId { get; set; }
         string? AccountId { get; set; }
+        string UserId { get; set; }
+        IRuntimePlatform Platform { get; set; }
+        string DeviceIdentifier { get; set; }
+        string PushNotificationServiceHandle { get; set; }
         List<string> Tags { get; set; }
         List<IPushNotificationTemplate> Templates { get; set; }
     }

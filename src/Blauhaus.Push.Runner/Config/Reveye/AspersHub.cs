@@ -4,8 +4,8 @@ namespace Blauhaus.Push.Runner.Config.Reveye
 {
     public abstract class BaseAspersHub : BasePushRunnerHub
     {
-        protected BaseAspersHub(IRuntimePlatform platform, string pnsHandle) 
-            : base(platform, pnsHandle)
+        protected BaseAspersHub(IRuntimePlatform platform, string pnsHandle, string deviceId) 
+            : base(platform, pnsHandle, deviceId)
         {
             NotificationHubConnectionString =
                 "Endpoint=sb://reveye-push.servicebus.windows.net/;" +
@@ -20,7 +20,8 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class AspersAndroidHub : BaseAspersHub
     {
         public AspersAndroidHub() : base(RuntimePlatform.Android, 
-            "dY-7NPUmQxc:APA91bF5pIKH_0iWDYk__Qc9IgNJnW2uWGu00-ymdrZvQ9PPKDev4grtCjvuczr3wTIIIPzHQvxzFU3zsggSGhwJPXu_LLyD5HHPQ9pv48evQqw5x8fKLRTO4lf0VurPO86EuwFGMjH5")
+            "dY-7NPUmQxc:APA91bF5pIKH_0iWDYk__Qc9IgNJnW2uWGu00-ymdrZvQ9PPKDev4grtCjvuczr3wTIIIPzHQvxzFU3zsggSGhwJPXu_LLyD5HHPQ9pv48evQqw5x8fKLRTO4lf0VurPO86EuwFGMjH5",
+            "androidDeviceId")
         {
         }
     }
@@ -28,7 +29,8 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class AspersUwpHub : BaseAspersHub
     {
         public AspersUwpHub() : base(RuntimePlatform.UWP,
-                "https://db5p.notify.windows.com/?token=AwYAAACVwSK3x81cjeQRa3IdEl35tsQ3c2fvE5kHneBz41%2bqNUVBhhUtfHc2EDyPYBkw039%2bIHtaow7DylWTLJqMevwu2Y5tGBBrGd%2f56JJ6yT5S9Hj3kPmBFY5T8hB6zucuS5ozcjqWyvGBIPlT49idqAxj")
+                "https://am3p.notify.windows.com/?token=AwYAAACWeMP3sweDZb4rsYLl1jmqHCChpXn%2buihtBr446nOT5Fbe1YL3qxp7pEDN1a%2bvUxqNUybF7cZkI5BG%2fdVxf%2bEUVmGPcZCcQpeGGVIXqXH3ayxmn4bOHNHV7NvebF61nmmwtJnVwdd0ggBhHQvt9JWi",
+                "5161a874-ce57-4fdd-bea6-830635673aa2")
         {
         }
     }

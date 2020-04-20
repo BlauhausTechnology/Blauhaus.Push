@@ -42,8 +42,14 @@ namespace Blauhaus.Push.Server.Extensions
 
             if (string.IsNullOrEmpty(deviceRegistration.DeviceIdentifier))
             {
-                deviceRegistration.DeviceIdentifier = Guid.NewGuid().ToString();
-                analyticsService.TraceVerbose(sender, "No DeviceIdentifier received, generating new InstallationId");
+                error = analyticsService.TraceError(sender, PushErrors.MissingDeviceIdentifier, deviceRegistration.ToObjectDictionary());
+                return true;
+            }
+            
+            if (string.IsNullOrEmpty(deviceRegistration.UserId))
+            {
+                error = analyticsService.TraceError(sender, PushErrors.MissingUserId, deviceRegistration.ToObjectDictionary());
+                return true;
             }
 
             foreach (var template in deviceRegistration.Templates)

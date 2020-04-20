@@ -26,6 +26,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             base.SetUp();
             _dataOnlyDeviceRegistration = new DeviceRegistration
             {
+                UserId = "myUserId",
                 PushNotificationServiceHandle = "myPnsHandle",
                 DeviceIdentifier = "myDeviceId",
                 Platform = RuntimePlatform.iOS,
@@ -41,6 +42,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
             _visibleTemplateDeviceRegistration = new DeviceRegistration
             {
+                UserId = "myUserId",
                 PushNotificationServiceHandle = "myPnsHandle",
                 DeviceIdentifier = "myDeviceId",
                 Platform = RuntimePlatform.Android,
@@ -119,18 +121,18 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             }
 
             [Test]
-            public async Task SHOULD_invoke_hub_to_install_with_DeviceIdentifier_as_InstallationId()
+            public async Task SHOULD_invoke_hub_to_install_with_DeviceIdentifier_and_userId_as_InstallationId()
             {
                 //Act
                 await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.InstallationId == "myDeviceId"), CancellationToken.None));
+                    y.InstallationId == "myUserId" + "___" + "myDeviceId"), CancellationToken.None));
             }
 
             [Test]
-            public async Task IF_DeviceIdentifier_is_not_provided_SHOULD_generate_one()
+            public async Task IF_DeviceIdentifier_is_not_provided_SHOULD_fail()
             {
                 //Arrange
                 _dataOnlyDeviceRegistration.DeviceIdentifier = null;
@@ -139,10 +141,22 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.InstallationId.Length == Guid.NewGuid().ToString().Length), CancellationToken.None));
-                Assert.AreEqual(Guid.NewGuid().ToString().Length, result.Value.DeviceIdentifier.Length);
-                MockAnalyticsService.VerifyTrace("No DeviceIdentifier received, generating new InstallationId");
+                Assert.AreEqual(PushErrors.MissingDeviceIdentifier.ToString(), result.Error);
+                MockAnalyticsService.VerifyTrace(PushErrors.MissingDeviceIdentifier.Code, LogSeverity.Error);
+            }
+
+            [Test]
+            public async Task IF_UserId_is_not_provided_SHOULD_fail()
+            {
+                //Arrange
+                _dataOnlyDeviceRegistration.DeviceIdentifier = null;
+
+                //Act
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+
+                //Assert
+                Assert.AreEqual(PushErrors.MissingDeviceIdentifier.ToString(), result.Error);
+                MockAnalyticsService.VerifyTrace(PushErrors.MissingDeviceIdentifier.Code, LogSeverity.Error);
             }
 
             [Test]

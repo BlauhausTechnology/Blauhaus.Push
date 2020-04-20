@@ -5,6 +5,8 @@ namespace Blauhaus.Push.Abstractions.Common
     public static class PushErrors
     {
         public static readonly Error InvalidDeviceRegistration = Error.Create("DeviceRegistration is required");
+        public static readonly Error MissingDeviceIdentifier = Error.Create("A unique identitifier for the device is required");
+        public static readonly Error MissingUserId = Error.Create("A unique identitifier for the user is required");
         public static readonly Error InvalidPnsHandle = Error.Create("The PushNotificationServiceHandle provided by the device operating system is required to register a device for push notifications");
         public static readonly Error InvalidPlatform = Error.Create("The requested RuntimePlatform is not supported. Only Android, UWP and iOS are currently allowed");
         public static readonly Error NoTemplateProvidedOnRegistration = Error.Create("At least one Template must be provided when registering a device for push notifications");

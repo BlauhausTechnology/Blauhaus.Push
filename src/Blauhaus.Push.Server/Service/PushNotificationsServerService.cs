@@ -31,10 +31,9 @@ namespace Blauhaus.Push.Server.Service
         }
 
         public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(
-            IDeviceRegistration deviceRegistration, 
-            IPushNotificationsHub hub,
-            CancellationToken token)
+            IDeviceRegistration deviceRegistration, IPushNotificationsHub hub, CancellationToken token)
         {
+
             if (deviceRegistration.IsNotValid(this, _analyticsService, out var validationError))
             {
                 return Result.Failure<IDeviceRegistration>(validationError);
@@ -47,7 +46,7 @@ namespace Blauhaus.Push.Server.Service
                 var installation = new Installation
                 {
                     PushChannel = deviceRegistration.PushNotificationServiceHandle,
-                    InstallationId = deviceRegistration.DeviceIdentifier,
+                    InstallationId = deviceRegistration.UserId + "___" + deviceRegistration.DeviceIdentifier,
                     Tags = deviceRegistration.Tags,
                     Platform = deviceRegistration.Platform.ToNotificationPlatform(),
                     Templates = new Dictionary<string, InstallationTemplate>()
@@ -81,7 +80,7 @@ namespace Blauhaus.Push.Server.Service
             }
         }
 
-        public async Task<Result<IDeviceRegistration>> LoadDeviceRegistrationAsync(
+        public async Task<Result<IDeviceRegistration>> LoadRegistrationsForUserAsync(
             string deviceIdentifier, 
             IPushNotificationsHub hub,
             CancellationToken token)

@@ -22,8 +22,6 @@ namespace Blauhaus.Push.Runner
 {
     internal class Program
     {
-
-
         private static string NotificationHubPath;
         private static string PnsHandle;
         private static IRuntimePlatform Platform;
@@ -33,6 +31,53 @@ namespace Blauhaus.Push.Runner
 
         private static IPushNotificationsServerService PushNotificationsService;
 
+        private static async Task Main(string[] args)
+        {
+            //PushNotificationsService = Setup(new AspersUwpHub());
+            PushNotificationsService = Setup(new RainbowUwpHub());
+
+            var template = Templates.Message;
+
+            try
+            {
+                //await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+                //{
+                //    AccountId = "myAccountId",
+                //    UserId = "myUserId",
+                //    Platform = Platform,
+                //    DeviceIdentifier = DeviceId,
+                //    PushNotificationServiceHandle = PnsHandle,
+                //    Tags = new List<string> { "RandomTaggage" },
+                //    Templates = new List<IPushNotificationTemplate>
+                //    {
+                //        Templates.Message
+                //    }
+                //}, Hub, CancellationToken.None);
+
+
+                //var registrations = await GetAllRegistrationsAsync();
+                var registrations = await GetRegistrationsForUserAsync("8B3A0775-973F-4442-B227-0CBBD639CA23");
+                foreach (var registrationDescription in registrations)
+                {
+                    var regType = registrationDescription.GetType();
+                }
+
+                var reg = await PushNotificationsService.LoadRegistrationsForUserAsync(DeviceId, Hub, CancellationToken.None);
+
+                await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
+                    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), "myUserId", Hub, CancellationToken.None);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            //Todo also when you delete an installation it becomes permanently fucked: you cannot create a new installation for that same deviceId
+
+
+        }
+        
         private static readonly PushNotificationTemplate VisibleTemplate = new PushNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
         {
             "message",
@@ -64,47 +109,23 @@ namespace Blauhaus.Push.Runner
             return services.BuildServiceProvider().GetRequiredService<IPushNotificationsServerService>();
         }
 
-
-        private static async Task Main(string[] args)
+        private static async Task<List<RegistrationDescription>> GetRegistrationsForUserAsync(string userId)
         {
-            PushNotificationsService = Setup(new AdminIosHub());
-
-            var template = Templates.Message;
-
-            try
+            var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
+            var registrations = await client.GetRegistrationsByTagAsync($"UserId_{userId}", 40);
+            var count = 0;
+            foreach (var reg in registrations)
             {
-                await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
-                {
-                    AccountId = "myAccountId",
-                    UserId = "myUserId",
-                    Platform = Platform,
-                    DeviceIdentifier = DeviceId,
-                    PushNotificationServiceHandle = PnsHandle,
-                    Tags = new List<string> { "RandomTaggage" },
-                    Templates = new List<IPushNotificationTemplate>
-                    {
-                        Templates.Message
-                    }
-                }, Hub, CancellationToken.None);
-
-
-                var reg = PushNotificationsService.LoadDeviceRegistrationAsync(DeviceId, Hub, CancellationToken.None);
-
-                await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
-                    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), "myUserId", Hub, CancellationToken.None);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                count++;
+                Console.WriteLine("Reg #: " + count + " Id: " + reg.RegistrationId);
+                Console.WriteLine(reg.Serialize());
+                Console.WriteLine();
             }
 
-            //Todo also when you delete an installation it becomes permanently fucked: you cannot create a new installation for that same deviceId
-
-
+            return registrations.ToList();
         }
 
-        private static async Task<List<RegistrationDescription>> GetAllRegistrationsAsync(string pnsHandle)
+        private static async Task<List<RegistrationDescription>> GetAllRegistrationsAsync()
         {
             var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
             var registrations = await client.GetAllRegistrationsAsync(10);
@@ -113,61 +134,12 @@ namespace Blauhaus.Push.Runner
             {
                 count++;
                 Console.WriteLine("Reg #: " + count + " Id: " + reg.RegistrationId);
+                Console.WriteLine(reg.Serialize());
                 Console.WriteLine();
-                if (reg.PnsHandle == pnsHandle)
-                {
-                    Console.WriteLine(reg.Serialize());
-                }
             }
 
             return registrations.ToList();
         }
 
-        //private static async Task<List<RegistrationDescription>> DeleteAllRegistrationsAsync()
-        //{
-        //    //TODO NB when deleting a registration you cannot use the same device Id again, so we should actually never do this in production
-
-        //    var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
-        //    var registrations = await client.GetAllRegistrationsAsync(100);
-        //    var count = 0;
-        //    try
-        //    {
-                            
-        //        foreach (var reg in registrations)
-        //        {
-        //            await client.DeleteRegistrationAsync(reg.RegistrationId);
-        //        }
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e);
-        //        throw;
-        //    }
-
-
-        //    return registrations.ToList();
-        //}
-
-        //private static async Task CreateInstallationAsync(string pnsHandle)
-        //{
-        //    var result = await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
-        //    {
-        //        Platform = RuntimePlatform.Android,
-        //        AccountId = "myAccountId",
-        //        UserId = "myUserId",
-        //        DeviceIdentifier = "myNewDeviceId",
-        //        PushNotificationServiceHandle = pnsHandle,
-        //        Tags = new List<string>{"RandomTaggage"},
-        //        Templates = new List<IPushNotificationTemplate>
-        //        {
-        //            new PushNotificationTemplate("default", "Test", "Test", new List<string>
-        //            {
-        //                "message"
-        //            })
-        //        }
-        //    }, CancellationToken.None);
-
-        //}
     }
 }
