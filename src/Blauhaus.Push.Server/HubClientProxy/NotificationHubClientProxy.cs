@@ -21,6 +21,12 @@ namespace Blauhaus.Push.Server.HubClientProxy
 
         public INotificationHubClientProxy Initialize(IPushNotificationsHub hub)
         {
+
+            if (!hub.NotificationHubConnectionString.Contains(hub.NotificationHubName))
+            {
+                throw new Exception("Invalid notification hub configuration");
+            }
+
             _hubClient = NotificationHubClient.CreateClientFromConnectionString(
                 hub.NotificationHubConnectionString, hub.NotificationHubName, _enableTestSend);
             return this;
