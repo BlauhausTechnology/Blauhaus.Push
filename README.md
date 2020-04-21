@@ -30,12 +30,15 @@ Download the google-services.json file from your Android app settings on FCM and
 
 Ensure that the AndroidManifest.xml file includes the following permissions:
 
+```xml
 <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+```
 
 Add the following between the <application></application> tags in the AndroidManifest.xml file:
 
+```xml
 <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver" android:exported="false" />
 <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
     <intent-filter>
@@ -44,11 +47,13 @@ Add the following between the <application></application> tags in the AndroidMan
     <category android:name="${applicationId}" />
     </intent-filter>
 </receiver>
+```
 
 #### PushService.cs
 
 Add a class to the Android project called PushService.cs. It must get a reference to the AndroidPushNotificationHandler from the Ioc Container, and invoke the handlers for new tokens and new messages:
 
+```c#
 [Service]
 [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
 [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
@@ -70,17 +75,21 @@ public class PushService : FirebaseMessagingService
             .HandleNewTokenAsync(token);
     }
 }
+````
 
 #### MainActivity.cs
 
 Ensure that the MainActivity has the following attributes:
 
+```
 MainLauncher = true, 
 LaunchMode = LaunchMode.SingleTop,
 NoHistory = true
+```
 
 In OnCreate, add a call to Initialize the Android handler:
 
+```c#
 protected override void OnCreate(Bundle savedInstanceState)
 {
     base.OnMessageReceived(message);
@@ -88,6 +97,7 @@ protected override void OnCreate(Bundle savedInstanceState)
     GetAReferenceTo<AndroidPushNotificationHandler>()
         .Initialize(this, Intent, (NotificationManager)GetSystemService(NotificationService));
 }
+```
 
 NB this doesn't seem to work when there is a separate splash screen activity. There must only be one Activity, set to be SingleTop. If you need a different theme for app startup, use the splash screen theme for the MainActivity (Theme = "@style/MainTheme.Splash") and then switch to the app theme in OnCreate using SetTheme(Resource.Style.MainTheme).
 
