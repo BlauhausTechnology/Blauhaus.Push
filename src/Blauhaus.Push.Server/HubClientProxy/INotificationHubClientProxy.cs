@@ -15,5 +15,6 @@ namespace Blauhaus.Push.Server.HubClientProxy
         Task<bool> InstallationExistsAsync(string installationId, CancellationToken token);
         Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, IEnumerable<string> tags, CancellationToken token);
         Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, string tagExpression, CancellationToken token);
+        Task<NotificationOutcome> SendDirectNotificationAsync(Notification notification, List<string> pnsHandles, CancellationToken token);
     }
 }

@@ -19,11 +19,11 @@ namespace Blauhaus.Push.Server.Extensions
                 return true;
             }
 
-            if (deviceRegistration.Templates.Count == 0)
-            {
-                error = analyticsService.TraceError(sender, PushErrors.NoTemplateProvidedOnRegistration, deviceRegistration.ToObjectDictionary());
-                return true;
-            }
+            //if (deviceRegistration.Templates.Count == 0)
+            //{
+            //    error = analyticsService.TraceError(sender, PushErrors.NoTemplateProvidedOnRegistration, deviceRegistration.ToObjectDictionary());
+            //    return true;
+            //}
 
             if (string.IsNullOrEmpty(deviceRegistration.PushNotificationServiceHandle))
             {
@@ -42,8 +42,14 @@ namespace Blauhaus.Push.Server.Extensions
 
             if (string.IsNullOrEmpty(deviceRegistration.DeviceIdentifier))
             {
-                deviceRegistration.DeviceIdentifier = Guid.NewGuid().ToString();
-                analyticsService.TraceVerbose(sender, "No DeviceIdentifier received, generating new InstallationId");
+                error = analyticsService.TraceError(sender, PushErrors.MissingDeviceIdentifier, deviceRegistration.ToObjectDictionary());
+                return true;
+            }
+            
+            if (string.IsNullOrEmpty(deviceRegistration.UserId))
+            {
+                error = analyticsService.TraceError(sender, PushErrors.MissingUserId, deviceRegistration.ToObjectDictionary());
+                return true;
             }
 
             foreach (var template in deviceRegistration.Templates)
@@ -62,6 +68,10 @@ namespace Blauhaus.Push.Server.Extensions
             error = string.Empty;
             return false;
         }
-         
+
+        public static string ExtractInstallationId(this IDeviceRegistration deviceRegistration)
+        {
+            return deviceRegistration.UserId + "___" + deviceRegistration.DeviceIdentifier;
+        }
     }
 }

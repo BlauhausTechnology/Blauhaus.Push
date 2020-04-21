@@ -38,6 +38,13 @@ namespace Blauhaus.Push.Server.Extensions
             }
             return accountId;
         }
+
+        public static string ExtractDeviceIdentifier(this Installation installation)
+        {
+            var deviceIdentifierStart = installation.InstallationId.IndexOf("___", StringComparison.Ordinal) + 3;
+            var deviceIdentifierLength = installation.InstallationId.Length - deviceIdentifierStart;
+            return installation.InstallationId.Substring(deviceIdentifierStart, deviceIdentifierLength);
+        }
        
         public static List<string> ExtractTags(this Installation installation)
         {
