@@ -64,18 +64,18 @@ namespace Blauhaus.Push.Server.Extractors
 
             body.Append("{ ");
 
-            body.Append("'aps' : { 'alert' : { ");
-            body.Append("'title' : '").Append(pushNotification.Title).Append("', ");
-            body.Append("'body' : '").Append(pushNotification.Body).Append("'");
+            body.Append("\"aps\" : { \"alert\" : { ");
+            body.Append("\"title\" : \"").Append(pushNotification.Title).Append("\", ");
+            body.Append("\"body\" : \"").Append(pushNotification.Body).Append("\"");
             body.Append(" }}, ");
             
-            body.Append("'Template_Name' : ").Append($"'{pushNotification.Name}'");
+            body.Append("\"Template_Name\" : ").Append($"\"{pushNotification.Name}\"");
 
             foreach (var dataProperty in pushNotification.DataProperties)
             {
                 body
-                    .Append(", '")
-                    .Append(dataProperty.Key).Append("' : '").Append(dataProperty.Value).Append("'");
+                    .Append(", \"")
+                    .Append(dataProperty.Key).Append("\" : \"").Append(dataProperty.Value).Append("\"");
             }
 
             body.Append(" }");
@@ -92,21 +92,24 @@ namespace Blauhaus.Push.Server.Extractors
 
             body.Append("{ ");
 
-            body.Append("'data' : { ");
-            body.Append("'title' : '").Append(pushNotification.Title).Append("', ");
-            body.Append("'body' : '").Append(pushNotification.Body).Append("'");
+            body.Append("\"notification\" : { ");
+            body.Append("\"title\" : \"").Append(pushNotification.Title).Append("\", ");
+            body.Append("\"body\" : \"").Append(pushNotification.Body).Append("\"");
             body.Append(" }, ");
             
-            body.Append("'Template_Name' : ").Append($"'{pushNotification.Name}'");
+            body.Append("\"data\" : { ");
+            body.Append("\"Template_Name\" : ").Append($"\"{pushNotification.Name}\", ");
+            body.Append("\"Title\" : ").Append($"\"{pushNotification.Title}\", ");
+            body.Append("\"Body\" : ").Append($"\"{pushNotification.Body}\"");
 
             foreach (var dataProperty in pushNotification.DataProperties)
             {
                 body
-                    .Append(", '")
-                    .Append(dataProperty.Key).Append("' : '").Append(dataProperty.Value).Append("'");
+                    .Append(", \"")
+                    .Append(dataProperty.Key).Append("\" : \"").Append(dataProperty.Value).Append("\"");
             }
 
-            body.Append(" }");
+            body.Append(" } }");
 
             var nativeNotification = new NativeNotification(new FcmNotification(body.ToString()));
             return Result.Success(nativeNotification);

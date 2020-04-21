@@ -61,11 +61,11 @@ namespace Blauhaus.Push.Tests.Server.Tests.NativeNotificationExtractorTests
         {
             //Arrange
             const string expectedPayload =
-                "{ 'aps' : { 'alert' : { 'title' : 'Hear Ye!', 'body' : 'The king is dead. Long live the king' }}, " +
-                "'Template_Name' : 'AllMinionsAlert', " +
-                "'Id' : 'd76594fd-1cae-4f4f-9dfe-545102d20357', " +
-                "'Details' : 'He was stabbed in the bath', " +
-                "'Number of stabs' : '12' }";
+                "{ \"aps\" : { \"alert\" : { \"title\" : \"Hear Ye!\", \"body\" : \"The king is dead. Long live the king\" }}, " +
+                "\"Template_Name\" : \"AllMinionsAlert\", " +
+                "\"Id\" : \"d76594fd-1cae-4f4f-9dfe-545102d20357\", " +
+                "\"Details\" : \"He was stabbed in the bath\", " +
+                "\"Number of stabs\" : \"12\" }";
 
             //Act
             var result = Sut.ExtractNotification(RuntimePlatform.iOS, _pushNotification);
@@ -79,11 +79,17 @@ namespace Blauhaus.Push.Tests.Server.Tests.NativeNotificationExtractorTests
         {
             //Arrange
             const string expectedPayload =
-                "{ 'data' : { 'title' : 'Hear Ye!', 'body' : 'The king is dead. Long live the king' }, " +
-                "'Template_Name' : 'AllMinionsAlert', " +
-                "'Id' : 'd76594fd-1cae-4f4f-9dfe-545102d20357', " +
-                "'Details' : 'He was stabbed in the bath', " +
-                "'Number of stabs' : '12' }";
+                "{ " +
+                "\"notification\" : { \"title\" : \"Hear Ye!\", \"body\" : \"The king is dead. Long live the king\" }, " +
+                "\"data\" : { " +
+                "\"Template_Name\" : \"AllMinionsAlert\", " +
+                "\"Title\" : \"Hear Ye!\", " +
+                "\"Body\" : \"The king is dead. Long live the king\", " +
+                "\"Id\" : \"d76594fd-1cae-4f4f-9dfe-545102d20357\", " +
+                "\"Details\" : \"He was stabbed in the bath\", " +
+                "\"Number of stabs\" : \"12\"" +
+                " }" +
+                " }";
 
             //Act
             var result = Sut.ExtractNotification(RuntimePlatform.Android, _pushNotification);

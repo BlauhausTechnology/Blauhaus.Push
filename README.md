@@ -103,6 +103,12 @@ NB this doesn't seem to work when there is a separate splash screen activity. Th
 
 ## UWP
 
+•	Go to the Dev Center and create an app. 
+•	Under product management > WNS / MPNS > click the Live Services link
+•	Copy the SID and application password, and enter them in Azure portal under Windows (WNS)
+•	In Visual Studio, associate the app with the store. 
+
+
 ### Cloud
 
 ### Device
