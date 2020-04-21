@@ -28,9 +28,11 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     
     public class RainbowUwpHub : BaseRainbowHub
     {
-        public RainbowUwpHub() : base(RuntimePlatform.UWP,
-                "https://db5p.notify.windows.com/?token=AwYAAAB%2f5BljxmKpDxReeld49LaxtNecQOnI0Zj1rAIg1nQ2C41%2b95JmMHTzm4mXnzNYNtAdUt7LsiynQ6g5pZq2dMmBXbpljslQfdgP2qomX4fxZEqTa2r1FrJvKFjwPBjicPmJuh7MOEtDoLuE5rtYD0Jq",
-                "5376462f-9061-4629-bf65-0cc048f9ee84", "")
+        public RainbowUwpHub() : base(
+            platform: RuntimePlatform.UWP,
+            pnsHandle: "https://am3p.notify.windows.com/?token=AwYAAABXk0fHgo%2fhFs4wvn%2fr9bBvu05pxXPhvIDHdJYLmmjoeH9T1T0e%2f51zNzCEAbj%2b7cYF75GestGA5NKiZZCienBsJ5lb1DxxbxDqtVSIBKbEgeCiHLjHA4068YiYTj1TEma3ex6tbNNB%2bkz%2fVuTX2xGT",
+            deviceId: "0c81a1b1-c926-4a42-98c7-eab1e97b3140", 
+            userId: "8B3A0775-973F-4442-B227-0CBBD639CA23")
         {
         }
     }

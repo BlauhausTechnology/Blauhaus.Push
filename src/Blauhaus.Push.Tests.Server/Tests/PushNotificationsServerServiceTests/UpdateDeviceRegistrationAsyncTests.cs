@@ -188,7 +188,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             }
 
             [Test]
-            public async Task IF_No_Templates_are_provided_SHOULD_Fail()
+            public async Task IF_No_Templates_are_provided_SHOULD_send_update_with_empty_list_to_clear_subscriptions()
             {
                 //Arrange
                 _dataOnlyDeviceRegistration.Templates = new List<IPushNotificationTemplate>();
@@ -197,8 +197,8 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.NoTemplateProvidedOnRegistration.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.NoTemplateProvidedOnRegistration.Code, LogSeverity.Error);
+                MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
+                    y.Templates.Count==0), CancellationToken.None));
             }
 
             [Test]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server._Config;
@@ -16,7 +17,10 @@ namespace Blauhaus.Push.Server.HubClientProxy
 
         public NotificationHubClientProxy(IBuildConfig buildConfig)
         {
-             _enableTestSend = (BuildConfig) buildConfig == BuildConfig.Debug;
+            _enableTestSend = false;
+            
+            //todo test send not available for sending to device handles
+            //(BuildConfig) buildConfig == BuildConfig.Debug;
         }
 
         public INotificationHubClientProxy Initialize(IPushNotificationsHub hub)
@@ -63,7 +67,13 @@ namespace Blauhaus.Push.Server.HubClientProxy
             return _hubClient.SendTemplateNotificationAsync(properties, tagExpression, token);
         }
 
-        
+        public Task<NotificationOutcome> SendDirectNotificationAsync(Notification notification, List<string> pnsHandles, CancellationToken token)
+        {
+            EnsureInitialized();
+            return _hubClient.SendDirectNotificationAsync(notification, pnsHandles, token);
+        }
+
+
         private void EnsureInitialized()
         {
             if (_hubClient == null)

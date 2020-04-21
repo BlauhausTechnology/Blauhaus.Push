@@ -30,7 +30,7 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     {
         public AspersUwpHub() : base(RuntimePlatform.UWP,
                 "https://am3p.notify.windows.com/?token=AwYAAACWeMP3sweDZb4rsYLl1jmqHCChpXn%2buihtBr446nOT5Fbe1YL3qxp7pEDN1a%2bvUxqNUybF7cZkI5BG%2fdVxf%2bEUVmGPcZCcQpeGGVIXqXH3ayxmn4bOHNHV7NvebF61nmmwtJnVwdd0ggBhHQvt9JWi",
-                "5161a874-ce57-4fdd-bea6-830635673aa2", "")
+                "5161a874-ce57-4fdd-bea6-830635673aa2", "0437D452-FC61-41FC-A814-E655241AFB18")
         {
         }
     }

@@ -5,12 +5,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
+using Blauhaus.Common.Results;
+using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extensions;
+using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
@@ -20,13 +23,16 @@ namespace Blauhaus.Push.Server.Service
     public class PushNotificationsServerService : IPushNotificationsServerService
     {
         private readonly IAnalyticsService _analyticsService;
+        private readonly INativeNotificationExtractor _nativeNotificationExtractor;
         private readonly INotificationHubClientProxy _hubClientProxy;
 
         public PushNotificationsServerService(
             IAnalyticsService analyticsService,
+            INativeNotificationExtractor nativeNotificationExtractor,
             INotificationHubClientProxy hubClientProxy)
         {
             _analyticsService = analyticsService;
+            _nativeNotificationExtractor = nativeNotificationExtractor;
             _hubClientProxy = hubClientProxy;
         }
 
@@ -108,7 +114,7 @@ namespace Blauhaus.Push.Server.Service
                 var deviceRegistration = new DeviceRegistration
                 {
                     Platform = installation.Platform.ToRuntimePlatform(),
-                    DeviceIdentifier = installation.InstallationId,
+                    DeviceIdentifier = installation.ExtractDeviceIdentifier(),
                     UserId = installation.ExtractUserId(),
                     AccountId = installation.ExtractAccountId(),
                     PushNotificationServiceHandle = installation.PushChannel,
@@ -122,6 +128,7 @@ namespace Blauhaus.Push.Server.Service
                 return Result.Success<IDeviceRegistration>(deviceRegistration); 
             }
         }
+         
 
         public async Task SendNotificationToUserAsync(
             IPushNotification notification, string userId, IPushNotificationsHub hub, CancellationToken token)
@@ -155,6 +162,38 @@ namespace Blauhaus.Push.Server.Service
                 var result = await _hubClientProxy.SendNotificationAsync(properties, tags, token);
             }
         }
-         
+
+
+        public async Task<Result> SendNotificationToDeviceAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub, CancellationToken token)
+        {
+            using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to device", new Dictionary<string, object>
+                {{nameof(PushNotification), pushNotification}, {nameof(DeviceTarget), deviceTarget}}))
+            {
+                try
+                {
+                    _hubClientProxy.Initialize(hub);
+
+                    var nativeNotificationResult = _nativeNotificationExtractor.ExtractNotification(deviceTarget.Platform, pushNotification);
+                    if (nativeNotificationResult.IsFailure) return nativeNotificationResult;
+
+                    var notification = nativeNotificationResult.Value.Notification;
+                    var devices = new List<string>{ deviceTarget.PushNotificationServicesHandle };
+                    _analyticsService.TraceVerbose(this, "Native push notification extracted", notification.ToObjectDictionary());
+
+                    var outcome = await _hubClientProxy.SendDirectNotificationAsync(notification, devices, token);
+                    _analyticsService.TraceVerbose(this, "Push notification sent to device", outcome.ToObjectDictionary());
+
+                    return Result.Success();
+                }
+                catch (Exception e)
+                {
+                    return _analyticsService.LogExceptionResult(this, e, PushErrors.FailedToSendNotification);
+                }
+                
+            }
+
+        }
+
+
     }
 }

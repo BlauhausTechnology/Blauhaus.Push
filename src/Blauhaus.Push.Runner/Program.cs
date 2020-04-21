@@ -36,49 +36,49 @@ namespace Blauhaus.Push.Runner
         {
             //PushNotificationsService = Setup(new AspersUwpHub());
             PushNotificationsService = Setup(new RainbowUwpHub());
-
             var template = Templates.Message;
 
             try
             {
-                //await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
-                //{
-                //    AccountId = "myAccountId",
-                //    UserId = "myUserId",
-                //    Platform = Platform,
-                //    DeviceIdentifier = DeviceId,
-                //    PushNotificationServiceHandle = PnsHandle,
-                //    Tags = new List<string> { "RandomTaggage" },
-                //    Templates = new List<IPushNotificationTemplate>
-                //    {
-                //        Templates.Message
-                //    }
-                //}, Hub, CancellationToken.None);
+                //var reg = await PushNotificationsService.LoadRegistrationForUserDeviceAsync(UserId, DeviceId, Hub, CancellationToken.None);
 
+                var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
 
-                //var registrations = await GetAllRegistrationsAsync();
-                var registrations = await GetRegistrationsForUserAsync("8B3A0775-973F-4442-B227-0CBBD639CA23");
-                foreach (var registrationDescription in registrations)
+                //var uwpMessage = 
+                //    "<toast launch=\"{ " +
+                //    "'Title' : 'Hear Ye!', " +
+                //    "'Body' : 'The king is dead. Long live the king', " +
+                //    "'Template_Name' : 'AllMinionsAlert', " +
+                //    "'Id' : 'd76594fd-1cae-4f4f-9dfe-545102d20357', " +
+                //    "'Details' : 'He was stabbed in the bath' }\">" +
+                //    "<visual><binding template=\"ToastText01\">" +
+                //    "<text id=\"1\">Hear Ye!</text>" +
+                //    "<text id=\"2\">The king is dead. Long live the king</text></binding></visual></toast>";
+                //var windowsNotification = new WindowsNotification(uwpMessage);
+
+                var notification = new PushNotification("Alert", new Dictionary<string, object>
                 {
-                    var regType = registrationDescription.GetType();
-                }
+                    {"Id", Guid.Parse("d76594fd-1cae-4f4f-9dfe-545102d20357") },
+                    {"Details", "He was stabbed in the bath" },
+                    {"Number of stabs", 12 },
+                }, "Hear Ye mortals!", "The king is dead. Long live the king");
 
-                var reg = await PushNotificationsService.LoadRegistrationForUserDeviceAsync(UserId, DeviceId, Hub, CancellationToken.None);
+                await PushNotificationsService.SendNotificationToDeviceAsync(notification, 
+                    DeviceTarget.UWP("https://am3p.notify.windows.com/?token=AwYAAABXk0fHgo%2fhFs4wvn%2fr9bBvu05pxXPhvIDHdJYLmmjoeH9T1T0e%2f51zNzCEAbj%2b7cYF75GestGA5NKiZZCienBsJ5lb1DxxbxDqtVSIBKbEgeCiHLjHA4068YiYTj1TEma3ex6tbNNB%2bkz%2fVuTX2xGT"), 
+                    Hub, CancellationToken.None);
 
-                await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
-                    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), "myUserId", Hub, CancellationToken.None);
+                //var outcome = await client.SendDirectNotificationAsync(windowsNotification, new List<string> {PnsHandle});
+
+                //await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
+                //    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-
-            //Todo also when you delete an installation it becomes permanently fucked: you cannot create a new installation for that same deviceId
-
-
         }
-        
+
         private static readonly PushNotificationTemplate VisibleTemplate = new PushNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
         {
             "message",
@@ -94,7 +94,7 @@ namespace Blauhaus.Push.Runner
 
 
 
-        private static IPushNotificationsServerService Setup(BasePushRunnerHub hub)  
+        private static IPushNotificationsServerService Setup(BasePushRunnerHub hub)
         {
             var services = new ServiceCollection();
 
@@ -107,10 +107,28 @@ namespace Blauhaus.Push.Runner
             ConnectionString = hub.NotificationHubConnectionString;
             Platform = hub.Platform;
             UserId = hub.UserId;
-            
+
             Hub = hub;
 
             return services.BuildServiceProvider().GetRequiredService<IPushNotificationsServerService>();
+        }
+
+
+        private async Task UpdateRegistrationAsync()
+        {
+            await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+            {
+                AccountId = "myAccountId",
+                UserId = UserId,
+                Platform = Platform,
+                DeviceIdentifier = DeviceId,
+                PushNotificationServiceHandle = PnsHandle,
+                Tags = new List<string> { "RandomTaggage" },
+                Templates = new List<IPushNotificationTemplate>
+                {
+                    Templates.Message
+                }
+            }, Hub, CancellationToken.None);
         }
 
         private static async Task<List<RegistrationDescription>> GetRegistrationsForUserAsync(string userId)
@@ -145,5 +163,26 @@ namespace Blauhaus.Push.Runner
             return registrations.ToList();
         }
 
+
+        private static async Task DeleteAllRegistrationsAsync()
+        {
+            //TODO NB when deleting a registration you cannot use the same device Id again, so we should actually never do this in production
+
+            var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
+            var registrations = await client.GetAllRegistrationsAsync(100);
+            var count = 0;
+            try
+            {
+                foreach (var reg in registrations)
+                {
+                    await client.DeleteRegistrationAsync(reg.RegistrationId);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

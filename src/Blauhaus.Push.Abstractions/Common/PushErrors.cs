@@ -12,5 +12,8 @@ namespace Blauhaus.Push.Abstractions.Common
         public static readonly Error NoTemplateProvidedOnRegistration = Error.Create("At least one Template must be provided when registering a device for push notifications");
         public static readonly Error RegistrationDoesNotExist = Error.Create("The requested device registration does not exist");
         public static Error ReservedString(string value) => Error.Create($"The string \"{value}\" is reserved for internal use. Please use something else");
+
+        public static readonly Error FailedToSendNotification = Error.Create("An error occured while sending a push notification");
+
     }
 }

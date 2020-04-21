@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blauhaus.Analytics.Console" Version="0.7.13" />
+    <PackageReference Include="Blauhaus.Common.Results" Version="1.0.20" />
     <PackageReference Include="Blauhaus.Common.Utils" Version="1.0.14" />
     <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="3.3.0" />
   </ItemGroup>

@@ -19,11 +19,11 @@ namespace Blauhaus.Push.Server.Extensions
                 return true;
             }
 
-            if (deviceRegistration.Templates.Count == 0)
-            {
-                error = analyticsService.TraceError(sender, PushErrors.NoTemplateProvidedOnRegistration, deviceRegistration.ToObjectDictionary());
-                return true;
-            }
+            //if (deviceRegistration.Templates.Count == 0)
+            //{
+            //    error = analyticsService.TraceError(sender, PushErrors.NoTemplateProvidedOnRegistration, deviceRegistration.ToObjectDictionary());
+            //    return true;
+            //}
 
             if (string.IsNullOrEmpty(deviceRegistration.PushNotificationServiceHandle))
             {

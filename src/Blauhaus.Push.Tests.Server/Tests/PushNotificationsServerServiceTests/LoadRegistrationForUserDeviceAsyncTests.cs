@@ -85,7 +85,6 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 MockAnalyticsService.VerifyTrace(PushErrors.RegistrationDoesNotExist.Code, LogSeverity.Error);
             }
 
-
             [Test]
             public async Task SHOULD_convert_InstallationId_to_DeviceIdentifier()
             {
@@ -93,7 +92,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(result.Value.DeviceIdentifier, _installation.InstallationId);
+                Assert.AreEqual( "myDeviceId", result.Value.DeviceIdentifier);
             }
 
             [Test]
