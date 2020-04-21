@@ -180,9 +180,7 @@ namespace Blauhaus.Push.Server.Service
                     var devices = new List<string>{ deviceTarget.PushNotificationServicesHandle };
                     _analyticsService.TraceVerbose(this, "Native push notification extracted", notification.ToObjectDictionary());
 
-                    var outcome = await _hubClientProxy.SendDirectNotificationAsync(notification, devices, token);
-                    _analyticsService.TraceVerbose(this, "Push notification sent to device", outcome.ToObjectDictionary());
-
+                    await _hubClientProxy.SendDirectNotificationAsync(notification, devices, token);
                     return Result.Success();
                 }
                 catch (Exception e)
