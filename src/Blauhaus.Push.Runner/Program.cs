@@ -14,6 +14,7 @@ using Blauhaus.Push.Runner.Config;
 using Blauhaus.Push.Runner.Config.MineGame;
 using Blauhaus.Push.Runner.Config.Reveye;
 using Blauhaus.Push.Server._Ioc;
+using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Server.Service;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,46 +30,35 @@ namespace Blauhaus.Push.Runner
         private static string ConnectionString;
         private static BasePushRunnerHub Hub;
         private static string UserId;
-
+        private static IDeviceTarget Target;
+        
+        private static NotificationHubClientProxy Client;
         private static IPushNotificationsServerService PushNotificationsService;
 
         private static async Task Main(string[] args)
         {
-            //PushNotificationsService = Setup(new AspersUwpHub());
-            PushNotificationsService = Setup(new RainbowUwpHub());
-            var template = Templates.Message;
-
             try
             {
-                //var reg = await PushNotificationsService.LoadRegistrationForUserDeviceAsync(UserId, DeviceId, Hub, CancellationToken.None);
+                PushNotificationsService = Setup(new AspersIosSandboxHub());
 
-                var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
+                //var mess =
+                //    "{ " +
+                //        "\"notification\" : { \"title\" : \"Hear Ye mortals!\", \"body\" : \"The king is dead. Long live the king\" }, " +
+                //        "\"data\" : {" +
+                //            "\"Title\" : \"Hear Ye mortals!\", " +
+                //            "\"Body\" : \"The king is dead. Long live the king\", " +
+                //            "\"Template_Name\" : \"Alert\", " +
+                //            "\"Id\" : \"d76594fd-1cae-4f4f-9dfe-545102d20357\", " +
+                //            "\"Details\" : \"He was stabbed in the bath\", " +
+                //            "\"Number of stabs\" : \"12\"" +
+                //        " }" +
+                //    " }";
+                //var notification = new FcmNotification(mess);
+                //await Client.SendDirectNotificationAsync(notification, new List<string> {PnsHandle}, CancellationToken.None);
 
-                //var uwpMessage = 
-                //    "<toast launch=\"{ " +
-                //    "'Title' : 'Hear Ye!', " +
-                //    "'Body' : 'The king is dead. Long live the king', " +
-                //    "'Template_Name' : 'AllMinionsAlert', " +
-                //    "'Id' : 'd76594fd-1cae-4f4f-9dfe-545102d20357', " +
-                //    "'Details' : 'He was stabbed in the bath' }\">" +
-                //    "<visual><binding template=\"ToastText01\">" +
-                //    "<text id=\"1\">Hear Ye!</text>" +
-                //    "<text id=\"2\">The king is dead. Long live the king</text></binding></visual></toast>";
-                //var windowsNotification = new WindowsNotification(uwpMessage);
+                await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
 
-                var notification = new PushNotification("Alert", new Dictionary<string, object>
-                {
-                    {"Id", Guid.Parse("d76594fd-1cae-4f4f-9dfe-545102d20357") },
-                    {"Details", "He was stabbed in the bath" },
-                    {"Number of stabs", 12 },
-                }, "Hear Ye mortals!", "The king is dead. Long live the king");
-
-                await PushNotificationsService.SendNotificationToDeviceAsync(notification, 
-                    DeviceTarget.UWP("https://am3p.notify.windows.com/?token=AwYAAABXk0fHgo%2fhFs4wvn%2fr9bBvu05pxXPhvIDHdJYLmmjoeH9T1T0e%2f51zNzCEAbj%2b7cYF75GestGA5NKiZZCienBsJ5lb1DxxbxDqtVSIBKbEgeCiHLjHA4068YiYTj1TEma3ex6tbNNB%2bkz%2fVuTX2xGT"), 
-                    Hub, CancellationToken.None);
-
-                //var outcome = await client.SendDirectNotificationAsync(windowsNotification, new List<string> {PnsHandle});
-
+                
                 //await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
                 //    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
 
@@ -79,20 +69,12 @@ namespace Blauhaus.Push.Runner
             }
         }
 
-        private static readonly PushNotificationTemplate VisibleTemplate = new PushNotificationTemplate("Visible", "DefaultTitle", "DefaultBody", new List<string>
+        private static readonly IPushNotification KingIsDeadAlert = new PushNotification("Alert", new Dictionary<string, object>
         {
-            "message",
-            "exclusive",
-            "integer"
-        });
-
-        private static IPushNotification VisibleNotification = new PushNotificationBuilder(VisibleTemplate)
-            .WithDataProperty("message", "This is the Message")
-            .WithDataProperty("exclusive", "Win!")
-            .WithDataProperty("integer", "1")
-            .Create();
-
-
+            {"Id", Guid.Parse("d76594fd-1cae-4f4f-9dfe-545102d20357") },
+            {"Details", "He was stabbed in the bath" },
+            {"Number of stabs", 12 },
+        }, "Hear Ye mortals!", "The king is dead. Long live the king");
 
         private static IPushNotificationsServerService Setup(BasePushRunnerHub hub)
         {
@@ -107,8 +89,11 @@ namespace Blauhaus.Push.Runner
             ConnectionString = hub.NotificationHubConnectionString;
             Platform = hub.Platform;
             UserId = hub.UserId;
-
+            Target = hub.DeviceTarget;
             Hub = hub;
+
+            Client = new NotificationHubClientProxy(BuildConfig.Debug);
+            Client.Initialize(Hub);
 
             return services.BuildServiceProvider().GetRequiredService<IPushNotificationsServerService>();
         }
@@ -162,7 +147,6 @@ namespace Blauhaus.Push.Runner
 
             return registrations.ToList();
         }
-
 
         private static async Task DeleteAllRegistrationsAsync()
         {

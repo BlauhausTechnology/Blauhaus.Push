@@ -110,23 +110,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
             //Assert
             Assert.AreEqual("fail!", result.Error);
-        }
-
-        [Test]
-        public async Task SHOULD_log_outcome()
-        {
-            //Arrange
-            var outcome = new NotificationOutcome { NotificationId = "Id" };
-            MockNotificationHubClientProxy.Mock.Setup(x => x.SendDirectNotificationAsync(It.IsAny<Notification>(), It.IsAny<List<string>>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(outcome);
-
-            //Act
-            await Sut.SendNotificationToDeviceAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("Push notification sent to device");
-            MockAnalyticsService.VerifyTraceProperty("NotificationOutcome", outcome);
-        }
+        } 
 
         [Test]
         public async Task IF_hub_throws_exception_SHOULD_return_fail()
