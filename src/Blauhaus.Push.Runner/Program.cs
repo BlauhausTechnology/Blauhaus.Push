@@ -39,26 +39,10 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(new AspersIosSandboxHub());
-
-                //var mess =
-                //    "{ " +
-                //        "\"notification\" : { \"title\" : \"Hear Ye mortals!\", \"body\" : \"The king is dead. Long live the king\" }, " +
-                //        "\"data\" : {" +
-                //            "\"Title\" : \"Hear Ye mortals!\", " +
-                //            "\"Body\" : \"The king is dead. Long live the king\", " +
-                //            "\"Template_Name\" : \"Alert\", " +
-                //            "\"Id\" : \"d76594fd-1cae-4f4f-9dfe-545102d20357\", " +
-                //            "\"Details\" : \"He was stabbed in the bath\", " +
-                //            "\"Number of stabs\" : \"12\"" +
-                //        " }" +
-                //    " }";
-                //var notification = new FcmNotification(mess);
-                //await Client.SendDirectNotificationAsync(notification, new List<string> {PnsHandle}, CancellationToken.None);
+                PushNotificationsService = Setup(new AspersAndroidHub());
 
                 await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
 
-                
                 //await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
                 //    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
 
