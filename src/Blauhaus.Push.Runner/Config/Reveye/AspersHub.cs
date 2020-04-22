@@ -19,10 +19,10 @@ namespace Blauhaus.Push.Runner.Config.Reveye
 
     public class AspersAndroidHub : BaseAspersHub
     {
-        public AspersAndroidHub() : base(RuntimePlatform.Android,
-            "e0W6iiS3p5E:APA91bHc3-nD18r7nGNM-fWe79P7AOPf1LKrYXZCWRho1ffSjwiE_5Mh1U4Eg-WtK6rUSRGbuqcOWh7c1XCyWGeQzkHs8C16T45Y8NqYfQmCrGEiACtn7tkXySsdM7cWlmysxp1Kv1_W",
-            "4392199c-5458-482b-b820-1a206e965ac9",
-            "A5D675FF-3F38-4FA4-9677-E30787676B0A")
+        public AspersAndroidHub() : base(platform: RuntimePlatform.Android,
+            pnsHandle: "dMef6M0RiZI:APA91bEjCxTWnJDg9cjuoCCV22LixpuW8Kf05x7CCvxgVbUE38TRZEh9BbAT4OkltcwMUq2zCOtPjR1-4CkIv8vX3US-Ge2jd0OGQUC6CKTj5-roXjc1e_CEezX1s6MVCe8KRk-dIrqz",
+            deviceId: "",
+            userId: "")
         {
         }
     }
@@ -31,8 +31,8 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     {
         public AspersUwpHub() : base(RuntimePlatform.UWP,
             "https://db5p.notify.windows.com/?token=AwYAAAD%2fklP4n8QQ7xvgGYsF3CErH4AFIE%2bv8MePNTqKa9pDheIZtcfq45C%2fJbC%2bQshz5Rg1bRimEw06E1pD7YK4FDl2%2bNv9WRm1cnwZgqG9X1s12E2jL5df5WDh0Pu1Emqqe6DEZsEYH3eNXFkz5w8%2f86kb",
-            "5161a874-ce57-4fdd-bea6-830635673aa2",
-            "A5D675FF-3F38-4FA4-9677-E30787676B0A")
+            "",
+            "")
         {
         }
 
@@ -42,8 +42,8 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     {
         public AspersIosHub() : base(RuntimePlatform.iOS,
             "13E5A75D411DB4A8AFDA55A24473872CD2A93D466E077645994F387F613FB11A",
-            "c6587b2e-383e-45cd-9073-e033ae4b2d3e",
-            "A5D675FF-3F38-4FA4-9677-E30787676B0A")
+            "",
+            "")
         {
         }
     }

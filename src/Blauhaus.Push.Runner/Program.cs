@@ -39,7 +39,7 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(new AspersAndroidHub());
+                PushNotificationsService = Setup(new AspersIosHub());
 
                 await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
 

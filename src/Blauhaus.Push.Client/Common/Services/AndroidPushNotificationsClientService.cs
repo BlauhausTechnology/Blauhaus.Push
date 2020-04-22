@@ -56,8 +56,20 @@ namespace Blauhaus.Push.Client.Common.Services
             {
                 try
                 {
-                    if(androidPayload ==null) throw new ArgumentNullException();
-                    await InvokeTapHandlersAsync(ExtractNotification(androidPayload));
+                    if (androidPayload == null)
+                    {
+                        throw new ArgumentNullException();
+                    }
+
+                    if (!androidPayload.ContainsKey("Template_Name"))
+                    {
+                        AnalyticsService.TraceVerbose(this, "Payload is not a notification: ignoring", 
+                            androidPayload.ToObjectDictionary("Raw Notification"));
+                    }
+                    else
+                    {
+                        await InvokeTapHandlersAsync(ExtractNotification(androidPayload));
+                    }
                 }
                 catch (Exception e)
                 {
