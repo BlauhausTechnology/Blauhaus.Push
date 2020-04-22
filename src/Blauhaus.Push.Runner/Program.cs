@@ -39,7 +39,7 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(new AspersIosHub());
+                PushNotificationsService = Setup(new RainbowIosHub());
 
                 await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
 

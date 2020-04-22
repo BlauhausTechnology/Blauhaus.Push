@@ -20,7 +20,7 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class BuckysAndroidHub : BaseBuckysHub
     {
         public BuckysAndroidHub() : base(RuntimePlatform.Android, 
-            "fRX3ONcA9zM:APA91bHGodn1MCl40C1klCqbn2xwjzmMv5RpGh6yLIbeFAGXX0OMfR_PkN0z64GqYJDsFzfG43HGAVIaG9BAeZMkW5SkT29zayD1cs0keJnED6KBASewm7K90wx6_4fBBN-ZC5aSiHx5",
+            "e8xB-7bA6hM:APA91bFcTnhOBvpesclqwDZZZB5FgL8JuQOzykK2yCeFmxUyfcRiH-HSiJY7ssiPACrstlxB4arPTRz4kQhY3M_DAkeFDHlllKjN0wRp1wGazw06W2xTDsLIzPZ3wYflFfV-bHSQfaWp",
             "", "")
         {
         }

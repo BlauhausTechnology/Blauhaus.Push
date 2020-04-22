@@ -20,11 +20,21 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class RainbowAndroidHub : BaseRainbowHub
     {
         public RainbowAndroidHub() : base(RuntimePlatform.Android, 
-            "fzILCXtAU3M:APA91bGDmwp7YH4OiLPyxYOd1L6U8W8-bPZhPF3lmc2AELh5HW71Yfbawl4N-6RIRx7lgAsTf2DD0djWcl23ZHgQepez1AMoq0m_AvVOHk-fFeJQy5c5jRxysI0RSqLZM6c2CTQE7NOx",
+            "dw82chUi43Q:APA91bFgwyv-mqaJbmexleSBFY0NAN1vEski9myxvwWKcM-EeIGgWXA2-_RsJQnzXQ2i_9chFQB69KcDnTvAmxbN4UDwMvSfahlFIxw6T7BAls4aYQiX8dNaHjAaKhxh_LMpN0C_EcZr",
             "", "")
         {
         }
     }
+    
+    public class RainbowIosHub : BaseRainbowHub
+    {
+        public RainbowIosHub() : base(RuntimePlatform.iOS, 
+            "69A848A52708D9602AFB8DF72B14C691C7038627A4EE967D5E25ECA150AEBBB5",
+            "", "")
+        {
+        }
+    }
+
     
     public class RainbowUwpHub : BaseRainbowHub
     {
