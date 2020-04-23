@@ -14,6 +14,6 @@ namespace Blauhaus.Push.Abstractions.Server
         Task<Result<IDeviceRegistration >> LoadRegistrationForUserDeviceAsync(string userId, string deviceId, IPushNotificationsHub hub, CancellationToken token);
         Task SendNotificationToUserAsync(IPushNotification notification, string userId, IPushNotificationsHub hub, CancellationToken token);
         Task<Result> SendNotificationToTargetAsync(IPushNotification notification, IDeviceTarget target, IPushNotificationsHub hub, CancellationToken token);
-
+        Task<Result> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token);
     }
 }

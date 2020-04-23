@@ -246,6 +246,16 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
                     y.Tags.Contains($"AccountId_{accountId}")), CancellationToken.None));
             }
+
+            [Test]
+            public async Task SHOULD_trace()
+            {
+                //Act
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+
+                //Assert
+                MockAnalyticsService.VerifyTrace("Push notification registration updated");
+            }
         }
 
         public class UwpDeviceRegistration : UpdateDeviceRegistrationAsyncTests

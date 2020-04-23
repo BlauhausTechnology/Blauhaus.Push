@@ -72,16 +72,17 @@ namespace Blauhaus.Push.Server.Service
                 {
                     installation.Templates.Add(template.ToPlatform(deviceRegistration.Platform));
                 }
-
-                try
+                
+                await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
+                
+                _analyticsService.TraceVerbose(this, "Push notification registration updated", new Dictionary<string, object>
                 {
-                    await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                    {"InstallationId", installation.InstallationId },
+                    {"Platform", installation.Platform },
+                    {"PushChannel", installation.PushChannel },
+                    {"Tags", installation.Tags },
+                });
+                
                 return Result.Ok<IDeviceRegistration>(deviceRegistration);
             }
         }
@@ -192,6 +193,41 @@ namespace Blauhaus.Push.Server.Service
 
         }
 
+        public async Task<Result> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
+        {
+            _hubClientProxy.Initialize(hub);
 
+            using (var _ = _analyticsService.ContinueOperation(this, "Deregister user device",
+                new Dictionary<string, object>
+                {
+                    {"DeviceIdentifier", deviceIdentifier},
+                    {"UserId", userId}
+                }))
+            {
+                var installationId = userId + "___" + deviceIdentifier;
+
+                var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId, token);
+                if (!installationExists)
+                {
+                    return Result.Failure<IDeviceRegistration>(_analyticsService.TraceError(this, PushErrors.RegistrationDoesNotExist));
+                }
+            
+                var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
+                installation.Templates.Clear();
+                await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
+
+                _analyticsService.TraceVerbose(this, "Templates cleared for push notifications registration", new Dictionary<string, object>
+                {
+                    {"InstallationId", installation.InstallationId },
+                    {"Platform", installation.Platform },
+                    {"PushChannel", installation.PushChannel },
+                    {"Tags", installation.Tags },
+                });
+
+                return Result.Success();
+            }
+
+
+        }
     }
 }
