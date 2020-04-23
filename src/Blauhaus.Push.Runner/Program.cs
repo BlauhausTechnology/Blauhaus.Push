@@ -39,12 +39,12 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(new RainbowIosHub());
+                PushNotificationsService = Setup(new AspersIosHub());
 
-                await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
+                //await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
 
-                //await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
-                //    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
+                await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
+                    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
 
             }
             catch (Exception e)

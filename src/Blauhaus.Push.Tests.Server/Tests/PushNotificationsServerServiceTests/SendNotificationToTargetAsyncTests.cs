@@ -20,7 +20,7 @@ using NUnit.Framework;
 namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 {
     [TestFixture]
-    public class SendNotificationToDeviceAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
+    public class SendNotificationToTargetAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
     {
 
         private IPushNotification _pushNotification;
@@ -52,7 +52,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         public async Task SHOULD_initialize_client()
         {
             //Act
-            await Sut.SendNotificationToDeviceAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
+            await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
@@ -62,7 +62,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         public async Task SHOULD_track_operation()
         {
             //Act
-            await Sut.SendNotificationToDeviceAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
+            await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             MockAnalyticsService.VerifyContinueOperation("Send push notification to device");
@@ -77,7 +77,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             _target = DeviceTarget.iOS("pnsHandle");
 
             //Act
-            await Sut.SendNotificationToDeviceAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
+            await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             MockNativeNotificationExtractor.Mock.Verify(x=> x.ExtractNotification(RuntimePlatform.iOS, _pushNotification));
@@ -92,7 +92,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             _target = DeviceTarget.iOS("pnsHandle");
 
             //Act
-            await Sut.SendNotificationToDeviceAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
+            await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             MockAnalyticsService.VerifyTrace("Native push notification extracted");
@@ -106,7 +106,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             MockNativeNotificationExtractor.Where_ExtractNotification_fails("fail!");
 
             //Act
-            var result = await Sut.SendNotificationToDeviceAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
+            var result = await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             Assert.AreEqual("fail!", result.Error);
@@ -121,7 +121,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 .ThrowsAsync(ex);
 
             //Act
-            var result = await Sut.SendNotificationToDeviceAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
+            var result = await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
             Assert.AreEqual(PushErrors.FailedToSendNotification.ToString(), result.Error);

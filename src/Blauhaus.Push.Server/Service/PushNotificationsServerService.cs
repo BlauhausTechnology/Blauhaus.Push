@@ -164,7 +164,7 @@ namespace Blauhaus.Push.Server.Service
         }
 
 
-        public async Task<Result> SendNotificationToDeviceAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub, CancellationToken token)
+        public async Task<Result> SendNotificationToTargetAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub, CancellationToken token)
         {
             using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to device", new Dictionary<string, object>
                 {{nameof(PushNotification), pushNotification}, {nameof(DeviceTarget), deviceTarget}}))
