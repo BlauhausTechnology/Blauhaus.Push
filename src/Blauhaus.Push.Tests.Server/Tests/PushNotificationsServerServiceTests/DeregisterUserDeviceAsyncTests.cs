@@ -95,6 +95,22 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 y.InstallationId == _installation.InstallationId &&
                 y.Templates.Count == 0), CancellationToken));
         }
+        
+        [Test]
+        public async Task IF_installation_Templates_null_SHOULD_set_to_empty()
+        {
+            //Arrange
+            _installation.Templates = null;
+
+            //Act
+            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
+
+            //Assert
+            MockNotificationHubClientProxy.Mock.Verify(x => x.GetInstallationAsync(_installation.InstallationId, CancellationToken));
+            MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y => 
+                y.InstallationId == _installation.InstallationId &&
+                y.Templates.Count == 0), CancellationToken));
+        }
 
         [Test]
         public async Task SHOULD_trace_success()

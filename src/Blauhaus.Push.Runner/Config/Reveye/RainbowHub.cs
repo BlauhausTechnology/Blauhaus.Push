@@ -40,9 +40,9 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     {
         public RainbowUwpHub() : base(
             platform: RuntimePlatform.UWP,
-            pnsHandle: "https://am3p.notify.windows.com/?token=AwYAAABXk0fHgo%2fhFs4wvn%2fr9bBvu05pxXPhvIDHdJYLmmjoeH9T1T0e%2f51zNzCEAbj%2b7cYF75GestGA5NKiZZCienBsJ5lb1DxxbxDqtVSIBKbEgeCiHLjHA4068YiYTj1TEma3ex6tbNNB%2bkz%2fVuTX2xGT",
-            deviceId: "", 
-            userId: "")
+            pnsHandle: "https://db5p.notify.windows.com/?token=AwYAAAB1Y53x%2b0VyJCkjPkpVBkGbm9VWeAm1GQVBzsUQBjMYLsgBHABmVyXCyLKw5HgVgZV4aEG1fNiJdvv0gV8P46eZlxXq%2fsnf4mtkF11wk43d86%2f6h94WUtIr66LFiNvvC1bDKat%2bFVj3CswpkblaW%2f9%2f",
+            deviceId: "8800e69d-e6af-b03b-3123-6d2b185cce3a", 
+            userId: "2E911DE0-61D9-4591-B3A5-9298A644E15B")
         {
         }
     }

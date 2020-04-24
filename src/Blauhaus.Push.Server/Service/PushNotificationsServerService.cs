@@ -213,7 +213,7 @@ namespace Blauhaus.Push.Server.Service
                 }
             
                 var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
-                installation.Templates.Clear();
+                installation.Templates = new Dictionary<string, InstallationTemplate>();
                 await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
 
                 _analyticsService.TraceVerbose(this, "Templates cleared for push notifications registration", new Dictionary<string, object>
