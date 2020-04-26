@@ -51,6 +51,24 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.A
                 y.DataProperties.Count == 3)));
         }
 
+        [Test]
+        public async Task IF_properties_does_not_include_Template_Name_SHOULD_ignore_but_log()
+        {
+            //Arrange
+            var fakeNotification = new Dictionary<string, object>
+            {
+                {"profile", 0 }
+            };
+
+            //Act
+            await Sut.HandleNotificationTappedAsync(fakeNotification);
+
+            //Assert
+            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.IsAny<IPushNotification>()), Times.Never);
+            MockAnalyticsService.VerifyTrace("Payload is not a notification: ignoring");
+            MockAnalyticsService.VerifyTraceProperty("Raw Notification", fakeNotification);
+        }
+
 
         [Test]
         public async Task SHOULD_log_operation_and_trace_content()

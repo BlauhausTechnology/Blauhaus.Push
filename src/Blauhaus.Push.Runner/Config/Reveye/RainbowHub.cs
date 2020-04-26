@@ -20,19 +20,29 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class RainbowAndroidHub : BaseRainbowHub
     {
         public RainbowAndroidHub() : base(RuntimePlatform.Android, 
-            "dY-7NPUmQxc:APA91bF5pIKH_0iWDYk__Qc9IgNJnW2uWGu00-ymdrZvQ9PPKDev4grtCjvuczr3wTIIIPzHQvxzFU3zsggSGhwJPXu_LLyD5HHPQ9pv48evQqw5x8fKLRTO4lf0VurPO86EuwFGMjH5",
-            "androidDeviceId", "")
+            "dw82chUi43Q:APA91bFgwyv-mqaJbmexleSBFY0NAN1vEski9myxvwWKcM-EeIGgWXA2-_RsJQnzXQ2i_9chFQB69KcDnTvAmxbN4UDwMvSfahlFIxw6T7BAls4aYQiX8dNaHjAaKhxh_LMpN0C_EcZr",
+            "", "")
         {
         }
     }
+    
+    public class RainbowIosHub : BaseRainbowHub
+    {
+        public RainbowIosHub() : base(RuntimePlatform.iOS, 
+            "69A848A52708D9602AFB8DF72B14C691C7038627A4EE967D5E25ECA150AEBBB5",
+            "", "")
+        {
+        }
+    }
+
     
     public class RainbowUwpHub : BaseRainbowHub
     {
         public RainbowUwpHub() : base(
             platform: RuntimePlatform.UWP,
-            pnsHandle: "https://am3p.notify.windows.com/?token=AwYAAABXk0fHgo%2fhFs4wvn%2fr9bBvu05pxXPhvIDHdJYLmmjoeH9T1T0e%2f51zNzCEAbj%2b7cYF75GestGA5NKiZZCienBsJ5lb1DxxbxDqtVSIBKbEgeCiHLjHA4068YiYTj1TEma3ex6tbNNB%2bkz%2fVuTX2xGT",
-            deviceId: "0c81a1b1-c926-4a42-98c7-eab1e97b3140", 
-            userId: "8B3A0775-973F-4442-B227-0CBBD639CA23")
+            pnsHandle: "https://db5p.notify.windows.com/?token=AwYAAAB1Y53x%2b0VyJCkjPkpVBkGbm9VWeAm1GQVBzsUQBjMYLsgBHABmVyXCyLKw5HgVgZV4aEG1fNiJdvv0gV8P46eZlxXq%2fsnf4mtkF11wk43d86%2f6h94WUtIr66LFiNvvC1bDKat%2bFVj3CswpkblaW%2f9%2f",
+            deviceId: "8800e69d-e6af-b03b-3123-6d2b185cce3a", 
+            userId: "2E911DE0-61D9-4591-B3A5-9298A644E15B")
         {
         }
     }

@@ -19,5 +19,14 @@ namespace Blauhaus.Push.Server._Ioc
             services.AddTransient<INativeNotificationExtractor, NativeNotificationExtractor>();
             return services;
         }
+
+        public static IServiceCollection AddTargetedPushNotificationsServer(this IServiceCollection services, TraceListener traceListener) 
+        {
+            services.RegisterConsoleLoggerService(traceListener);
+            services.AddTransient<ITargetedPushNotificationsServerService, TargetedPushNotificationsServerService>();
+            services.AddTransient<INotificationHubClientProxy, NotificationHubClientProxy>();
+            services.AddTransient<INativeNotificationExtractor, NativeNotificationExtractor>();
+            return services;
+        }
     }
 }

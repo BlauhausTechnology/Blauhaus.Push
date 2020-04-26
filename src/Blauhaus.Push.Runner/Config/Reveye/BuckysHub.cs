@@ -20,8 +20,17 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class BuckysAndroidHub : BaseBuckysHub
     {
         public BuckysAndroidHub() : base(RuntimePlatform.Android, 
-            "dY-7NPUmQxc:APA91bF5pIKH_0iWDYk__Qc9IgNJnW2uWGu00-ymdrZvQ9PPKDev4grtCjvuczr3wTIIIPzHQvxzFU3zsggSGhwJPXu_LLyD5HHPQ9pv48evQqw5x8fKLRTO4lf0VurPO86EuwFGMjH5",
-            "androidDeviceId", "")
+            "e8xB-7bA6hM:APA91bFcTnhOBvpesclqwDZZZB5FgL8JuQOzykK2yCeFmxUyfcRiH-HSiJY7ssiPACrstlxB4arPTRz4kQhY3M_DAkeFDHlllKjN0wRp1wGazw06W2xTDsLIzPZ3wYflFfV-bHSQfaWp",
+            "", "")
+        {
+        }
+    }
+    
+    public class BuckysIosHub : BaseBuckysHub
+    {
+        public BuckysIosHub() : base(RuntimePlatform.iOS, 
+            "41C34D7D31B1C1919A3895ACB9CFD7BC99731657D9A916C390AB07904C3173F9",
+            "", "")
         {
         }
     }
@@ -30,8 +39,7 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     {
         public BuckysUwpHub() : base(RuntimePlatform.UWP,
                 "https://am3p.notify.windows.com/?token=AwYAAADpHWcmCYOfO1iJtYF8H%2fu9fBlRQSgwbsV3wp3BkDgkBibB46HC19Htmh63vsmvofw0UEVAPSnUi0mGEai6A0oWcUyXzdj7y2aA7IQ4u0PGmmCD4zo4XFP2I%2f5KriR0SxnondtS2W%2bj11xwZgSFCae5",
-                "9acadc82-f0c2-4e8b-95c7-11862f2d035b", 
-                "569AF4F2-9144-4D8F-96A2-C55CF3E44C30")
+                "", "")
         {
         }
     }

@@ -28,8 +28,10 @@ namespace Blauhaus.Push.Runner.Config.MineGame
     
     public class GameUwpHub : BaseGameHub
     {
-        public GameUwpHub() : base(RuntimePlatform.UWP,
-            "https://db5p.notify.windows.com/?token=AwYAAAANTjlKv%2bwU0%2f%2bnWdzDmWTMWnZuXzwrqecvO3fioWdBonwAqLygADjWzJXXd8AJwyD0t%2fbtTmgdMSbN762Guytann%2fmPxjlRRmMZkdi3fpfyAp1vYm1LuRzhvaG8Tb9CbYGecEGrjcPCFG3Xbyn4LHJ", "", "")
+        public GameUwpHub() : base(platform: RuntimePlatform.UWP,
+            pnsHandle: "https://db5p.notify.windows.com/?token=AwYAAAANKf9P63pukiLqul3HjYwjNbl8DKloqVq5foqihBT%2bz1OeIZl2gmoObwtF7lFT%2bEO%2fxqfUVIxVO6WvZU2hFFsgSP%2bpc%2fNStW8fv34TNkg8dBqpzcTh7kuhKzy15kV88se%2f2B%2f6%2b%2b4ODju3BRJVgE2W",
+            deviceId: "201f8114-070d-b6b8-b1ba-47f289ca3471", 
+            userId: "0FF7A478-FED1-414D-893C-E8F7694BACC0")
         {
         }
     }
