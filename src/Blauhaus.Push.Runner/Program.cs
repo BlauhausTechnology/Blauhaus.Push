@@ -31,7 +31,8 @@ namespace Blauhaus.Push.Runner
         private static BasePushRunnerHub Hub;
         private static string UserId;
         private static IDeviceTarget Target;
-        
+
+        private static NotificationHubClient RawClient => NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
         private static NotificationHubClientProxy Client;
         private static IPushNotificationsServerService PushNotificationsService;
 
@@ -39,28 +40,10 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(new AspersIosSandboxHub());
+                PushNotificationsService = Setup(new GameUwpHub());
 
-                //var mess =
-                //    "{ " +
-                //        "\"notification\" : { \"title\" : \"Hear Ye mortals!\", \"body\" : \"The king is dead. Long live the king\" }, " +
-                //        "\"data\" : {" +
-                //            "\"Title\" : \"Hear Ye mortals!\", " +
-                //            "\"Body\" : \"The king is dead. Long live the king\", " +
-                //            "\"Template_Name\" : \"Alert\", " +
-                //            "\"Id\" : \"d76594fd-1cae-4f4f-9dfe-545102d20357\", " +
-                //            "\"Details\" : \"He was stabbed in the bath\", " +
-                //            "\"Number of stabs\" : \"12\"" +
-                //        " }" +
-                //    " }";
-                //var notification = new FcmNotification(mess);
-                //await Client.SendDirectNotificationAsync(notification, new List<string> {PnsHandle}, CancellationToken.None);
-
-                await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
-
-                
-                //await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
-                //    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
+                await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
+                    "This is a grill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
 
             }
             catch (Exception e)

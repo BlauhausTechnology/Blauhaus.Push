@@ -72,16 +72,17 @@ namespace Blauhaus.Push.Server.Service
                 {
                     installation.Templates.Add(template.ToPlatform(deviceRegistration.Platform));
                 }
-
-                try
+                
+                await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
+                
+                _analyticsService.TraceVerbose(this, "Push notification registration updated", new Dictionary<string, object>
                 {
-                    await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                    {"InstallationId", installation.InstallationId },
+                    {"Platform", installation.Platform },
+                    {"PushChannel", installation.PushChannel },
+                    {"Tags", installation.Tags },
+                });
+                
                 return Result.Ok<IDeviceRegistration>(deviceRegistration);
             }
         }
@@ -145,8 +146,7 @@ namespace Blauhaus.Push.Server.Service
 
                 var tags = new List<string>
                 {
-                    notification.Name,
-                    $"UserId_{userId}"
+                    $"(UserId_{userId} && {notification.Name})"
                 };
 
                 if (!string.IsNullOrWhiteSpace(notification.Title))
@@ -162,36 +162,42 @@ namespace Blauhaus.Push.Server.Service
                 var result = await _hubClientProxy.SendNotificationAsync(properties, tags, token);
             }
         }
-
-
-        public async Task<Result> SendNotificationToDeviceAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub, CancellationToken token)
+         
+        public async Task<Result> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
         {
-            using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to device", new Dictionary<string, object>
-                {{nameof(PushNotification), pushNotification}, {nameof(DeviceTarget), deviceTarget}}))
+            _hubClientProxy.Initialize(hub);
+
+            using (var _ = _analyticsService.ContinueOperation(this, "Deregister user device",
+                new Dictionary<string, object>
+                {
+                    {"DeviceIdentifier", deviceIdentifier},
+                    {"UserId", userId}
+                }))
             {
-                try
+                var installationId = userId + "___" + deviceIdentifier;
+
+                var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId, token);
+                if (!installationExists)
                 {
-                    _hubClientProxy.Initialize(hub);
-
-                    var nativeNotificationResult = _nativeNotificationExtractor.ExtractNotification(deviceTarget.Platform, pushNotification);
-                    if (nativeNotificationResult.IsFailure) return nativeNotificationResult;
-
-                    var notification = nativeNotificationResult.Value.Notification;
-                    var devices = new List<string>{ deviceTarget.PushNotificationServicesHandle };
-                    _analyticsService.TraceVerbose(this, "Native push notification extracted", notification.ToObjectDictionary());
-
-                    await _hubClientProxy.SendDirectNotificationAsync(notification, devices, token);
-                    return Result.Success();
+                    return Result.Failure<IDeviceRegistration>(_analyticsService.TraceError(this, PushErrors.RegistrationDoesNotExist));
                 }
-                catch (Exception e)
+            
+                var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
+                installation.Templates = new Dictionary<string, InstallationTemplate>();
+                await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
+
+                _analyticsService.TraceVerbose(this, "Templates cleared for push notifications registration", new Dictionary<string, object>
                 {
-                    return _analyticsService.LogExceptionResult(this, e, PushErrors.FailedToSendNotification);
-                }
-                
+                    {"InstallationId", installation.InstallationId },
+                    {"Platform", installation.Platform },
+                    {"PushChannel", installation.PushChannel },
+                    {"Tags", installation.Tags },
+                });
+
+                return Result.Success();
             }
 
+
         }
-
-
     }
 }
