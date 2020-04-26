@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
-using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.Service;
@@ -17,10 +14,10 @@ using Microsoft.Azure.NotificationHubs;
 using Moq;
 using NUnit.Framework;
 
-namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
+namespace Blauhaus.Push.Tests.Server.Tests.TargetedNotificationsServerServiceTests
 {
     [TestFixture]
-    public class SendNotificationToTargetAsyncTests : BasePushNotificationsServerTest<PushNotificationsServerService>
+    public class SendNotificationToTargetAsyncTests : BasePushNotificationsServerTest<TargetedPushNotificationsServerService>
     {
 
         private IPushNotification _pushNotification;
