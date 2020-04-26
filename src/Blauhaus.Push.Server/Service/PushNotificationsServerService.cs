@@ -146,8 +146,7 @@ namespace Blauhaus.Push.Server.Service
 
                 var tags = new List<string>
                 {
-                    notification.Name,
-                    $"UserId_{userId}"
+                    $"(UserId_{userId} && {notification.Name})"
                 };
 
                 if (!string.IsNullOrWhiteSpace(notification.Title))

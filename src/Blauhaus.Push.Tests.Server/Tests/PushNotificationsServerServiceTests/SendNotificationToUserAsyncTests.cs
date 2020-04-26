@@ -57,7 +57,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
 
 
         [Test]
-        public async Task SHOULD_invoke_send_on_hub_client()
+        public async Task SHOULD_compose_tags_into_AND_clause_and_invoke_send_on_hub_client()
         {
             //Act
             await Sut.SendNotificationToUserAsync(_notification, _userId, MockNotificationHub.Object, CancellationToken.None);
@@ -68,8 +68,8 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                     y["PropertyOne"] == "ValueOne" &&
                     y["PropertyTwo"] == "ValueTwo"), 
                 It.Is<List<string>>(z => 
-                    z.Contains("UserId_" + _userId) && 
-                    z.Contains("MyTemplate")),      
+                    z.Count == 1 &&
+                    z[0] == $"(UserId_{_userId} && MyTemplate)"),      
                 It.IsAny<CancellationToken>()));
         }
 

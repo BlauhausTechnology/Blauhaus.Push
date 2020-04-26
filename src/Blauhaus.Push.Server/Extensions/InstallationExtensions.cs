@@ -63,16 +63,19 @@ namespace Blauhaus.Push.Server.Extensions
         {
             var templates = new List<IPushNotificationTemplate>();
 
-            foreach (var installationTemplate in installation.Templates)
+            if (installation.Templates != null)
             {
-                if(installation.Platform == NotificationPlatform.Fcm)
-                    templates.Add(ExtractAndroidPushNotificationTemplate(installationTemplate));
+                foreach (var installationTemplate in installation.Templates)
+                {
+                    if(installation.Platform == NotificationPlatform.Fcm)
+                        templates.Add(ExtractAndroidPushNotificationTemplate(installationTemplate));
                 
-                if(installation.Platform == NotificationPlatform.Apns)
-                    templates.Add(ExtractIosPushNotificationTemplate(installationTemplate));
+                    if(installation.Platform == NotificationPlatform.Apns)
+                        templates.Add(ExtractIosPushNotificationTemplate(installationTemplate));
                 
-                if(installation.Platform == NotificationPlatform.Wns)
-                    templates.Add(ExtractUwpPushNotificationTemplate(installationTemplate));
+                    if(installation.Platform == NotificationPlatform.Wns)
+                        templates.Add(ExtractUwpPushNotificationTemplate(installationTemplate));
+                }
             }
 
             return templates;

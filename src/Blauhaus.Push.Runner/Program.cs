@@ -31,7 +31,8 @@ namespace Blauhaus.Push.Runner
         private static BasePushRunnerHub Hub;
         private static string UserId;
         private static IDeviceTarget Target;
-        
+
+        private static NotificationHubClient RawClient => NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
         private static NotificationHubClientProxy Client;
         private static IPushNotificationsServerService PushNotificationsService;
 
@@ -39,12 +40,10 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(new RainbowUwpHub());
-
-                //await PushNotificationsService.SendNotificationToDeviceAsync(KingIsDeadAlert, Target, Hub, CancellationToken.None);
+                PushNotificationsService = Setup(new GameUwpHub());
 
                 await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
-                    "This is a drill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
+                    "This is a grill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
 
             }
             catch (Exception e)
