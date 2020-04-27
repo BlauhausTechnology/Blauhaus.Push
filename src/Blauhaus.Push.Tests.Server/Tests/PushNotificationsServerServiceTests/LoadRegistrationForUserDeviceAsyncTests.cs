@@ -55,9 +55,9 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                MockAnalyticsService.VerifyContinueOperation("Load push notification registration for user device");
-                MockAnalyticsService.VerifyContinueOperationProperty("UserId", "myUserId");
-                MockAnalyticsService.VerifyContinueOperationProperty("DeviceIdentifier", "myDeviceId");
+                MockAnalyticsService.VerifyTrace("Load push notification registration for user device");
+                MockAnalyticsService.VerifyTraceProperty("UserId", "myUserId");
+                MockAnalyticsService.VerifyTraceProperty("DeviceIdentifier", "myDeviceId");
             }
 
             [Test]

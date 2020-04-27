@@ -5,7 +5,7 @@ namespace Blauhaus.Push.Runner.Config.MineGame
     public abstract class BaseGameHub : BasePushRunnerHub
     {
         protected BaseGameHub(IRuntimePlatform platform, string pnsHandle, string deviceId, string userId) 
-            : base(platform, pnsHandle, deviceId, userId)
+            : base(platform: platform, pnsHandle: pnsHandle, deviceId: deviceId, userId: userId)
         {
             NotificationHubConnectionString =
                 "Endpoint=sb://minegamedevhub.servicebus.windows.net/;" +
@@ -20,8 +20,10 @@ namespace Blauhaus.Push.Runner.Config.MineGame
 
     public class GameAndroidHub : BaseGameHub
     {
-        public GameAndroidHub() : base(RuntimePlatform.Android, 
-            "", "", "")
+        public GameAndroidHub() : base(platform: RuntimePlatform.Android, 
+            pnsHandle: "cmuEVxOUh9I:APA91bGN91H-GbNIgToTKQgldPdSeczzGJZbX8Z_od3PgMG0YK9XkqQP7DWgMhJPTnRbD3jXB8IVQufoMI9hbNy34opvjCqmG33CFwSyIqieaf-nIvMHuWOvN8Ul8Msx6Z1EpXpCNtOV", 
+            deviceId: "52dab57d459926dc", 
+            userId: "0FF7A478-FED1-414D-893C-E8F7694BACC0")
         {
         }
     }
@@ -38,8 +40,8 @@ namespace Blauhaus.Push.Runner.Config.MineGame
 
     public class GameIosHub : BaseGameHub
     {
-        public GameIosHub() : base(RuntimePlatform.iOS,
-            "", "", "")
+        public GameIosHub() : base(platform: RuntimePlatform.iOS,
+            pnsHandle: "", deviceId: "", userId: "")
         {
         }
     }

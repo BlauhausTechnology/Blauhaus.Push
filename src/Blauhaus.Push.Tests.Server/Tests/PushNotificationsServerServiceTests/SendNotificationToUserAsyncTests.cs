@@ -50,9 +50,9 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             await Sut.SendNotificationToUserAsync(_notification, _userId, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
-            MockAnalyticsService.VerifyContinueOperation("Send push notification to user");
-            MockAnalyticsService.VerifyContinueOperationProperty(nameof(IPushNotification), _notification);
-            MockAnalyticsService.VerifyContinueOperationProperty("UserId", _userId);
+            MockAnalyticsService.VerifyTrace("Send push notification to user");
+            MockAnalyticsService.VerifyTraceProperty(nameof(IPushNotification), _notification);
+            MockAnalyticsService.VerifyTraceProperty("UserId", _userId);
         }
 
 
