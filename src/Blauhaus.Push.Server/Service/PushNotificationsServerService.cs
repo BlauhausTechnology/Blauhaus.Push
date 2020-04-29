@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Common.Results;
-using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extensions;
-using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
@@ -23,23 +17,19 @@ namespace Blauhaus.Push.Server.Service
     public class PushNotificationsServerService : IPushNotificationsServerService
     {
         private readonly IAnalyticsService _analyticsService;
-        private readonly INativeNotificationExtractor _nativeNotificationExtractor;
         private readonly INotificationHubClientProxy _hubClientProxy;
 
         public PushNotificationsServerService(
             IAnalyticsService analyticsService,
-            INativeNotificationExtractor nativeNotificationExtractor,
             INotificationHubClientProxy hubClientProxy)
         {
             _analyticsService = analyticsService;
-            _nativeNotificationExtractor = nativeNotificationExtractor;
             _hubClientProxy = hubClientProxy;
         }
 
         public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, IPushNotificationsHub hub, CancellationToken token)
         {
             
-
             if (deviceRegistration.IsNotValid(this, _analyticsService, out var validationError))
             {
                 return Result.Failure<IDeviceRegistration>(validationError);
