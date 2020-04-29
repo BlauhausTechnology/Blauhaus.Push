@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Blauhaus.Push.Abstractions.Client;
+using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.TestHelpers.MockBuilders;
 using Moq;
 
@@ -16,6 +20,45 @@ namespace Blauhaus.Push.TestHelpers.MockBuilders
         {
             Mock.Setup(x => x.GetPushNotificationServiceHandleAsync())
                 .ReturnsAsync(value);
+            return this;
+        }
+
+        public PushNotificationsClientServiceMockBuilder Where_ObserveForegroundNotifications_returns(List<IPushNotification> notifications)
+        {
+            Mock.Setup(x => x.ObserveForegroundNotifications())
+                .Returns(Observable.Create<IPushNotification>(observer =>
+                {
+                    foreach (var pushNotification in notifications)
+                    {
+                        observer.OnNext(pushNotification);
+                    }
+                    return Disposable.Empty;
+                }));
+
+            return this;
+        }
+
+        public PushNotificationsClientServiceMockBuilder Where_ObserveForegroundNotifications_returns(IPushNotification notification)
+        {
+            Mock.Setup(x => x.ObserveForegroundNotifications())
+                .Returns(Observable.Create<IPushNotification>(observer =>
+                {
+                    observer.OnNext(notification);
+                    return Disposable.Empty;
+                }));
+
+            return this;
+        }
+        
+        public PushNotificationsClientServiceMockBuilder Where_ObserveForegroundNotifications_fails(Exception exception)
+        {
+            Mock.Setup(x => x.ObserveForegroundNotifications())
+                .Returns(Observable.Create<IPushNotification>(observer =>
+                {
+                    observer.OnError(exception);
+                    return Disposable.Empty;
+                }));
+
             return this;
         }
     }

@@ -40,13 +40,12 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(new GameAndroidHub());
+                PushNotificationsService = Setup(new BuckysAndroidHub());
 
-                var reg = await GetAllRegistrationsAsync();
+                //var reg = await GetAllRegistrationsAsync();
 
-
-                //await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
-                //    "This is a grill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
+                await PushNotificationsService.SendNotificationToUserAsync(new MessageNotification(
+                    "This is a grill", "Please head to the nearest shed", "Payload data", "Payload id"), UserId, Hub, CancellationToken.None);
 
             }
             catch (Exception e)

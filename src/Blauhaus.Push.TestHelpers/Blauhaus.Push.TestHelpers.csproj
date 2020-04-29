@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blauhaus.TestHelpers" Version="1.0.8" />
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
   </ItemGroup>
 
   <ItemGroup>

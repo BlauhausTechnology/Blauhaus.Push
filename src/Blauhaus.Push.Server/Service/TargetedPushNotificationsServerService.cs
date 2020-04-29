@@ -39,30 +39,27 @@ namespace Blauhaus.Push.Server.Service
 
         public async Task<Result> SendNotificationToTargetAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub, CancellationToken token)
         {
-            using (var _ = _analyticsService.ContinueOperation(this, "Send push notification to device", new Dictionary<string, object>
-                {{nameof(PushNotification), pushNotification}, {nameof(DeviceTarget), deviceTarget}}))
+            _analyticsService.TraceVerbose(this, "Send push notification to device", new Dictionary<string, object>
+                {{nameof(PushNotification), pushNotification}, {nameof(DeviceTarget), deviceTarget}});
+
+            try
             {
-                try
-                {
-                    _hubClientProxy.Initialize(hub);
+                _hubClientProxy.Initialize(hub);
 
-                    var nativeNotificationResult = _nativeNotificationExtractor.ExtractNotification(deviceTarget.Platform, pushNotification);
-                    if (nativeNotificationResult.IsFailure) return nativeNotificationResult;
+                var nativeNotificationResult = _nativeNotificationExtractor.ExtractNotification(deviceTarget.Platform, pushNotification);
+                if (nativeNotificationResult.IsFailure) return nativeNotificationResult;
 
-                    var notification = nativeNotificationResult.Value.Notification;
-                    var devices = new List<string>{ deviceTarget.PushNotificationServicesHandle };
-                    _analyticsService.TraceVerbose(this, "Native push notification extracted", notification.ToObjectDictionary());
+                var notification = nativeNotificationResult.Value.Notification;
+                var devices = new List<string>{ deviceTarget.PushNotificationServicesHandle };
+                _analyticsService.TraceVerbose(this, "Native push notification extracted", notification.ToObjectDictionary());
 
-                    await _hubClientProxy.SendDirectNotificationAsync(notification, devices, token);
-                    return Result.Success();
-                }
-                catch (Exception e)
-                {
-                    return _analyticsService.LogExceptionResult(this, e, PushErrors.FailedToSendNotification);
-                }
-                
+                await _hubClientProxy.SendDirectNotificationAsync(notification, devices, token);
+                return Result.Success();
             }
-
+            catch (Exception e)
+            {
+                return _analyticsService.LogExceptionResult(this, e, PushErrors.FailedToSendNotification);
+            }
         }
     }
 }

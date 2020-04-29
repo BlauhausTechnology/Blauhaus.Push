@@ -21,9 +21,9 @@ namespace Blauhaus.Push.Runner.Config.MineGame
     public class GameAndroidHub : BaseGameHub
     {
         public GameAndroidHub() : base(platform: RuntimePlatform.Android, 
-            pnsHandle: "cmuEVxOUh9I:APA91bGN91H-GbNIgToTKQgldPdSeczzGJZbX8Z_od3PgMG0YK9XkqQP7DWgMhJPTnRbD3jXB8IVQufoMI9hbNy34opvjCqmG33CFwSyIqieaf-nIvMHuWOvN8Ul8Msx6Z1EpXpCNtOV", 
-            deviceId: "52dab57d459926dc", 
-            userId: "0FF7A478-FED1-414D-893C-E8F7694BACC0")
+            pnsHandle: "fT5D5IsSbSs:APA91bFonZgtP6OSSTuu1ej8zxvDVGTec_4wOD6pIUYt2Dd9UbAmSDU7tdbttAiONCnd7hpoMVPevKVg3scx_VEGKp01CPCmFtcBgSe3V9kfNbEebz97iVMIAdgFqoUgIPQqIpgGFaMz", 
+            deviceId: "c57dc2e6f14ed0d3", 
+            userId: "4DE82274-DD70-4C34-833A-2BE2AB36FEB1")
         {
         }
     }
@@ -41,7 +41,9 @@ namespace Blauhaus.Push.Runner.Config.MineGame
     public class GameIosHub : BaseGameHub
     {
         public GameIosHub() : base(platform: RuntimePlatform.iOS,
-            pnsHandle: "", deviceId: "", userId: "")
+            pnsHandle: "CCA1ED6C170AB011147C37D3BCC151F0DD0C7E731566D99FACBC7BCDE4A925C2", 
+            deviceId: "6832D9AC-A657-42B6-9FDE-64F70CAD699E",
+            userId: "D23BCCEA-DD4F-460E-B7D6-F542CC4808EA")
         {
         }
     }
