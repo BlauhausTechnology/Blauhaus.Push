@@ -40,8 +40,9 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public class BuckysUwpHub : BaseBuckysHub
     {
         public BuckysUwpHub() : base(platform: RuntimePlatform.UWP,
-                pnsHandle: "https://am3p.notify.windows.com/?token=AwYAAADpHWcmCYOfO1iJtYF8H%2fu9fBlRQSgwbsV3wp3BkDgkBibB46HC19Htmh63vsmvofw0UEVAPSnUi0mGEai6A0oWcUyXzdj7y2aA7IQ4u0PGmmCD4zo4XFP2I%2f5KriR0SxnondtS2W%2bj11xwZgSFCae5",
-                deviceId: "", userId: "")
+                pnsHandle: "https://db5p.notify.windows.com/?token=AwYAAAAEk4LUFdOxtqYaniGYyIK6fleFm0NmmCpbLqEayBReCgHC%2fPmzPtBVoEhjwEc3mw45yKLiWRt%2beaiGF%2fdFUOvPYt0blkpInNYNZONiFca%2fY6ehUR95Gw2HKTwmakpPRo%2bbkucSOjBq%2bnAvyVEktSU0",
+                deviceId: "", 
+                userId: "92C5D5A6-B015-4FDE-ACD9-2655C6B21D13")
         {
         }
     }

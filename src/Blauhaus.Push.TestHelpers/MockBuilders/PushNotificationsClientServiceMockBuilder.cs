@@ -14,6 +14,7 @@ namespace Blauhaus.Push.TestHelpers.MockBuilders
         public PushNotificationsClientServiceMockBuilder()
         {
             Where_GetPushNotificationServiceHandleAsync_returns(Guid.NewGuid().ToString());
+            Where_ObserveForegroundNotifications_returns(new PushNotificationMockBuilder().Object);
         }
 
         public PushNotificationsClientServiceMockBuilder Where_GetPushNotificationServiceHandleAsync_returns(string value)
