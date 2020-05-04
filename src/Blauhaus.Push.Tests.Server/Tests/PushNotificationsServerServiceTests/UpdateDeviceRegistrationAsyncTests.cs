@@ -76,8 +76,8 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                MockAnalyticsService.VerifyContinueOperation("Register device for push notifications");
-                MockAnalyticsService.VerifyContinueOperationProperty(nameof(DeviceRegistration), _dataOnlyDeviceRegistration);
+                MockAnalyticsService.VerifyTrace("Register device for push notifications");
+                MockAnalyticsService.VerifyTraceProperty(nameof(DeviceRegistration), _dataOnlyDeviceRegistration);
             }
 
             [Test]

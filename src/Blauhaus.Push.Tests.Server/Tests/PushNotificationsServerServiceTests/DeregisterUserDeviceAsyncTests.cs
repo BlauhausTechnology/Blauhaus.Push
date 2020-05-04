@@ -53,9 +53,9 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
 
             //Assert
-            MockAnalyticsService.VerifyContinueOperation("Deregister user device");
-            MockAnalyticsService.VerifyContinueOperationProperty("UserId", "myUserId");
-            MockAnalyticsService.VerifyContinueOperationProperty("DeviceIdentifier", "myDeviceId");
+            MockAnalyticsService.VerifyTrace("Deregister user device");
+            MockAnalyticsService.VerifyTraceProperty("UserId", "myUserId");
+            MockAnalyticsService.VerifyTraceProperty("DeviceIdentifier", "myDeviceId");
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         }
 
         [Test]
-        public async Task IF_installation_does_not_exist_SHOULD_fail()
+        public async Task IF_installation_does_not_exist_SHOULD_succeed_and_trace()
         {
             //Arrange
             MockNotificationHubClientProxy.Mock.Setup(x => x.InstallationExistsAsync(_installation.InstallationId, It.IsAny<CancellationToken>()))
@@ -79,8 +79,8 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             var result = await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
 
             //Assert
-            Assert.AreEqual(PushErrors.RegistrationDoesNotExist.ToString(), result.Error);
-            MockAnalyticsService.VerifyTrace(PushErrors.RegistrationDoesNotExist.Code, LogSeverity.Error);
+            Assert.IsTrue(result.IsSuccess);
+            MockAnalyticsService.VerifyTrace("No installation exists for user device, so there is nothing to deregister", LogSeverity.Warning);
         }
 
         [Test]
