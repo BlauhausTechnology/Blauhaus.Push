@@ -17,10 +17,10 @@ namespace Blauhaus.Push.Server.HubClientProxy
 
         public NotificationHubClientProxy(IBuildConfig buildConfig)
         {
-            _enableTestSend = false;
-            
             //todo test send not available for sending to device handles
-            //(BuildConfig) buildConfig == BuildConfig.Debug;
+
+            _enableTestSend = (BuildConfig) buildConfig == BuildConfig.Debug;
+
         }
 
         public INotificationHubClientProxy Initialize(IPushNotificationsHub hub)

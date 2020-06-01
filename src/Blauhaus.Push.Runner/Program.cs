@@ -40,13 +40,14 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(hub: new BuckysUwpHub());
+                PushNotificationsService = Setup(hub: new RainbowAndroidHub());
 
-                //var reg = await GetAllRegistrationsAsync();
+                var reg = await GetAllRegistrationsAsync();
+                //var gp = reg.First(x => x.PnsHandle == "dYe3tHzgJao:APA91bEC9eYef-osn3w0Kkj_j7xN0Nvwn0ES2GsjLKBqu_za-96T52YO4WLWKwpNTdzDuITeK74u2ygEi4lfQresWKnAXFqIJX6FkVwIXIHh_4biQFbumpv2H6o_5NDHKpmrJnfL_Jl6");
 
                 await PushNotificationsService.SendNotificationToUserAsync(
-                    notification: new MessageNotification(title: "This is a grill", body: "Please head to the nearest shed", payload: "Payload data", id: "Payload id"), 
-                    userId: "92C5D5A6-B015-4FDE-ACD9-2655C6B21D13", 
+                    notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
+                    userId: "E7936FE7-1E86-4E4A-8EF2-53EACD91EA1D".ToLowerInvariant(), 
                     hub: Hub, token: CancellationToken.None);
 
             }
