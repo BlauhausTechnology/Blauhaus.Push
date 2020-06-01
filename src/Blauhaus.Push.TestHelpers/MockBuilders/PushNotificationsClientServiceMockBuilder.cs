@@ -23,6 +23,14 @@ namespace Blauhaus.Push.TestHelpers.MockBuilders
                 .ReturnsAsync(value);
             return this;
         }
+        
+        public PushNotificationsClientServiceMockBuilder Where_ObserveForegroundNotifications_returns(IDisposable token)
+        {
+            Mock.Setup(x => x.ObserveForegroundNotifications())
+                .Returns(Observable.Create<IPushNotification>(observer => token));
+
+            return this;
+        }
 
         public PushNotificationsClientServiceMockBuilder Where_ObserveForegroundNotifications_returns(List<IPushNotification> notifications)
         {
