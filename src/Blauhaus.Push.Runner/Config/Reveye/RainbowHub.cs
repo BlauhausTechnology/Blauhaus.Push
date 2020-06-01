@@ -5,7 +5,7 @@ namespace Blauhaus.Push.Runner.Config.Reveye
     public abstract class BaseRainbowHub : BasePushRunnerHub
     {
         protected BaseRainbowHub(IRuntimePlatform platform, string pnsHandle,  string deviceId, string userId) 
-            : base(platform, pnsHandle, deviceId, userId)
+            : base(platform: platform, pnsHandle: pnsHandle, deviceId: deviceId, userId: userId)
         {
             NotificationHubConnectionString = 
                 "Endpoint=sb://reveye-push.servicebus.windows.net/;" +
@@ -19,18 +19,19 @@ namespace Blauhaus.Push.Runner.Config.Reveye
 
     public class RainbowAndroidHub : BaseRainbowHub
     {
-        public RainbowAndroidHub() : base(RuntimePlatform.Android, 
-            "dw82chUi43Q:APA91bFgwyv-mqaJbmexleSBFY0NAN1vEski9myxvwWKcM-EeIGgWXA2-_RsJQnzXQ2i_9chFQB69KcDnTvAmxbN4UDwMvSfahlFIxw6T7BAls4aYQiX8dNaHjAaKhxh_LMpN0C_EcZr",
-            "", "")
+        public RainbowAndroidHub() : base(platform: RuntimePlatform.Android, 
+            pnsHandle: "",
+            deviceId: "", 
+            userId: "")
         {
         }
     }
     
     public class RainbowIosHub : BaseRainbowHub
     {
-        public RainbowIosHub() : base(RuntimePlatform.iOS, 
-            "69A848A52708D9602AFB8DF72B14C691C7038627A4EE967D5E25ECA150AEBBB5",
-            "", "")
+        public RainbowIosHub() : base(platform: RuntimePlatform.iOS, 
+            pnsHandle: "69A848A52708D9602AFB8DF72B14C691C7038627A4EE967D5E25ECA150AEBBB5",
+            deviceId: "", userId: "")
         {
         }
     }

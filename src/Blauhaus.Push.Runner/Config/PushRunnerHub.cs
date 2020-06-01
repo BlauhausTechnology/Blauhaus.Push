@@ -14,12 +14,17 @@ namespace Blauhaus.Push.Runner.Config
             PnsHandle = pnsHandle;
             UserId = userId;
 
-            if((RuntimePlatform) platform == RuntimePlatform.iOS)
-                DeviceTarget = Server.Service.DeviceTarget.iOS(pnsHandle);
-            else if((RuntimePlatform) platform == RuntimePlatform.UWP)
-                DeviceTarget = Server.Service.DeviceTarget.UWP(pnsHandle);
-            else if((RuntimePlatform) platform == RuntimePlatform.Android)
-                DeviceTarget = Server.Service.DeviceTarget.Android(pnsHandle);
+            if (!string.IsNullOrEmpty(pnsHandle))
+            {
+                if((RuntimePlatform) platform == RuntimePlatform.iOS)
+                    DeviceTarget = Server.Service.DeviceTarget.iOS(pnsHandle);
+                else if((RuntimePlatform) platform == RuntimePlatform.UWP)
+                    DeviceTarget = Server.Service.DeviceTarget.UWP(pnsHandle);
+                else if((RuntimePlatform) platform == RuntimePlatform.Android)
+                    DeviceTarget = Server.Service.DeviceTarget.Android(pnsHandle);
+            }
+
+
         }
 
         public string NotificationHubName { get; set; }

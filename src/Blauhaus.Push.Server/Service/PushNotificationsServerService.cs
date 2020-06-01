@@ -11,6 +11,7 @@ using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
+using Newtonsoft.Json;
 
 namespace Blauhaus.Push.Server.Service
 {
@@ -140,6 +141,8 @@ namespace Blauhaus.Push.Server.Service
             }
 
             var result = await _hubClientProxy.SendNotificationAsync(properties, tags, token);
+
+            var jj = JsonConvert.SerializeObject(result);
         }
          
         public async Task<Result> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
