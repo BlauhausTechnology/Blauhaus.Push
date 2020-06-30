@@ -50,7 +50,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         public async Task SHOULD_track_operation()
         {
             //Act
-            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
+            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancelToken);
 
             //Assert
             MockAnalyticsService.VerifyTrace("Deregister user device");
@@ -62,7 +62,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         public async Task SHOULD_initialize_client()
         {
             //Act
-            var result = await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
+            var result = await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancelToken);
 
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
@@ -76,7 +76,7 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
                 .ReturnsAsync(false);
 
             //Act
-            var result = await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
+            var result = await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancelToken);
 
             //Assert
             Assert.IsTrue(result.IsSuccess);
@@ -87,13 +87,13 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
         public async Task SHOULD_clear_templates_for_loaded_installation_and_then_save()
         {
             //Act
-            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
+            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancelToken);
 
             //Assert
-            MockNotificationHubClientProxy.Mock.Verify(x => x.GetInstallationAsync(_installation.InstallationId, CancellationToken));
+            MockNotificationHubClientProxy.Mock.Verify(x => x.GetInstallationAsync(_installation.InstallationId, CancelToken));
             MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y => 
                 y.InstallationId == _installation.InstallationId &&
-                y.Templates.Count == 0), CancellationToken));
+                y.Templates.Count == 0), CancelToken));
         }
         
         [Test]
@@ -103,20 +103,20 @@ namespace Blauhaus.Push.Tests.Server.Tests.PushNotificationsServerServiceTests
             _installation.Templates = null;
 
             //Act
-            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
+            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancelToken);
 
             //Assert
-            MockNotificationHubClientProxy.Mock.Verify(x => x.GetInstallationAsync(_installation.InstallationId, CancellationToken));
+            MockNotificationHubClientProxy.Mock.Verify(x => x.GetInstallationAsync(_installation.InstallationId, CancelToken));
             MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y => 
                 y.InstallationId == _installation.InstallationId &&
-                y.Templates.Count == 0), CancellationToken));
+                y.Templates.Count == 0), CancelToken));
         }
 
         [Test]
         public async Task SHOULD_trace_success()
         {
             //Act
-            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken);
+            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancelToken);
 
             //Assert
             MockAnalyticsService.VerifyTrace("Templates cleared for push notifications registration");
