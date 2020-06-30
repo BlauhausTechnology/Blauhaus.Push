@@ -1,4 +1,4 @@
-﻿using Blauhaus.Common.ValueObjects.Errors;
+﻿using Blauhaus.Errors;
 
 namespace Blauhaus.Push.Abstractions.Common
 {
