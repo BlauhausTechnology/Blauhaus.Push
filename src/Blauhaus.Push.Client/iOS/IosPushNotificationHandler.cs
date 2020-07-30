@@ -44,7 +44,7 @@ namespace Blauhaus.Push.Client.iOS
             {
                 if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
                 {
-                    UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Sound,
+                    UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Badge,
                         (granted, error) =>
                         {
                             if (granted)
