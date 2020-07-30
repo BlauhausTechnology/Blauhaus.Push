@@ -44,17 +44,24 @@ namespace Blauhaus.Push.Client.iOS
             {
                 if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
                 {
-                    UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Sound,
+                    UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound,
                         (granted, error) =>
                         {
                             if (granted)
                             {
-                                _analyticsService.TraceInformation(this, "Permission granted for push notifications on iOS10+");
+                                _analyticsService.TraceInformation(this, "Permission granted for push notifications");
                                 appDelegate.InvokeOnMainThread(UIApplication.SharedApplication.RegisterForRemoteNotifications);
                             }
                             else
                             {
-                                _analyticsService.TraceWarning(this, "Failed to get permission for push notifications on iOS10+", "ErrorCode", error.Code.ToString());
+                                if(error != null && error.Code != null)
+                                {
+                                    _analyticsService.TraceError(this, "Failed to get permission for push notifications", "ErrorCode", error.Code.ToString());
+                                }
+                                else
+                                {
+                                    _analyticsService.TraceWarning(this, "Permission for push notifications not granted");
+                                }
                             }
                         });
                 }
