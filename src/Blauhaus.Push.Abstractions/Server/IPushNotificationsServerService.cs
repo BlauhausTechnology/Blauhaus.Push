@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using CSharpFunctionalExtensions;
 

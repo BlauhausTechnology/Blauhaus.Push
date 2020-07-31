@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Tests.Client.Tests._Base;

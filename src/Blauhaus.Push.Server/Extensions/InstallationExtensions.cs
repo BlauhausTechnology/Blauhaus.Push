@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml;
 using Blauhaus.Common.Utils.Extensions;
-using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
-using Blauhaus.Push.Abstractions.Server;
 using Microsoft.Azure.NotificationHubs;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Blauhaus.Push.Server.Extensions
