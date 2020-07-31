@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Blauhaus.Push.Abstractions.Common.Notifications;
+﻿using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
 
 namespace Blauhaus.Push.Abstractions.Common.Templates

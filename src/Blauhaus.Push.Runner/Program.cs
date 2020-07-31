@@ -11,7 +11,6 @@ using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
-using Blauhaus.Push.Runner.Config.MineGame;
 using Blauhaus.Push.Runner.Config.Reveye;
 using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.HubClientProxy;

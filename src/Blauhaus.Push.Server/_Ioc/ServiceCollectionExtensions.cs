@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Blauhaus.Analytics.Console._Ioc;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Server.Service;
