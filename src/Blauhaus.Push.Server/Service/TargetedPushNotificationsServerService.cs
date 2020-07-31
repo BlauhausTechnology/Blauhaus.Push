@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Common.Results;
-using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server._Config;
-using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.HubClientProxy;
 using CSharpFunctionalExtensions;
-using Microsoft.Azure.NotificationHubs;
 
 namespace Blauhaus.Push.Server.Service
 {

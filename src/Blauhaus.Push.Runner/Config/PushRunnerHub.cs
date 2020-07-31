@@ -1,7 +1,5 @@
 ﻿using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server._Config;
-using Blauhaus.Push.Server.Service;
 
 namespace Blauhaus.Push.Runner.Config
 {

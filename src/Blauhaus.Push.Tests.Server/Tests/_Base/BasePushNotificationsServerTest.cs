@@ -1,11 +1,9 @@
 ﻿using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Analytics.TestHelpers;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server._Config;
 using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Tests.Server.MockBuilders;
-using Blauhaus.Push.Tests.Server.Tests.NativeNotificationExtractorTests;
 using Blauhaus.TestHelpers.BaseTests;
 using Blauhaus.TestHelpers.MockBuilders;
 using Microsoft.Extensions.DependencyInjection;

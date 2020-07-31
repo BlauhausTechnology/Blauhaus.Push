@@ -1,8 +1,6 @@
-﻿using System;
-using Blauhaus.Analytics.Abstractions.Extensions;
+﻿using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Server;
 

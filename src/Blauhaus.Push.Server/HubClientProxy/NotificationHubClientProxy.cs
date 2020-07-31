@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Push.Abstractions.Server;
-using Blauhaus.Push.Server._Config;
 using Microsoft.Azure.NotificationHubs;
 
 namespace Blauhaus.Push.Server.HubClientProxy
