@@ -44,7 +44,7 @@ namespace Blauhaus.Push.Tests.Client.Tests._Base
             Services.AddSingleton<AndroidPushNotificationsClientService>();
         }
 
-        protected SecureStorageMockBuilder MockSecureStorageService => Mocks.AddMock<SecureStorageMockBuilder, ISecureStorageService>().Invoke();
+        protected SecureStorageServiceMockBuilder MockSecureStorageService => Mocks.AddMock<SecureStorageServiceMockBuilder, ISecureStorageService>().Invoke();
         protected AnalyticsServiceMockBuilder MockAnalyticsService => Mocks.AddMock<AnalyticsServiceMockBuilder, IAnalyticsService>().Invoke();
         protected PushNotificationTapHandlerMockBuilder MockPushNotificationTapHandler => Mocks.AddMock<PushNotificationTapHandlerMockBuilder, IPushNotificationTapHandler>().Invoke();
     }
