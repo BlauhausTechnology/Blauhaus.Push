@@ -15,7 +15,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.B
         {
             base.Setup();
             Services.AddSingleton<TestPushNotificationsClientService>();
-            MockSecureStorageService.Where_GetAsync_returns("", "PnsHandle");
+            MockSecureStorageService.Where_GetAsync_returns("PnsHandle", string.Empty);
         }
 
         [Test]

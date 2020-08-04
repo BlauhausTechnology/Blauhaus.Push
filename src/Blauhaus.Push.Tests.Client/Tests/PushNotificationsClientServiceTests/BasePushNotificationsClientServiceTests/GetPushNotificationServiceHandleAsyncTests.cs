@@ -13,7 +13,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.B
         {
             base.Setup();
             Services.AddSingleton<TestPushNotificationsClientService>();
-            MockSecureStorageService.Where_GetAsync_returns("stored handle", "PnsHandle");
+            MockSecureStorageService.Where_GetAsync_returns("PnsHandle", "stored handle");
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace Blauhaus.Push.Tests.Client.Tests.PushNotificationsClientServiceTests.B
         public async Task IF_no_stored_handle_exists_SHOULD_return_empty_string_and_trace()
         {
             //Arrange
-            MockSecureStorageService.Where_GetAsync_returns(null, "PnsHandle");
+            MockSecureStorageService.Where_GetAsync_returns("PnsHandle", null);
 
             //Act
             var result = await Sut.GetPushNotificationServiceHandleAsync();
