@@ -3,7 +3,7 @@ using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.TestHelpers.MockBuilders;
 using Moq;
 
-namespace Blauhaus.Push.Tests.Server.MockBuilders
+namespace Blauhaus.Push.Tests.MockBuilders
 {
     public class NotificationHubClientProxyMockBuilder : BaseMockBuilder<NotificationHubClientProxyMockBuilder, INotificationHubClientProxy>
     {

@@ -1,7 +1,7 @@
-﻿<Project Sdk="MsBuild.SDK.Extras/2.0.54">
+﻿<Project Sdk="MsBuild.SDK.Extras/2.1.2">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;MonoAndroid9;uap10.0.17134</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;MonoAndroid9;uap10.0.18362</TargetFrameworks>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild> 
@@ -39,10 +39,10 @@
 <ItemGroup>
     <PackageReference Include="Blauhaus.Common.Utils" Version="1.6.2" />
     <PackageReference Include="Blauhaus.DeviceServices" Version="0.7.10" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.7" />
     <PackageReference Include="System.Reactive" Version="4.4.1" />
-    <PackageReference Include="Xamarin.Forms" Version="4.7.0.1239" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,13 +63,16 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <PackageReference Include="Xamarin.Azure.NotificationHubs.iOS">
-      <Version>3.0.1</Version>
+      <Version>3.0.2</Version>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
     <PackageReference Include="WindowsAzure.Messaging.Managed">
       <Version>0.1.7.9</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>6.2.10</Version>
     </PackageReference>
   </ItemGroup>
 

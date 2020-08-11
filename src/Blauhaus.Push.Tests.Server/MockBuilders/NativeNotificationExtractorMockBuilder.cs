@@ -5,7 +5,7 @@ using Blauhaus.TestHelpers.MockBuilders;
 using CSharpFunctionalExtensions;
 using Moq;
 
-namespace Blauhaus.Push.Tests.Server.MockBuilders
+namespace Blauhaus.Push.Tests.MockBuilders
 {
     public class NativeNotificationExtractorMockBuilder : BaseMockBuilder<NativeNotificationExtractorMockBuilder, INativeNotificationExtractor>
     {
