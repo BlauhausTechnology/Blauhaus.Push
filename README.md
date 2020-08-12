@@ -174,9 +174,21 @@ Finally, register the Android dependencies with the Service Collection using ser
 
 * Go to the Dev Center and create an app. 
 * Under product management > WNS / MPNS > click the Live Services link
-* Copy the SID and application password, and enter them in Azure portal under Windows (WNS)
+* Copy the SID and application secret, and enter them in Azure portal under Windows (WNS)
 
 ### Device
+
+#### App.xaml.cs
+
+In OnLaunched, just after initializing Xamarin.Forms (ie in the bit of code that is executed if RootFrame is null), call
+
+await GetAReferenceTo<UwpPushNotificationHandler>().InitializeAsync();
+
+After the above block, and before Window.Current.Activate, call
+
+await GetAReferenceTo<UwpPushNotificationHandler>().HandleAppLaunching(e);
+
+
 
 * In Visual Studio, associate the app with the store. 
 
