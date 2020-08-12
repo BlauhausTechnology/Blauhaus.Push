@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
-using Blauhaus.Push.Abstractions.Server;
 
-namespace Blauhaus.Push.Server.Service
+namespace Blauhaus.Push.Abstractions.Server
 {
     public class DeviceRegistration : IDeviceRegistration
     {

@@ -106,7 +106,7 @@ public class PushService : FirebaseMessagingService
     {
         base.OnNewToken(token);
 
-        GetAReferenceTo<AndroidPushNotificationHandler>()
+        AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
             .HandleNewTokenAsync(token);
     }
 
@@ -114,7 +114,7 @@ public class PushService : FirebaseMessagingService
     {
         base.OnMessageReceived(message);
 
-        GetAReferenceTo<AndroidPushNotificationHandler>()
+        AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
             .HandleMessageReceived(message);
     }
 }
@@ -137,7 +137,7 @@ protected override void OnCreate(Bundle savedInstanceState)
 {
     base.OnMessageReceived(message);
 
-    GetAReferenceTo<AndroidPushNotificationHandler>()
+    AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
         .Initialize(this, Intent, (NotificationManager)GetSystemService(NotificationService));
 }
 ```
@@ -150,7 +150,7 @@ Override OnNewIntent:
 {
     base.OnNewIntent(intent);
             
-    GetAReferenceTo<AndroidPushNotificationHandler>()
+    AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
         .HandleNewIntent(intent);
 }
 ```
@@ -164,11 +164,61 @@ Finally, register the Android dependencies with the Service Collection using ser
 
 ### Cloud
 
+* On a Mac, generate a Certificate Signing Request using the KeyChain Access Certificate Assistant, and save it to disk
+* On the Apple Developer portal, ensure the App Id is enabled for push notifications, and click the Configure button next to the Push capability option.
+* Create a production certificate using the CSR created on the Mac
+* Download the cert on the mac, double-click it to add to keychain, and then export a .p12
+* Upload the p12 cert to bitrise
+* Go to Notification Hub on Azure and select Apple (APNS) from the menu
+* Upload the p12 file and enter password
+* NB you have to recreate any existing provisioning profiles after adding push capabilities. The old ones will not have the aps-environment key in them. 
+* To enable testing locally on iOS you need to create an additional cert and add it to the app identifier as a development APNS cert. Then create an alternative Entitlements.plist for debugging that has  <string>development</string>
+
 ### Device
+
+#### AppDelegate.cs
+
+In FinishedLaunching, after the call to LoadApplication, call 
+
+```c#
+AppServiceLocator.Resolve<IosPushNotificationHandler>().InitializeAsync(this, options);
+```
+
+Add overrides for notification event handlers:
+
+```c#
+public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+{
+    AppServiceLocator.Resolve<IosPushNotificationHandler>()
+        .HandleNewToken(deviceToken);
+}
+
+public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
+{
+    AppServiceLocator.Resolve<IosPushNotificationHandler>()
+        .HandleFailedRegistration(error);
+}
+
+public override void ReceivedRemoteNotification(UIApplication application, NSDictionary options)
+{
+    AppServiceLocator.Resolve<IosPushNotificationHandler>()
+        .HandleMessageReceivedAsync(application.ApplicationState, options);
+}
+```
+
+#### Entitlements.plist:
+
+```xml
+<key>aps-environment</key>
+<string>production</string>
+```
+
+#### Service registration
+
+Register the iOS dependencies with the Service Collection using services.AddIosPushNotifications();
 
 
 ## UWP
-
 
 ### Cloud
 
@@ -178,18 +228,20 @@ Finally, register the Android dependencies with the Service Collection using ser
 
 ### Device
 
+In Visual Studio, associate the app with the store. 
+
 #### App.xaml.cs
 
-In OnLaunched, just after initializing Xamarin.Forms (ie in the bit of code that is executed if RootFrame is null), call
+In OnLaunched, just before Window.Current.Activate(), call
 
-await GetAReferenceTo<UwpPushNotificationHandler>().InitializeAsync();
+await AppServiceLocator.Resolve<UwpPushNotificationHandler>().InitializeAsync();
+await AppServiceLocator.Resolve<UwpPushNotificationHandler>().HandleAppLaunching(e);
 
-After the above block, and before Window.Current.Activate, call
+#### Service registration
 
-await GetAReferenceTo<UwpPushNotificationHandler>().HandleAppLaunching(e);
+Register the Uwp dependencies with the Service Collection using services.AddIosPushNotifications();
 
 
 
-* In Visual Studio, associate the app with the store. 
 
 
