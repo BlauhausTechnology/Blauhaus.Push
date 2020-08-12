@@ -10,6 +10,49 @@ When setting up the Notification Hub on Azure, note the following:
 
 Once your hub is set up, go to Access policies and copy the values for *DefaultFullSharedAccessSignature* and *DefaultListenSharedAccessSignature*. You will use these in your config. 
 
+## Server Setup
+
+Install Blauhaus.Push.Server and add push notification services to the service collection using the .AddPushNotificationsServer() extension method. 
+
+Configure an implementation of IPushNotificationsHub containing the NotificationHubName you created on Azure, and the DefaultFullSharedAccessSignature connection string.
+NB you need to add the notification hub name to the connection string as the EntityPah, eg "{connectionStringFromAzure};EntityPath={notificationHubName}".
+
+Once you get a PushNotificationServiceHandle from the device, send it to the server and call UpdateDeviceRegistrationAsync, passing in the PnsHandle and other info, eg:
+
+```c#
+await _pushNotificationsServerService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+{
+    PushNotificationServiceHandle = userDevice.PushNotificationServiceHandle,
+    AccountId = "",
+    UserId = userDevice.UserId,
+    DeviceIdentifier = userDevice.DeviceIdentifier,
+    Platform = userDevice.Platform,
+    Templates = new List<IPushNotificationTemplate>
+    {
+        Templates.Message //this is a default template
+    }
+}, hub, token);
+```
+
+To send a message to a user, call _pushNotificationsServerService.SendNotificationToUserAsync(), passing in their userId and a PushNotification.
+
+When a user logs out, call _pushNotificationsServerService.DeregisterUserDeviceAsync with the userId and deviceId you used to register this user's device.
+
+## Device Setup
+
+In the .NET Standard class library, add a PushConfig class that implements `IPushNotificationsClientConfig`. Give it the NotificationHubName you created on Azure, and the DefaultListenSharedAccessSignature connection string.
+NB you need to add the notification hub name to the connection string as the EntityPah, eg "{connectionStringFromAzure};EntityPath={notificationHubName}"
+
+Register the push services and config with the serviceCollection using:
+```c#
+services.AddPushNotificationsClient<MoonbasePushConfig>();
+```
+
+If you want to handle notifications that are tapped, add an implementation of `IPushNotificationTapHandler` and register it using:
+```c#
+services.AddPushNotificationsClient<MoonbasePushConfig, TapHandlerImplementation>();
+```
+
 ## ANDROID
 
 ### Cloud
@@ -72,7 +115,7 @@ public class PushService : FirebaseMessagingService
         base.OnMessageReceived(message);
 
         GetAReferenceTo<AndroidPushNotificationHandler>()
-            .HandleNewTokenAsync(token);
+            .HandleMessageReceived(message);
     }
 }
 ````
@@ -98,20 +141,23 @@ protected override void OnCreate(Bundle savedInstanceState)
         .Initialize(this, Intent, (NotificationManager)GetSystemService(NotificationService));
 }
 ```
-
 NB this doesn't seem to work when there is a separate splash screen activity. There must only be one Activity, set to be SingleTop. If you need a different theme for app startup, use the splash screen theme for the MainActivity (Theme = "@style/MainTheme.Splash") and then switch to the app theme in OnCreate using SetTheme(Resource.Style.MainTheme).
 
-## UWP
+Override OnNewIntent:
 
-•	Go to the Dev Center and create an app. 
-•	Under product management > WNS / MPNS > click the Live Services link
-•	Copy the SID and application password, and enter them in Azure portal under Windows (WNS)
-•	In Visual Studio, associate the app with the store. 
+```c#
+ protected override void OnNewIntent(Intent intent)
+{
+    base.OnNewIntent(intent);
+            
+    GetAReferenceTo<AndroidPushNotificationHandler>()
+        .HandleNewIntent(intent);
+}
+```
 
+#### Service registration
 
-### Cloud
-
-### Device
+Finally, register the Android dependencies with the Service Collection using services.AddAndroidPushNotifications();
 
 
 ## iOS
@@ -119,3 +165,19 @@ NB this doesn't seem to work when there is a separate splash screen activity. Th
 ### Cloud
 
 ### Device
+
+
+## UWP
+
+
+### Cloud
+
+* Go to the Dev Center and create an app. 
+* Under product management > WNS / MPNS > click the Live Services link
+* Copy the SID and application password, and enter them in Azure portal under Windows (WNS)
+
+### Device
+
+* In Visual Studio, associate the app with the store. 
+
+
