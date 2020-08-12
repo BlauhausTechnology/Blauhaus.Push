@@ -7,6 +7,7 @@ using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
+using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Service;
 using Blauhaus.Push.Tests.Tests.Server._Base;
 using Microsoft.Azure.NotificationHubs;

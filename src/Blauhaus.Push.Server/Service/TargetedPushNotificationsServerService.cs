@@ -13,6 +13,7 @@ using CSharpFunctionalExtensions;
 
 namespace Blauhaus.Push.Server.Service
 {
+    //this does not work on the free tier
     public class TargetedPushNotificationsServerService : ITargetedPushNotificationsServerService
     {
         private readonly IAnalyticsService _analyticsService;
