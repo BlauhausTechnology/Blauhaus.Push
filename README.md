@@ -10,6 +10,49 @@ When setting up the Notification Hub on Azure, note the following:
 
 Once your hub is set up, go to Access policies and copy the values for *DefaultFullSharedAccessSignature* and *DefaultListenSharedAccessSignature*. You will use these in your config. 
 
+## Server Setup
+
+Install Blauhaus.Push.Server and add push notification services to the service collection using the .AddPushNotificationsServer() extension method. 
+
+Configure an implementation of IPushNotificationsHub containing the NotificationHubName you created on Azure, and the DefaultFullSharedAccessSignature connection string.
+NB you need to add the notification hub name to the connection string as the EntityPah, eg "{connectionStringFromAzure};EntityPath={notificationHubName}".
+
+Once you get a PushNotificationServiceHandle from the device, send it to the server and call UpdateDeviceRegistrationAsync, passing in the PnsHandle and other info, eg:
+
+```c#
+await _pushNotificationsServerService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+{
+    PushNotificationServiceHandle = userDevice.PushNotificationServiceHandle,
+    AccountId = "",
+    UserId = userDevice.UserId,
+    DeviceIdentifier = userDevice.DeviceIdentifier,
+    Platform = userDevice.Platform,
+    Templates = new List<IPushNotificationTemplate>
+    {
+        Templates.Message //this is a default template
+    }
+}, hub, token);
+```
+
+To send a message to a user, call _pushNotificationsServerService.SendNotificationToUserAsync(), passing in their userId and a PushNotification.
+
+When a user logs out, call _pushNotificationsServerService.DeregisterUserDeviceAsync with the userId and deviceId you used to register this user's device.
+
+## Device Setup
+
+In the .NET Standard class library, add a PushConfig class that implements `IPushNotificationsClientConfig`. Give it the NotificationHubName you created on Azure, and the DefaultListenSharedAccessSignature connection string.
+NB you need to add the notification hub name to the connection string as the EntityPah, eg "{connectionStringFromAzure};EntityPath={notificationHubName}"
+
+Register the push services and config with the serviceCollection using:
+```c#
+services.AddPushNotificationsClient<MoonbasePushConfig>();
+```
+
+If you want to handle notifications that are tapped, add an implementation of `IPushNotificationTapHandler` and register it using:
+```c#
+services.AddPushNotificationsClient<MoonbasePushConfig, TapHandlerImplementation>();
+```
+
 ## ANDROID
 
 ### Cloud
@@ -63,7 +106,7 @@ public class PushService : FirebaseMessagingService
     {
         base.OnNewToken(token);
 
-        GetAReferenceTo<AndroidPushNotificationHandler>()
+        AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
             .HandleNewTokenAsync(token);
     }
 
@@ -71,8 +114,8 @@ public class PushService : FirebaseMessagingService
     {
         base.OnMessageReceived(message);
 
-        GetAReferenceTo<AndroidPushNotificationHandler>()
-            .HandleNewTokenAsync(token);
+        AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
+            .HandleMessageReceived(message);
     }
 }
 ````
@@ -94,28 +137,111 @@ protected override void OnCreate(Bundle savedInstanceState)
 {
     base.OnMessageReceived(message);
 
-    GetAReferenceTo<AndroidPushNotificationHandler>()
+    AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
         .Initialize(this, Intent, (NotificationManager)GetSystemService(NotificationService));
 }
 ```
-
 NB this doesn't seem to work when there is a separate splash screen activity. There must only be one Activity, set to be SingleTop. If you need a different theme for app startup, use the splash screen theme for the MainActivity (Theme = "@style/MainTheme.Splash") and then switch to the app theme in OnCreate using SetTheme(Resource.Style.MainTheme).
 
-## UWP
+Override OnNewIntent:
 
-•	Go to the Dev Center and create an app. 
-•	Under product management > WNS / MPNS > click the Live Services link
-•	Copy the SID and application password, and enter them in Azure portal under Windows (WNS)
-•	In Visual Studio, associate the app with the store. 
+```c#
+ protected override void OnNewIntent(Intent intent)
+{
+    base.OnNewIntent(intent);
+            
+    AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
+        .HandleNewIntent(intent);
+}
+```
 
+#### Service registration
 
-### Cloud
-
-### Device
+Finally, register the Android dependencies with the Service Collection using services.AddAndroidPushNotifications();
 
 
 ## iOS
 
 ### Cloud
 
+* On a Mac, generate a Certificate Signing Request using the KeyChain Access Certificate Assistant, and save it to disk
+* On the Apple Developer portal, ensure the App Id is enabled for push notifications, and click the Configure button next to the Push capability option.
+* Create a production certificate using the CSR created on the Mac
+* Download the cert on the mac, double-click it to add to keychain, and then export a .p12
+* Upload the p12 cert to bitrise
+* Go to Notification Hub on Azure and select Apple (APNS) from the menu
+* Upload the p12 file and enter password
+* NB you have to recreate any existing provisioning profiles after adding push capabilities. The old ones will not have the aps-environment key in them. 
+* To enable testing locally on iOS you need to create an additional cert and add it to the app identifier as a development APNS cert. Then create an alternative Entitlements.plist for debugging that has  <string>development</string>
+
 ### Device
+
+#### AppDelegate.cs
+
+In FinishedLaunching, after the call to LoadApplication, call 
+
+```c#
+AppServiceLocator.Resolve<IosPushNotificationHandler>().InitializeAsync(this, options);
+```
+
+Add overrides for notification event handlers:
+
+```c#
+public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+{
+    AppServiceLocator.Resolve<IosPushNotificationHandler>()
+        .HandleNewToken(deviceToken);
+}
+
+public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
+{
+    AppServiceLocator.Resolve<IosPushNotificationHandler>()
+        .HandleFailedRegistration(error);
+}
+
+public override void ReceivedRemoteNotification(UIApplication application, NSDictionary options)
+{
+    AppServiceLocator.Resolve<IosPushNotificationHandler>()
+        .HandleMessageReceivedAsync(application.ApplicationState, options);
+}
+```
+
+#### Entitlements.plist:
+
+```xml
+<key>aps-environment</key>
+<string>production</string>
+```
+
+#### Service registration
+
+Register the iOS dependencies with the Service Collection using services.AddIosPushNotifications();
+
+
+## UWP
+
+### Cloud
+
+* Go to the Dev Center and create an app. 
+* Under product management > WNS / MPNS > click the Live Services link
+* Copy the SID and application secret, and enter them in Azure portal under Windows (WNS)
+
+### Device
+
+In Visual Studio, associate the app with the store. 
+
+#### App.xaml.cs
+
+In OnLaunched, just before Window.Current.Activate(), call
+
+await AppServiceLocator.Resolve<UwpPushNotificationHandler>().InitializeAsync();
+await AppServiceLocator.Resolve<UwpPushNotificationHandler>().HandleAppLaunching(e);
+
+#### Service registration
+
+Register the Uwp dependencies with the Service Collection using services.AddIosPushNotifications();
+
+
+
+
+
