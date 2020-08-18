@@ -26,7 +26,7 @@ namespace Blauhaus.Push.Client.Common.Services
         public void HandleForegroundNotification(string uwpPayload)
         {
 
-            using (var _ = AnalyticsService.StartOperation(this, "Foreground Push Notification"))
+            using (var _ = AnalyticsService.StartTrace(this, "Foreground Push Notification"))
             {
                 try
                 {
@@ -44,7 +44,7 @@ namespace Blauhaus.Push.Client.Common.Services
         {
             if (!string.IsNullOrWhiteSpace(uwpPayload))
             {
-                using (var _ = AnalyticsService.StartOperation(this, "Push Notification Tapped"))
+                using (var _ = AnalyticsService.StartTrace(this, "Push Notification Tapped"))
                 {
                     try
                     {

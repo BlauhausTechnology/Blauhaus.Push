@@ -39,7 +39,7 @@ namespace Blauhaus.Push.Client.UWP
         {
             if (!_appIsInitialized)
             {
-                using (var _ = _analyticsService.StartOperation(this, "UWP Push Notifications Initialization"))
+                using (var _ = _analyticsService.StartTrace(this, "UWP Push Notifications Initialization"))
                 {
                     try
                     {

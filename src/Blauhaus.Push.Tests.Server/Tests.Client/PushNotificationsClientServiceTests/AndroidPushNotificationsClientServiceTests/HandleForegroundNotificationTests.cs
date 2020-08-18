@@ -47,7 +47,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.A
             Sut.HandleForegroundNotification(AndroidMessageProperties);
 
             //Assert
-            MockAnalyticsService.VerifyStartOperation("Foreground Push Notification");
+            MockAnalyticsService.VerifyStartTrace("Foreground Push Notification");
             MockAnalyticsService.VerifyTrace("Extracting push notification");
             MockAnalyticsService.VerifyTraceProperty("Raw Notification", AndroidMessageProperties);
             MockAnalyticsService.VerifyTrace("Notification processed");
@@ -63,7 +63,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.A
             Sut.HandleForegroundNotification(AndroidMessageProperties);
 
             //Assert
-            MockAnalyticsService.VerifyStartOperation("Foreground Push Notification");
+            MockAnalyticsService.VerifyStartTrace("Foreground Push Notification");
             MockAnalyticsService.VerifyTrace("Extracting push notification");
             MockAnalyticsService.VerifyTraceProperty("Raw Notification", AndroidMessageProperties);
             MockAnalyticsService.VerifyTrace("Notification processed");

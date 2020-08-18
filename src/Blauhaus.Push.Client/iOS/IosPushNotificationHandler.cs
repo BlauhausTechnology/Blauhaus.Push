@@ -40,7 +40,7 @@ namespace Blauhaus.Push.Client.iOS
         public async Task InitializeAsync(FormsApplicationDelegate appDelegate, NSDictionary options)
         {
 
-            using (var _ = _analyticsService.StartOperation(this, "iOs Push Notifications Initialization"))
+            using (var _ = _analyticsService.StartTrace(this, "iOs Push Notifications Initialization"))
             {
                 if (UIDevice.CurrentDevice.CheckSystemVersion(10, 0))
                 {

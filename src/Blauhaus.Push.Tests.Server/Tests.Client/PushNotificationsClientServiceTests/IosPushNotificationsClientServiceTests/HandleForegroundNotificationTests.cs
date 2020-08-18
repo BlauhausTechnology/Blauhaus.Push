@@ -43,7 +43,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.I
             Sut.HandleForegroundNotification(IosNotification);
 
             //Assert
-            MockAnalyticsService.VerifyStartOperation("Foreground Push Notification");
+            MockAnalyticsService.VerifyStartTrace("Foreground Push Notification");
             MockAnalyticsService.VerifyTrace("Extracting push notification");
             MockAnalyticsService.VerifyTraceProperty("Raw Notification", IosNotification);
             MockAnalyticsService.VerifyTrace("Notification processed");

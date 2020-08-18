@@ -41,7 +41,7 @@ namespace Blauhaus.Push.Client.Android
         
         public void Initialize(Context context, Intent intent, NotificationManager notificationManager)
         {
-            using (var _ = _analyticsService.StartOperation(this, "Android Push Notifications Initialization"))
+            using (var _ = _analyticsService.StartTrace(this, "Android Push Notifications Initialization"))
             {
                 var resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(context);
 

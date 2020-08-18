@@ -61,7 +61,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.U
             Sut.HandleAppLaunchingAsync(Arguments);
 
             //Assert
-            MockAnalyticsService.VerifyStartOperation("Push Notification Tapped");
+            MockAnalyticsService.VerifyStartTrace("Push Notification Tapped");
             MockAnalyticsService.VerifyTrace("Extracting push notification");
             MockAnalyticsService.VerifyTraceProperty("Raw Notification", Arguments);
             MockAnalyticsService.VerifyTrace("Notification processed");

@@ -144,7 +144,7 @@ namespace Blauhaus.Push.Client
 
         public void HandleForegroundNotification(Dictionary<string, object> androidPayload)
         {
-            using (var _ = AnalyticsService.StartOperation(this, "Foreground Push Notification"))
+            using (var _ = AnalyticsService.StartTrace(this, "Foreground Push Notification"))
             {
                 try
                 {
@@ -160,7 +160,7 @@ namespace Blauhaus.Push.Client
 
         public async Task HandleNotificationTappedAsync(Dictionary<string, object>  androidPayload)
         {
-            using (var _ = AnalyticsService.StartOperation(this, "Push Notification Tapped"))
+            using (var _ = AnalyticsService.StartTrace(this, "Push Notification Tapped"))
             {
                 try
                 {

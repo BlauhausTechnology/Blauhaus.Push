@@ -76,7 +76,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.A
             await Sut.HandleNotificationTappedAsync(AndroidIntentProperties);
 
             //Assert
-            MockAnalyticsService.VerifyStartOperation("Push Notification Tapped");
+            MockAnalyticsService.VerifyStartTrace("Push Notification Tapped");
             MockAnalyticsService.VerifyTrace("Extracting push notification");
             MockAnalyticsService.VerifyTraceProperty("Raw Notification", AndroidIntentProperties);
             MockAnalyticsService.VerifyTrace("Notification processed");
