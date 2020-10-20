@@ -82,7 +82,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                result.VerifyResultError(PushErrors.RegistrationDoesNotExist, MockAnalyticsService);
+                result.VerifyResponseError(PushErrors.RegistrationDoesNotExist, MockAnalyticsService);
             }
 
             [Test]

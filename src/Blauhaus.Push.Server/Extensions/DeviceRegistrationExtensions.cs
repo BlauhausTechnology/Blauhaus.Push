@@ -1,6 +1,7 @@
 ﻿using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
+using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Server;
 
@@ -8,12 +9,13 @@ namespace Blauhaus.Push.Server.Extensions
 {
     public static class DeviceRegistrationExtensions
     {
-        public static bool IsNotValid(this IDeviceRegistration deviceRegistration, object sender, IAnalyticsService analyticsService, out string error)
+        public static bool IsNotValid(this IDeviceRegistration deviceRegistration, object sender, IAnalyticsService analyticsService, out Error error)
         {
 
             if (deviceRegistration == null)
             {
-                error = analyticsService.TraceError(sender, PushErrors.InvalidDeviceRegistration);
+                error = PushErrors.InvalidDeviceRegistration;
+                analyticsService.TraceError(sender, error);
                 return true;
             }
 
@@ -25,7 +27,8 @@ namespace Blauhaus.Push.Server.Extensions
 
             if (string.IsNullOrEmpty(deviceRegistration.PushNotificationServiceHandle))
             {
-                error = analyticsService.TraceError(sender, PushErrors.InvalidPnsHandle, deviceRegistration.ToObjectDictionary());
+                error = PushErrors.InvalidPnsHandle;
+                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary()); 
                 return true;
             }
 
@@ -34,19 +37,22 @@ namespace Blauhaus.Push.Server.Extensions
                 deviceRegistration.Platform.Value != RuntimePlatform.Android.Value &&
                 deviceRegistration.Platform.Value != RuntimePlatform.UWP.Value)
             {
-                error = analyticsService.TraceError(sender, PushErrors.InvalidPlatform);
+                error = PushErrors.InvalidPlatform;
+                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary()); 
                 return true;
             }
 
             if (string.IsNullOrEmpty(deviceRegistration.DeviceIdentifier))
             {
-                error = analyticsService.TraceError(sender, PushErrors.MissingDeviceIdentifier, deviceRegistration.ToObjectDictionary());
+                error = PushErrors.MissingDeviceIdentifier;
+                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary());  
                 return true;
             }
             
             if (string.IsNullOrEmpty(deviceRegistration.UserId))
             {
-                error = analyticsService.TraceError(sender, PushErrors.MissingUserId, deviceRegistration.ToObjectDictionary());
+                error = PushErrors.MissingUserId;
+                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary()); 
                 return true;
             }
 
@@ -57,13 +63,14 @@ namespace Blauhaus.Push.Server.Extensions
                     var reservedStrings = ReservedStrings.GetForPlatform(deviceRegistration.Platform);
                     if (reservedStrings.Contains(templateDataProperty))
                     {
-                        error = analyticsService.TraceError(sender, PushErrors.ReservedString(templateDataProperty));
+                        error = PushErrors.ReservedString(templateDataProperty);
+                        analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary());  
                         return true;
                     }
                 }
             }
 
-            error = string.Empty;
+            error = Error.None;
             return false;
         }
 

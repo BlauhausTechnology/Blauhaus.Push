@@ -1,8 +1,9 @@
 ﻿using Blauhaus.Common.ValueObjects.RuntimePlatforms;
+using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Server.Extractors;
+using Blauhaus.Responses;
 using Blauhaus.TestHelpers.MockBuilders;
-using CSharpFunctionalExtensions;
 using Moq;
 
 namespace Blauhaus.Push.Tests.MockBuilders
@@ -17,14 +18,14 @@ namespace Blauhaus.Push.Tests.MockBuilders
         public NativeNotificationExtractorMockBuilder Where_ExtractNotification_returns(NativeNotification notification)
         {
             Mock.Setup(x => x.ExtractNotification(It.IsAny<IRuntimePlatform>(), It.IsAny<IPushNotification>()))
-                .Returns(Result.Ok(notification));
+                .Returns(Response.Success(notification));
             return this;
         }
 
-        public NativeNotificationExtractorMockBuilder Where_ExtractNotification_fails(string error)
+        public NativeNotificationExtractorMockBuilder Where_ExtractNotification_fails(Error error)
         {
             Mock.Setup(x => x.ExtractNotification(It.IsAny<IRuntimePlatform>(), It.IsAny<IPushNotification>()))
-                .Returns(Result.Failure<NativeNotification>(error));
+                .Returns(Response.Failure<NativeNotification>(error));
             return this;
         }
 
@@ -33,12 +34,12 @@ namespace Blauhaus.Push.Tests.MockBuilders
         //    if (pushNotification == null)
         //    {
         //        Mock.Setup(x => x.ExtractIosNotification(It.IsAny<IPushNotification>()))
-        //            .Returns(Result.Ok(notification));
+        //            .Returns(Response.Ok(notification));
         //    }
         //    else
         //    {
         //        Mock.Setup(x => x.ExtractIosNotification(pushNotification))
-        //            .Returns(Result.Ok(notification));
+        //            .Returns(Response.Ok(notification));
         //    }
         //    return this;
         //}
@@ -48,12 +49,12 @@ namespace Blauhaus.Push.Tests.MockBuilders
         //    if (pushNotification == null)
         //    {
         //        Mock.Setup(x => x.ExtractAndroidNotification(It.IsAny<IPushNotification>()))
-        //            .Returns(Result.Ok(notification));
+        //            .Returns(Response.Ok(notification));
         //    }
         //    else
         //    {
         //        Mock.Setup(x => x.ExtractAndroidNotification(pushNotification))
-        //            .Returns(Result.Ok(notification));
+        //            .Returns(Response.Ok(notification));
         //    }
         //    return this;
         //}
@@ -63,12 +64,12 @@ namespace Blauhaus.Push.Tests.MockBuilders
         //    if (pushNotification == null)
         //    {
         //        Mock.Setup(x => x.ExtractUwpNotification(It.IsAny<IPushNotification>()))
-        //            .Returns(Result.Ok(notification));
+        //            .Returns(Response.Ok(notification));
         //    }
         //    else
         //    {
         //        Mock.Setup(x => x.ExtractUwpNotification(pushNotification))
-        //            .Returns(Result.Ok(notification));
+        //            .Returns(Response.Ok(notification));
         //    }
         //    return this;
         //}

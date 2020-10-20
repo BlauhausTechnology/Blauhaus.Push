@@ -92,7 +92,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                result.VerifyResultError(PushErrors.InvalidPnsHandle, MockAnalyticsService); 
+                result.VerifyResponseError(PushErrors.InvalidPnsHandle, MockAnalyticsService); 
             }
 
             [Test]
@@ -105,7 +105,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                result.VerifyResultError(PushErrors.InvalidDeviceRegistration, MockAnalyticsService);  
+                result.VerifyResponseError(PushErrors.InvalidDeviceRegistration, MockAnalyticsService);  
             }
 
             [Test]
@@ -140,7 +140,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                result.VerifyResultError(PushErrors.MissingDeviceIdentifier, MockAnalyticsService); 
+                result.VerifyResponseError(PushErrors.MissingDeviceIdentifier, MockAnalyticsService); 
             }
 
             [Test]
@@ -153,7 +153,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                result.VerifyResultError(PushErrors.MissingUserId, MockAnalyticsService); 
+                result.VerifyResponseError(PushErrors.MissingUserId, MockAnalyticsService); 
             }
 
             [Test]
@@ -166,7 +166,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                result.VerifyResultError(PushErrors.InvalidPlatform, MockAnalyticsService);  
+                result.VerifyResponseError(PushErrors.InvalidPlatform, MockAnalyticsService);  
             }
 
             [Test]
@@ -179,7 +179,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                result.VerifyResultError(PushErrors.InvalidPlatform, MockAnalyticsService);  
+                result.VerifyResponseError(PushErrors.InvalidPlatform, MockAnalyticsService);  
             }
 
             [Test]
@@ -308,7 +308,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                     var result = await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
                     
                     //Assert
-                    result.VerifyResultError(PushErrors.ReservedString(forbiddenString), MockAnalyticsService);  
+                    result.VerifyResponseError(PushErrors.ReservedString(forbiddenString), MockAnalyticsService);  
                     
                     //Cleanup
                     _visibleTemplateDeviceRegistration.Templates.First().DataProperties.Remove(forbiddenString);    

@@ -9,6 +9,7 @@ using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.HubClientProxy;
+using Blauhaus.Responses;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
 using Newtonsoft.Json;
@@ -28,12 +29,12 @@ namespace Blauhaus.Push.Server.Service
             _hubClientProxy = hubClientProxy;
         }
 
-        public async Task<Result<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, IPushNotificationsHub hub, CancellationToken token)
+        public async Task<Response<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, IPushNotificationsHub hub, CancellationToken token)
         {
             
             if (deviceRegistration.IsNotValid(this, _analyticsService, out var validationError))
             {
-                return Result.Failure<IDeviceRegistration>(validationError);
+                return Response.Failure<IDeviceRegistration>(validationError);
             }
             
             _analyticsService.TraceVerbose(this, "Register device for push notifications", deviceRegistration.ToObjectDictionary());
@@ -74,10 +75,10 @@ namespace Blauhaus.Push.Server.Service
                 {"Tags", installation.Tags },
             });
             
-            return Result.Ok(deviceRegistration);
+            return Response.Success(deviceRegistration);
         }
 
-        public async Task<Result<IDeviceRegistration>> LoadRegistrationForUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
+        public async Task<Response<IDeviceRegistration>> LoadRegistrationForUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
         {
             _analyticsService.TraceVerbose(this, "Load push notification registration for user device",
                 new Dictionary<string, object>
@@ -94,7 +95,7 @@ namespace Blauhaus.Push.Server.Service
 
             if (!installationExists)
             {
-                return Result.Failure<IDeviceRegistration>(_analyticsService.TraceError(this, PushErrors.RegistrationDoesNotExist));
+                return _analyticsService.TraceErrorResponse<IDeviceRegistration>(this, PushErrors.RegistrationDoesNotExist);
             }
 
             var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
@@ -112,7 +113,7 @@ namespace Blauhaus.Push.Server.Service
 
             _analyticsService.TraceVerbose(this, "Device registration loaded", deviceRegistration.ToObjectDictionary());
 
-            return Result.Success<IDeviceRegistration>(deviceRegistration); 
+            return Response.Success<IDeviceRegistration>(deviceRegistration); 
             
         }
          
@@ -145,7 +146,7 @@ namespace Blauhaus.Push.Server.Service
             var jj = JsonConvert.SerializeObject(result);
         }
          
-        public async Task<Result> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
+        public async Task<Response> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
         {
             _analyticsService.TraceVerbose(this, "Deregister user device",
                 new Dictionary<string, object>
@@ -162,7 +163,7 @@ namespace Blauhaus.Push.Server.Service
             if (!installationExists)
             {
                 _analyticsService.TraceWarning(this, "No installation exists for user device, so there is nothing to deregister");
-                return Result.Success();
+                return Response.Success();
             }
         
             var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
@@ -177,7 +178,7 @@ namespace Blauhaus.Push.Server.Service
                 {"Tags", installation.Tags },
             });
 
-            return Result.Success();
+            return Response.Success();
         }
     }
 }

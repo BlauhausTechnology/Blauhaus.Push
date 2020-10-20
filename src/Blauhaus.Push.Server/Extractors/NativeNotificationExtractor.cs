@@ -2,6 +2,7 @@
 using System.Text;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common.Notifications;
+using Blauhaus.Responses;
 using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
 
@@ -10,7 +11,7 @@ namespace Blauhaus.Push.Server.Extractors
     public class NativeNotificationExtractor : INativeNotificationExtractor
     {
         
-        public Result<NativeNotification> ExtractNotification(IRuntimePlatform platform, IPushNotification pushNotification)
+        public Response<NativeNotification> ExtractNotification(IRuntimePlatform platform, IPushNotification pushNotification)
         {
             if ((RuntimePlatform) platform == RuntimePlatform.iOS)
                 return ExtractIosNotification(pushNotification);
@@ -23,7 +24,7 @@ namespace Blauhaus.Push.Server.Extractors
         }
 
 
-        public Result<NativeNotification> ExtractUwpNotification(IPushNotification pushNotification)
+        public Response<NativeNotification> ExtractUwpNotification(IPushNotification pushNotification)
         {
             var launchProperties = new StringBuilder();
 
@@ -53,10 +54,10 @@ namespace Blauhaus.Push.Server.Extractors
                 .Append("</binding></visual></toast>");
 
             var nativeNotification = new NativeNotification(new WindowsNotification(body.ToString()));
-            return Result.Success(nativeNotification);
+            return Response.Success(nativeNotification);
         }
 
-        public Result<NativeNotification> ExtractIosNotification(IPushNotification pushNotification)
+        public Response<NativeNotification> ExtractIosNotification(IPushNotification pushNotification)
         {
             var body = new StringBuilder();
 
@@ -81,10 +82,10 @@ namespace Blauhaus.Push.Server.Extractors
             var b = body.ToString();
             
             var nativeNotification = new NativeNotification(new AppleNotification(body.ToString()));
-            return Result.Success(nativeNotification);
+            return Response.Success(nativeNotification);
         }
 
-        public Result<NativeNotification> ExtractAndroidNotification(IPushNotification pushNotification)
+        public Response<NativeNotification> ExtractAndroidNotification(IPushNotification pushNotification)
         {
             var body = new StringBuilder();
 
@@ -110,7 +111,7 @@ namespace Blauhaus.Push.Server.Extractors
             body.Append(" } }");
 
             var nativeNotification = new NativeNotification(new FcmNotification(body.ToString()));
-            return Result.Success(nativeNotification);
+            return Response.Success(nativeNotification);
         }
     }
 }

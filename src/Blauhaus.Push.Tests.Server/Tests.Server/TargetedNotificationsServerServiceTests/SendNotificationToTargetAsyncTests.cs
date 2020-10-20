@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.TestHelpers.Extensions;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
+using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Server;
@@ -100,13 +102,13 @@ namespace Blauhaus.Push.Tests.Tests.Server.TargetedNotificationsServerServiceTes
         public async Task IF_extraction_fails_SHOULD_fail()
         {
             //Arrange
-            MockNativeNotificationExtractor.Where_ExtractNotification_fails("fail!");
+            MockNativeNotificationExtractor.Where_ExtractNotification_fails(Error.Create("fail!"));
 
             //Act
             var result = await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
-            Assert.AreEqual("fail!", result.Error);
+            Assert.AreEqual("fail!", result.Error.Description);
         } 
 
         [Test]
@@ -121,8 +123,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.TargetedNotificationsServerServiceTes
             var result = await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object, CancellationToken.None);
 
             //Assert
-            Assert.AreEqual(PushErrors.FailedToSendNotification.ToString(), result.Error);
-            MockAnalyticsService.VerifyLogException(ex);
+            result.VerifyResponseException(PushErrors.FailedToSendNotification, "Something bad happened",  MockAnalyticsService);
         }
     }
 }
