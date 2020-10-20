@@ -10,8 +10,8 @@ namespace Blauhaus.Push.Runner.Config.Reveye
             NotificationHubConnectionString =
                 "Endpoint=sb://reveye-push.servicebus.windows.net/;" +
                 "SharedAccessKeyName=DefaultFullSharedAccessSignature;" +
-                "SharedAccessKey=mk4xOnfkwdbOAZ7CvAyAX0FwgOTm8TJFisEhj6hdhOE=;" +
-                "EntityPath=reveye-push-aspers";
+                "SharedAccessKey=mk4xOnfkwdbOAZ7CvAyAX0FwgOTm8TJFisEhj6hdhOE=";//";" +
+                //"EntityPath=reveye-push-aspers";
 
             NotificationHubName = "reveye-push-aspers";
         }

@@ -39,17 +39,18 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(hub: new AspersUwpHub());
+                PushNotificationsService = Setup(hub: new AspersIosHub());
 
                 var reg = await GetAllRegistrationsAsync();
-                //var gp = reg.First(x => x.PnsHandle == "dYe3tHzgJao:APA91bEC9eYef-osn3w0Kkj_j7xN0Nvwn0ES2GsjLKBqu_za-96T52YO4WLWKwpNTdzDuITeK74u2ygEi4lfQresWKnAXFqIJX6FkVwIXIHh_4biQFbumpv2H6o_5NDHKpmrJnfL_Jl6");
+
+                var myReg = await GetRegistrationsForUserAsync("525FFD2E-8589-425E-B28E-ED429850322C".ToLowerInvariant());
 
                 var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
                 var registrations = await client.GetRegistrationsByChannelAsync("https://am3p.notify.windows.com/?token=AwYAAADnKjphJrjNV7l3IGta1nIkOxg95J64KIlxZTy4gSsLIizKWGokHLsxrAWysSxKvdT%2fHPDr8QHj4ceYGtokKndAY0kmCuJ5CHB4HePua0Bfh481mB%2fs4jVo6Xas5MWJG3Hb%2bYrC7d3WruEPpBooqMRq", 10);
 
                 await PushNotificationsService.SendNotificationToUserAsync(
                     notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
-                    userId: "E7936FE7-1E86-4E4A-8EF2-53EACD91EA1D".ToLowerInvariant(), 
+                    userId: "525FFD2E-8589-425E-B28E-ED429850322C".ToLowerInvariant(), 
                     hub: Hub, token: CancellationToken.None);
 
             }
