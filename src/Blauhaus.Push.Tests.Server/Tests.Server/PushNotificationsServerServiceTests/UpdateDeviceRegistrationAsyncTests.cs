@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Service;
+using Blauhaus.Analytics.TestHelpers.Extensions;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
@@ -91,9 +92,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.InvalidPnsHandle.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.InvalidPnsHandle.Code, LogSeverity.Error);
-                MockAnalyticsService.VerifyTraceProperty(nameof(DeviceRegistration), _dataOnlyDeviceRegistration);
+                result.VerifyResultError(PushErrors.InvalidPnsHandle, MockAnalyticsService); 
             }
 
             [Test]
@@ -106,8 +105,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.InvalidDeviceRegistration.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.InvalidDeviceRegistration.Code, LogSeverity.Error);
+                result.VerifyResultError(PushErrors.InvalidDeviceRegistration, MockAnalyticsService);  
             }
 
             [Test]
@@ -142,22 +140,20 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.MissingDeviceIdentifier.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.MissingDeviceIdentifier.Code, LogSeverity.Error);
+                result.VerifyResultError(PushErrors.MissingDeviceIdentifier, MockAnalyticsService); 
             }
 
             [Test]
             public async Task IF_UserId_is_not_provided_SHOULD_fail()
             {
                 //Arrange
-                _dataOnlyDeviceRegistration.DeviceIdentifier = null;
+                _dataOnlyDeviceRegistration.UserId = null;
 
                 //Act
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.MissingDeviceIdentifier.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.MissingDeviceIdentifier.Code, LogSeverity.Error);
+                result.VerifyResultError(PushErrors.MissingUserId, MockAnalyticsService); 
             }
 
             [Test]
@@ -170,8 +166,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.InvalidPlatform.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.InvalidPlatform.Code, LogSeverity.Error);
+                result.VerifyResultError(PushErrors.InvalidPlatform, MockAnalyticsService);  
             }
 
             [Test]
@@ -184,8 +179,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.InvalidPlatform.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.InvalidPlatform.Code, LogSeverity.Error);
+                result.VerifyResultError(PushErrors.InvalidPlatform, MockAnalyticsService);  
             }
 
             [Test]
@@ -314,8 +308,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                     var result = await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
                     
                     //Assert
-                    Assert.AreEqual(PushErrors.ReservedString(forbiddenString).ToString(), result.Error);
-                    MockAnalyticsService.VerifyTrace(PushErrors.ReservedString(forbiddenString).Code, LogSeverity.Error);  
+                    result.VerifyResultError(PushErrors.ReservedString(forbiddenString), MockAnalyticsService);  
                     
                     //Cleanup
                     _visibleTemplateDeviceRegistration.Templates.First().DataProperties.Remove(forbiddenString);    

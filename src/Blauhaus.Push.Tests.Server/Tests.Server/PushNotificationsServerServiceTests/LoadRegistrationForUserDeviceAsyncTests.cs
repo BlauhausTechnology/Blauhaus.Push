@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Service;
+using Blauhaus.Analytics.TestHelpers.Extensions;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Server.Service;
@@ -81,8 +82,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object, CancellationToken.None);
 
                 //Assert
-                Assert.AreEqual(PushErrors.RegistrationDoesNotExist.ToString(), result.Error);
-                MockAnalyticsService.VerifyTrace(PushErrors.RegistrationDoesNotExist.Code, LogSeverity.Error);
+                result.VerifyResultError(PushErrors.RegistrationDoesNotExist, MockAnalyticsService);
             }
 
             [Test]
