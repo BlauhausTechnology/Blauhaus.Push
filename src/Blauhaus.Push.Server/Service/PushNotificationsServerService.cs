@@ -10,7 +10,6 @@ using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Responses;
-using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
 using Newtonsoft.Json;
 

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Responses;
-using CSharpFunctionalExtensions;
 
 namespace Blauhaus.Push.Abstractions.Server
 {

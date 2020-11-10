@@ -3,7 +3,6 @@ using System.Text;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Responses;
-using CSharpFunctionalExtensions;
 using Microsoft.Azure.NotificationHubs;
 
 namespace Blauhaus.Push.Server.Extractors

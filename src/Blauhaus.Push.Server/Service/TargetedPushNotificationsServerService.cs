@@ -10,7 +10,6 @@ using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Responses;
-using CSharpFunctionalExtensions;
 
 namespace Blauhaus.Push.Server.Service
 {
