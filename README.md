@@ -67,6 +67,9 @@ Under "Project Settings" in the FCM portal, select Cloud Messaging and copy the 
 
 Install Xamarin.Firebase.Messaging and Blauhaus.Push.Client from nuget. 
 
+At the moment it also looks like we have to install Xamarin.Google.Dagger:
+https://stackoverflow.com/questions/64428377/java-lang-nosuchmethoderror-no-static-method-checkbuilderrequirement
+
 Download the google-services.json file from your Android app settings on FCM and put it in the root of your Android app project – it must have the GoogleJsonServices build action. If you don't see the build action, install all the relevant nuget packages and restart Visual Studio. 
 
 #### AndroidManifest.xml
@@ -135,7 +138,7 @@ In OnCreate, add a call to Initialize the Android handler:
 ```c#
 protected override void OnCreate(Bundle savedInstanceState)
 {
-    base.OnMessageReceived(message);
+    base.OnCreate(message);
 
     AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
         .Initialize(this, Intent, (NotificationManager)GetSystemService(NotificationService));
