@@ -235,10 +235,12 @@ In Visual Studio, associate the app with the store.
 
 #### App.xaml.cs
 
-In OnLaunched, just before Window.Current.Activate(), call
+In OnLaunched, just before Window.Current.Activate(), call:
+ await AppServiceLocator.Resolve<UwpPushNotificationHandler>().HandleAppLaunching(e);
 
-await AppServiceLocator.Resolve<UwpPushNotificationHandler>().InitializeAsync();
-await AppServiceLocator.Resolve<UwpPushNotificationHandler>().HandleAppLaunching(e);
+#### MainPage.xaml.cs
+After LoadApplication, call:
+Task.Run(async ()=> await AppServiceLocator.Resolve<UwpPushNotificationHandler>().InitializeAsync()); 
 
 #### Service registration
 
