@@ -244,7 +244,7 @@ Task.Run(async ()=> await AppServiceLocator.Resolve<UwpPushNotificationHandler>(
 
 #### Service registration
 
-Register the Uwp dependencies with the Service Collection using services.AddIosPushNotifications();
+Register the Uwp dependencies with the Service Collection using services.AddUwpPushNotifications();
 
 
 
