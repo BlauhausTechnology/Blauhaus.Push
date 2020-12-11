@@ -291,7 +291,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 Assert.That(template.DataProperties.Contains("message"));
                 Assert.That(template.DataProperties.Contains("exclusive"));
                 Assert.That(template.DataProperties.Contains("integer"));
-                Assert.That(template.DataProperties.Count, Is.EqualTo(3));
+                Assert.That(template.DataProperties.Count,Is.EqualTo(3));
             }
 
         }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.Console._Ioc;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common.Notifications;
@@ -73,7 +74,8 @@ namespace Blauhaus.Push.Runner
 
             services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
 
-            services.AddPushNotificationsServer(new ConsoleTraceListener());
+            services.AddPushNotificationsServer();
+            services.RegisterConsoleLoggerService(new ConsoleTraceListener());
             NotificationHubPath = hub.NotificationHubName;
             DeviceId = hub.DeviceId;
             PnsHandle = hub.PnsHandle;
