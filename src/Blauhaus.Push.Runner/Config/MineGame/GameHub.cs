@@ -10,8 +10,7 @@ namespace Blauhaus.Push.Runner.Config.MineGame
             NotificationHubConnectionString =
                 "Endpoint=sb://minegamedevhub.servicebus.windows.net/;" +
                 "SharedAccessKeyName=DefaultFullSharedAccessSignature;" +
-                "SharedAccessKey=fa802OEeFAWRmXRWTsBzXTRcHk4i3UOiwIgfj68O2Zk=;" +
-                "EntityPath=minegamedevhub";
+                "SharedAccessKey=fa802OEeFAWRmXRWTsBzXTRcHk4i3UOiwIgfj68O2Zk=";
 
             NotificationHubName = "minegamedevhub";
         }
@@ -31,9 +30,9 @@ namespace Blauhaus.Push.Runner.Config.MineGame
     public class GameUwpHub : BaseGameHub
     {
         public GameUwpHub() : base(platform: RuntimePlatform.UWP,
-            pnsHandle: "https://db5p.notify.windows.com/?token=AwYAAAANKf9P63pukiLqul3HjYwjNbl8DKloqVq5foqihBT%2bz1OeIZl2gmoObwtF7lFT%2bEO%2fxqfUVIxVO6WvZU2hFFsgSP%2bpc%2fNStW8fv34TNkg8dBqpzcTh7kuhKzy15kV88se%2f2B%2f6%2b%2b4ODju3BRJVgE2W",
+            pnsHandle: "https://par02p.notify.windows.com/?token=AwYAAADzGHlLVDfebz6LYjZcHBB7%2bVL1IhNib9bsTzpAgCBw7%2fzJubu3C6KL1z39IzZYNZsEwQ2Tp5hDw%2beXfpJ3K4MNckAPfUT55WhtR6GhpAbZraIkDuLPgpOd9rAPg%2fNNmza%2bp0AmaqnUNgtgUnSWpuGe",
             deviceId: "201f8114-070d-b6b8-b1ba-47f289ca3471", 
-            userId: "0FF7A478-FED1-414D-893C-E8F7694BACC0")
+            userId: "0ff7a478-fed1-414d-893c-e8f7694bacc0")
         {
         }
     }
@@ -41,9 +40,9 @@ namespace Blauhaus.Push.Runner.Config.MineGame
     public class GameIosHub : BaseGameHub
     {
         public GameIosHub() : base(platform: RuntimePlatform.iOS,
-            pnsHandle: "CCA1ED6C170AB011147C37D3BCC151F0DD0C7E731566D99FACBC7BCDE4A925C2", 
-            deviceId: "6832D9AC-A657-42B6-9FDE-64F70CAD699E",
-            userId: "D23BCCEA-DD4F-460E-B7D6-F542CC4808EA")
+            pnsHandle: "084632978D726A132158027A084550CA2D97C4B0D157F602F1CFB39D1897EB3F", 
+            deviceId: "13373AEF-F73D-4E9E-927E-07079EBEE3E3",
+            userId: "0ff7a478-fed1-414d-893c-e8f7694bacc0")
         {
         }
     }

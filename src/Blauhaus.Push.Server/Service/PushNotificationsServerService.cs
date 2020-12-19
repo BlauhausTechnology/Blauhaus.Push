@@ -142,7 +142,6 @@ namespace Blauhaus.Push.Server.Service
 
             var result = await _hubClientProxy.SendNotificationAsync(properties, tags, token);
 
-            var jj = JsonConvert.SerializeObject(result);
         }
          
         public async Task<Response> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)

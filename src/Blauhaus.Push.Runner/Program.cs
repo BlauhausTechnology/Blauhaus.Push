@@ -12,6 +12,7 @@ using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
+using Blauhaus.Push.Runner.Config.MineGame;
 using Blauhaus.Push.Runner.Config.Reveye;
 using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.HubClientProxy;
@@ -40,18 +41,18 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(hub: new AspersIosHub());
+                PushNotificationsService = Setup(hub: new GameIosHub());
 
                 var reg = await GetAllRegistrationsAsync();
 
-                var myReg = await GetRegistrationsForUserAsync("525FFD2E-8589-425E-B28E-ED429850322C".ToLowerInvariant());
+                var myReg = await GetRegistrationsForUserAsync("0ff7a478-fed1-414d-893c-e8f7694bacc0".ToLowerInvariant());
 
                 var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
-                var registrations = await client.GetRegistrationsByChannelAsync("https://am3p.notify.windows.com/?token=AwYAAADnKjphJrjNV7l3IGta1nIkOxg95J64KIlxZTy4gSsLIizKWGokHLsxrAWysSxKvdT%2fHPDr8QHj4ceYGtokKndAY0kmCuJ5CHB4HePua0Bfh481mB%2fs4jVo6Xas5MWJG3Hb%2bYrC7d3WruEPpBooqMRq", 10);
+                var registrations = await client.GetRegistrationsByChannelAsync("084632978D726A132158027A084550CA2D97C4B0D157F602F1CFB39D1897EB3F", 10);
 
                 await PushNotificationsService.SendNotificationToUserAsync(
                     notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
-                    userId: "525FFD2E-8589-425E-B28E-ED429850322C".ToLowerInvariant(), 
+                    userId: "0ff7a478-fed1-414d-893c-e8f7694bacc0".ToLowerInvariant(), 
                     hub: Hub, token: CancellationToken.None);
 
             }
