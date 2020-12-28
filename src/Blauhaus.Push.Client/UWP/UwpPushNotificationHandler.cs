@@ -35,7 +35,7 @@ namespace Blauhaus.Push.Client.UWP
             _config = config;
         }
 
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(Window currentWindow)
         {
             if (!_appIsInitialized)
             {
@@ -43,7 +43,8 @@ namespace Blauhaus.Push.Client.UWP
                 {
                     try
                     {
-                        Window.Current.Activated += HandleWindowActivated;
+                        
+                        currentWindow.Activated += HandleWindowActivated;
 
                         _channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
                         _channel.PushNotificationReceived += HandlePushNotificationReceived;
