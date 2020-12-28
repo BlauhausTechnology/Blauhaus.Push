@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common._Ioc;
-using Microsoft.Extensions.Options;
 using Blauhaus.Analytics.Abstractions.Service;
 using UIKit;
 using Foundation;
 using UserNotifications;
 using Blauhaus.Analytics.Abstractions.Extensions;
-using Blauhaus.Push.Abstractions;
 using Blauhaus.Push.Abstractions.Common;
-using Blauhaus.Push.Client.Common;
-using Xamarin.Forms.Platform.iOS;
 using Blauhaus.Push.Client.Common.Services;
-using Newtonsoft.Json;
 using Blauhaus.Push.Client.Common._Config;
 
 namespace Blauhaus.Push.Client.iOS
@@ -37,7 +29,7 @@ namespace Blauhaus.Push.Client.iOS
         }
 
 
-        public async Task InitializeAsync(FormsApplicationDelegate appDelegate, NSDictionary options)
+        public async Task InitializeAsync(UIApplicationDelegate appDelegate, NSDictionary options)
         {
 
             using (var _ = _analyticsService.StartTrace(this, "iOs Push Notifications Initialization"))
@@ -54,7 +46,7 @@ namespace Blauhaus.Push.Client.iOS
                             }
                             else
                             {
-                                if(error != null && error.Code != null)
+                                if(error?.Code != null)
                                 {
                                     _analyticsService.TraceError(this, "Failed to get permission for push notifications", "ErrorCode", error.Code.ToString());
                                 }
