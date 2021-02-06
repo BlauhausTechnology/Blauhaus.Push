@@ -63,7 +63,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
         public async Task SHOULD_initialize_client()
         {
             //Act
-            var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+            var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
@@ -75,7 +75,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
             public async Task SHOULD_track_operation()
             {
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockAnalyticsService.VerifyTrace("Register device for push notifications");
@@ -89,7 +89,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.PushNotificationServiceHandle = string.Empty;
 
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 result.VerifyResponseError(PushErrors.InvalidPnsHandle, MockAnalyticsService); 
@@ -102,7 +102,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration = null;
 
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 result.VerifyResponseError(PushErrors.InvalidDeviceRegistration, MockAnalyticsService);  
@@ -112,22 +112,22 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
             public async Task SHOULD_invoke_hub_to_install_with_PushNotificationServiceHandle_as_PushChannel()
             {
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.PushChannel == "myPnsHandle"), CancellationToken.None));
+                    y.PushChannel == "myPnsHandle")));
             }
 
             [Test]
             public async Task SHOULD_invoke_hub_to_install_with_DeviceIdentifier_and_userId_as_InstallationId()
             {
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.InstallationId == "myUserId" + "___" + "myDeviceId"), CancellationToken.None));
+                    y.InstallationId == "myUserId" + "___" + "myDeviceId")));
             }
 
             [Test]
@@ -137,7 +137,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.DeviceIdentifier = null;
 
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 result.VerifyResponseError(PushErrors.MissingDeviceIdentifier, MockAnalyticsService); 
@@ -150,7 +150,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.UserId = null;
 
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 result.VerifyResponseError(PushErrors.MissingUserId, MockAnalyticsService); 
@@ -163,7 +163,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.DotNetCore;
 
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 result.VerifyResponseError(PushErrors.InvalidPlatform, MockAnalyticsService);  
@@ -176,7 +176,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Platform = null;
 
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 result.VerifyResponseError(PushErrors.InvalidPlatform, MockAnalyticsService);  
@@ -189,11 +189,11 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Templates = new List<IPushNotificationTemplate>();
 
                 //Act
-                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                var result = await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Templates.Count==0), CancellationToken.None));
+                    y.Templates.Count==0)));
             }
 
             [Test]
@@ -203,28 +203,43 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Tags = new List<string> {"ThingOne", "ThingTwo"};
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Tags.Contains("ThingOne")), CancellationToken.None));
+                    y.Tags.Contains("ThingOne"))));
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Tags.Contains("ThingTwo")), CancellationToken.None));
+                    y.Tags.Contains("ThingTwo"))));
             }
 
             [Test]
-            public async Task IF_UserId_is_provided_SHOULD_add_tag()
+            public async Task SHOULD_add_UserId_tag()
             {
                 //Arrange
                 var userId = Guid.NewGuid().ToString();
                 _dataOnlyDeviceRegistration.UserId = userId;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Tags.Contains($"UserId_{userId}")), CancellationToken.None));
+                    y.Tags.Contains($"UserId_{userId}"))));
+            }
+            
+            [Test]
+            public async Task SHOULD_add_DeviceIdentifier_tag()
+            {
+                //Arrange
+                var deviceId = Guid.NewGuid().ToString();
+                _dataOnlyDeviceRegistration.DeviceIdentifier = deviceId;
+
+                //Act
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
+
+                //Assert
+                MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
+                    y.Tags.Contains($"DeviceIdentifier_{deviceId}"))));
             }
 
             [Test]
@@ -235,18 +250,18 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.AccountId = accountId;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Tags.Contains($"AccountId_{accountId}")), CancellationToken.None));
+                    y.Tags.Contains($"AccountId_{accountId}"))));
             }
 
             [Test]
             public async Task SHOULD_trace()
             {
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockAnalyticsService.VerifyTrace("Push notification registration updated");
@@ -262,11 +277,11 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.UWP;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Platform == NotificationPlatform.Wns), CancellationToken.None));
+                    y.Platform == NotificationPlatform.Wns)));
             }
 
             [Test]
@@ -276,7 +291,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _visibleTemplateDeviceRegistration.Platform = RuntimePlatform.UWP;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 var expectedTemplate =
@@ -291,7 +306,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                     "<text id=\"2\">$(Body)</text></binding></visual></toast>";
                 
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Templates["VisibleTemplate"].Body == expectedTemplate), CancellationToken.None));
+                    y.Templates["VisibleTemplate"].Body == expectedTemplate)));
             }
 
             [Test]
@@ -305,7 +320,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                     _visibleTemplateDeviceRegistration.Templates.First().DataProperties.Add(forbiddenString);
                     
                     //Act
-                    var result = await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                    var result = await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object);
                     
                     //Assert
                     result.VerifyResponseError(PushErrors.ReservedString(forbiddenString), MockAnalyticsService);  
@@ -326,11 +341,11 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.iOS;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Platform == NotificationPlatform.Apns), CancellationToken.None));
+                    y.Platform == NotificationPlatform.Apns)));
             }
             
             [Test]
@@ -340,7 +355,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _visibleTemplateDeviceRegistration.Platform = RuntimePlatform.iOS;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 const string expectedTemplate = 
@@ -349,7 +364,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                     "\"VisibleTemplateProperty\" : \"$(VisibleTemplateProperty)\", " +
                     "\"SecondVisibleTemplateProperty\" : \"$(SecondVisibleTemplateProperty)\" }";
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Templates["VisibleTemplate"].Body == expectedTemplate), CancellationToken.None));
+                    y.Templates["VisibleTemplate"].Body == expectedTemplate)));
             }
 
 
@@ -364,11 +379,11 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.Android;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_dataOnlyDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Platform == NotificationPlatform.Fcm), CancellationToken.None));
+                    y.Platform == NotificationPlatform.Fcm)));
             }
 
             [Test]
@@ -378,7 +393,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 _dataOnlyDeviceRegistration.Platform = RuntimePlatform.Android;
 
                 //Act
-                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object, CancellationToken.None);
+                await Sut.UpdateDeviceRegistrationAsync(_visibleTemplateDeviceRegistration, MockNotificationHub.Object);
 
                 //Assert
                 const string expectedTemplate = 
@@ -390,7 +405,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                     "\"SecondVisibleTemplateProperty\" : \"$(SecondVisibleTemplateProperty)\" " +
                     "}, \"notification\" : { \"title\" : \"$(Title)\", \"body\" : \"$(Body)\" } }";
                 MockNotificationHubClientProxy.Mock.Verify(x => x.CreateOrUpdateInstallationAsync(It.Is<Installation>(y =>
-                    y.Templates["VisibleTemplate"].Body == expectedTemplate), CancellationToken.None));
+                    y.Templates["VisibleTemplate"].Body == expectedTemplate)));
             }
         }
     }

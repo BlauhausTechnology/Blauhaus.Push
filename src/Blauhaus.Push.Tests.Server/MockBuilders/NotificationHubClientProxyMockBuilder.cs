@@ -9,7 +9,7 @@ namespace Blauhaus.Push.Tests.MockBuilders
     {
         public NotificationHubClientProxyMockBuilder()
         {
-            Mock.Setup(x => x.InstallationExistsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            Mock.Setup(x => x.InstallationExistsAsync(It.IsAny<string>()))
                 .ReturnsAsync(true);
         }
     }

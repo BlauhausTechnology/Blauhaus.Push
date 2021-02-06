@@ -28,7 +28,7 @@ namespace Blauhaus.Push.Server.Service
             _hubClientProxy = hubClientProxy;
         }
 
-        public async Task<Response<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, IPushNotificationsHub hub, CancellationToken token)
+        public async Task<Response<IDeviceRegistration>> UpdateDeviceRegistrationAsync(IDeviceRegistration deviceRegistration, IPushNotificationsHub hub)
         {
             
             if (deviceRegistration.IsNotValid(this, _analyticsService, out var validationError))
@@ -49,10 +49,8 @@ namespace Blauhaus.Push.Server.Service
                 Templates = new Dictionary<string, InstallationTemplate>()
             };
 
-            if (!string.IsNullOrEmpty(deviceRegistration.UserId))
-            {
-                installation.Tags.Add($"UserId_{deviceRegistration.UserId}");
-            }
+            installation.Tags.Add($"UserId_{deviceRegistration.UserId}");
+            installation.Tags.Add($"DeviceIdentifier_{deviceRegistration.DeviceIdentifier}");
 
             if (!string.IsNullOrEmpty(deviceRegistration.AccountId))
             {
@@ -64,7 +62,7 @@ namespace Blauhaus.Push.Server.Service
                 installation.Templates.Add(template.ToPlatform(deviceRegistration.Platform));
             }
             
-            await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
+            await _hubClientProxy.CreateOrUpdateInstallationAsync(installation);
             
             _analyticsService.TraceVerbose(this, "Push notification registration updated", new Dictionary<string, object>
             {
@@ -77,7 +75,7 @@ namespace Blauhaus.Push.Server.Service
             return Response.Success(deviceRegistration);
         }
 
-        public async Task<Response<IDeviceRegistration>> LoadRegistrationForUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
+        public async Task<Response<IDeviceRegistration>> LoadRegistrationForUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub)
         {
             _analyticsService.TraceVerbose(this, "Load push notification registration for user device",
                 new Dictionary<string, object>
@@ -90,14 +88,14 @@ namespace Blauhaus.Push.Server.Service
 
             var installationId = userId + "___" + deviceIdentifier;
 
-            var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId, token);
+            var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId);
 
             if (!installationExists)
             {
                 return _analyticsService.TraceErrorResponse<IDeviceRegistration>(this, PushErrors.RegistrationDoesNotExist);
             }
 
-            var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
+            var installation = await _hubClientProxy.GetInstallationAsync(installationId);
 
             var deviceRegistration = new DeviceRegistration
             {
@@ -116,19 +114,45 @@ namespace Blauhaus.Push.Server.Service
             
         }
          
-        public async Task SendNotificationToUserAsync(IPushNotification notification, string userId, IPushNotificationsHub hub, CancellationToken token)
+        public Task SendNotificationToUserAsync(IPushNotification notification, string userId, IPushNotificationsHub hub)
         {
-            _analyticsService.TraceVerbose(this, "Send push notification to user", new Dictionary<string, object> {{nameof(IPushNotification), notification}, {"UserId", userId}});
-
-            _hubClientProxy.Initialize(hub);
-
-            var properties = notification.DataProperties.ToDictionary(notificationDataProperty => 
-                notificationDataProperty.Key, notificationDataProperty => notificationDataProperty.Value.ToString());
+            _analyticsService.TraceVerbose(this, "Sending push notification to user", new Dictionary<string, object> {{nameof(IPushNotification), notification}, {"UserId", userId}});
 
             var tags = new List<string>
             {
                 $"(UserId_{userId} && {notification.Name})"
             };
+
+            return SendNotificationToTagsAsync(notification, hub, tags);
+
+
+        }
+
+        public Task SendNotificationToUserDeviceAsync(IPushNotification notification, string userId, string deviceIdentifier, IPushNotificationsHub hub)
+        {
+            _analyticsService.TraceVerbose(this, "Sending push notification to user device", new Dictionary<string, object>
+            {
+                {nameof(IPushNotification), notification}, 
+                {"UserId", userId},
+                {"DeviceIdentifier", deviceIdentifier},
+            });
+             
+            var tags = new List<string>
+            {
+                $"(UserId_{userId} && {notification.Name} && DeviceIdentifier_{deviceIdentifier})"
+            };
+
+            return SendNotificationToTagsAsync(notification, hub, tags);
+
+        }
+
+        private async Task SendNotificationToTagsAsync(IPushNotification notification, IPushNotificationsHub hub, IEnumerable<string> tags)
+        {
+            
+            _hubClientProxy.Initialize(hub);
+
+            var properties = notification.DataProperties.ToDictionary(notificationDataProperty => 
+                notificationDataProperty.Key, notificationDataProperty => notificationDataProperty.Value.ToString());
 
             if (!string.IsNullOrWhiteSpace(notification.Title))
             {
@@ -140,11 +164,10 @@ namespace Blauhaus.Push.Server.Service
                 properties.Add("Body", notification.Body);
             }
 
-            var result = await _hubClientProxy.SendNotificationAsync(properties, tags, token);
-
+            await _hubClientProxy.SendNotificationAsync(properties, tags);
         }
-         
-        public async Task<Response> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub, CancellationToken token)
+
+        public async Task<Response> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub)
         {
             _analyticsService.TraceVerbose(this, "Deregister user device",
                 new Dictionary<string, object>
@@ -157,16 +180,16 @@ namespace Blauhaus.Push.Server.Service
 
             var installationId = userId + "___" + deviceIdentifier;
 
-            var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId, token);
+            var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId);
             if (!installationExists)
             {
                 _analyticsService.TraceWarning(this, "No installation exists for user device, so there is nothing to deregister");
                 return Response.Success();
             }
         
-            var installation = await _hubClientProxy.GetInstallationAsync(installationId, token);
+            var installation = await _hubClientProxy.GetInstallationAsync(installationId);
             installation.Templates = new Dictionary<string, InstallationTemplate>();
-            await _hubClientProxy.CreateOrUpdateInstallationAsync(installation, token);
+            await _hubClientProxy.CreateOrUpdateInstallationAsync(installation);
 
             _analyticsService.TraceVerbose(this, "Templates cleared for push notifications registration", new Dictionary<string, object>
             {

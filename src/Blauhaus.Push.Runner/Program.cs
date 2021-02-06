@@ -41,19 +41,21 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                PushNotificationsService = Setup(hub: new GameIosHub());
+                var hub = new StagingAndroidHub();
+                
+                PushNotificationsService = Setup(hub);
 
                 var reg = await GetAllRegistrationsAsync();
 
-                var myReg = await GetRegistrationsForUserAsync("0ff7a478-fed1-414d-893c-e8f7694bacc0".ToLowerInvariant());
+                var myReg = await GetRegistrationsForUserAsync(hub.UserId.ToLowerInvariant());
 
                 var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
-                var registrations = await client.GetRegistrationsByChannelAsync("084632978D726A132158027A084550CA2D97C4B0D157F602F1CFB39D1897EB3F", 10);
+                var registrations = await client.GetRegistrationsByChannelAsync(hub.PnsHandle, 10);
 
                 await PushNotificationsService.SendNotificationToUserAsync(
                     notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
-                    userId: "0ff7a478-fed1-414d-893c-e8f7694bacc0".ToLowerInvariant(), 
-                    hub: Hub, token: CancellationToken.None);
+                    userId: hub.UserId.ToLowerInvariant(), 
+                    hub: Hub);
 
             }
             catch (Exception e)
@@ -107,7 +109,7 @@ namespace Blauhaus.Push.Runner
                 {
                     Templates.Message
                 }
-            }, Hub, CancellationToken.None);
+            }, Hub);
         }
 
         private static async Task<List<RegistrationDescription>> GetRegistrationsForUserAsync(string userId)

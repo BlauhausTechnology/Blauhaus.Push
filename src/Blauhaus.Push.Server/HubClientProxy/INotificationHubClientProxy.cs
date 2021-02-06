@@ -10,11 +10,11 @@ namespace Blauhaus.Push.Server.HubClientProxy
     {
         INotificationHubClientProxy Initialize(IPushNotificationsHub hub);
 
-        Task CreateOrUpdateInstallationAsync(Installation installation, CancellationToken cancellationToken);
-        Task<Installation> GetInstallationAsync(string installationId, CancellationToken token);
-        Task<bool> InstallationExistsAsync(string installationId, CancellationToken token);
-        Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, IEnumerable<string> tags, CancellationToken token);
-        Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, string tagExpression, CancellationToken token);
-        Task<NotificationOutcome> SendDirectNotificationAsync(Notification notification, List<string> pnsHandles, CancellationToken token);
+        Task CreateOrUpdateInstallationAsync(Installation installation);
+        Task<Installation> GetInstallationAsync(string installationId);
+        Task<bool> InstallationExistsAsync(string installationId);
+        Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, IEnumerable<string> tags);
+        Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, string tagExpression);
+        Task<NotificationOutcome> SendDirectNotificationAsync(Notification notification, List<string> pnsHandles);
     }
 }

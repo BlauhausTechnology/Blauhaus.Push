@@ -11,7 +11,7 @@ namespace Blauhaus.Push.Abstractions.Server
         /// Sends notifications directly to PnsHandles, bypassing the Azure templating system.
         /// This requires your Azure notification hub namespace to be at least at the Basic Tier 
         /// </summary>
-        Task<Response> SendNotificationToTargetAsync(IPushNotification notification, IDeviceTarget target, IPushNotificationsHub hub, CancellationToken token);
+        Task<Response> SendNotificationToTargetAsync(IPushNotification notification, IDeviceTarget target, IPushNotificationsHub hub);
 
     }
 }

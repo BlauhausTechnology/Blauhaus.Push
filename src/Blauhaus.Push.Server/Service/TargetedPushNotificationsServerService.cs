@@ -31,7 +31,7 @@ namespace Blauhaus.Push.Server.Service
         }
 
 
-        public async Task<Response> SendNotificationToTargetAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub, CancellationToken token)
+        public async Task<Response> SendNotificationToTargetAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub)
         {
             _analyticsService.TraceVerbose(this, "Send push notification to device", new Dictionary<string, object>
                 {{nameof(PushNotification), pushNotification}, {nameof(DeviceTarget), deviceTarget}});
@@ -47,7 +47,7 @@ namespace Blauhaus.Push.Server.Service
                 var devices = new List<string>{ deviceTarget.PushNotificationServicesHandle };
                 _analyticsService.Trace(this, "Native push notification extracted", LogSeverity.Verbose, notification.ToObjectDictionary());
 
-                await _hubClientProxy.SendDirectNotificationAsync(notification, devices, token);
+                await _hubClientProxy.SendDirectNotificationAsync(notification, devices);
                 return Response.Success();
             }
             catch (Exception e)

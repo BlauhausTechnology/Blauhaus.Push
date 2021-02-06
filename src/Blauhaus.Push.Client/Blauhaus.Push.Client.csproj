@@ -51,9 +51,10 @@
     <PackageReference Include="Xamarin.Azure.NotificationHubs.Android">
       <Version>1.1.4.1</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Firebase.Messaging">
+	<!--This needs to be included in the android app project -->
+    <!--<PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>121.0.1</Version>
-    </PackageReference>
+    </PackageReference>-->
     <PackageReference Include="Xamarin.GooglePlayServices.Base">
       <Version>117.5.0</Version>
     </PackageReference>
@@ -64,11 +65,16 @@
       <Version>3.1.1</Version>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
     <PackageReference Include="WindowsAzure.Messaging.Managed">
       <Version>0.1.7.9</Version>
     </PackageReference>
   </ItemGroup>
+
+	<ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
+		<PackageReference Include="WindowsAzure.Messaging.Managed">
+			<Version>0.1.7.9</Version>
+		</PackageReference>
+	</ItemGroup>
 
 </Project>

@@ -35,50 +35,46 @@ namespace Blauhaus.Push.Server.HubClientProxy
             return this;
         }
 
-        public Task CreateOrUpdateInstallationAsync(Installation installation, CancellationToken cancellationToken)
+        public Task CreateOrUpdateInstallationAsync(Installation installation)
         {
-            EnsureInitialized();
-            return _hubClient.CreateOrUpdateInstallationAsync(installation, cancellationToken);
+            return GetClient().CreateOrUpdateInstallationAsync(installation);
         }
 
-        public Task<Installation> GetInstallationAsync(string installationId, CancellationToken token)
+        public Task<Installation> GetInstallationAsync(string installationId)
         {
-            EnsureInitialized();
-            return _hubClient.GetInstallationAsync(installationId, token);
+            return GetClient().GetInstallationAsync(installationId);
         }
 
-        public Task<bool> InstallationExistsAsync(string installationId, CancellationToken token)
+        public Task<bool> InstallationExistsAsync(string installationId)
         {
-            EnsureInitialized();
-            return _hubClient.InstallationExistsAsync(installationId, token);
+            return GetClient().InstallationExistsAsync(installationId);
         }
 
         //the NotificationOutcome only has interesting data when you're on the Standard tier :(
-        public Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, IEnumerable<string> tags, CancellationToken token)
+        public Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, IEnumerable<string> tags)
         {
-            EnsureInitialized();
-            return _hubClient.SendTemplateNotificationAsync(properties, tags, token);
+            return GetClient().SendTemplateNotificationAsync(properties, tags);
         }
 
-        public Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, string tagExpression, CancellationToken token)
+        public Task<NotificationOutcome> SendNotificationAsync(IDictionary<string, string> properties, string tagExpression)
         {
-            EnsureInitialized();
-            return _hubClient.SendTemplateNotificationAsync(properties, tagExpression, token);
+            return GetClient().SendTemplateNotificationAsync(properties, tagExpression);
         }
 
-        public Task<NotificationOutcome> SendDirectNotificationAsync(Notification notification, List<string> pnsHandles, CancellationToken token)
+        public Task<NotificationOutcome> SendDirectNotificationAsync(Notification notification, List<string> pnsHandles)
         {
-            EnsureInitialized();
-            return _hubClient.SendDirectNotificationAsync(notification, pnsHandles, token);
+            return GetClient().SendDirectNotificationAsync(notification, pnsHandles);
         }
 
 
-        private void EnsureInitialized()
+        private NotificationHubClient GetClient()
         {
             if (_hubClient == null)
             {
                 throw new Exception("Notification hub client has not been initialized. Please call Initialize() before using the hub");
             }
+
+            return _hubClient;
         }
 
     }
