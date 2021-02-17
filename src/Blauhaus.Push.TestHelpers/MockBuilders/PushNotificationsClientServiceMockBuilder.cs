@@ -9,7 +9,7 @@ using Moq;
 
 namespace Blauhaus.Push.TestHelpers.MockBuilders
 {
-    public class PushNotificationsClientServiceMockBuilder : BaseMockBuilder<PushNotificationsClientServiceMockBuilder, IPushNotificationsClientService>
+    public class PushNotificationsClientServiceMockBuilder : BaseAsyncPublisherMockBuilder<PushNotificationsClientServiceMockBuilder, IPushNotificationsClientService, IPushNotification>
     {
         public PushNotificationsClientServiceMockBuilder()
         {

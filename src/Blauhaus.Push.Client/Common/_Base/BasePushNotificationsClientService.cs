@@ -4,13 +4,14 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
+using Blauhaus.Common.Utils.Disposables;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 
 namespace Blauhaus.Push.Client.Common._Base
 {
-    public abstract class BasePushNotificationsClientService : IPushNotificationsClientService
+    public abstract class BasePushNotificationsClientService : BasePublisher, IPushNotificationsClientService
     {
         private const string PnsHandleKey = "PnsHandle";
         private string _currentPnsHandle;
@@ -27,8 +28,11 @@ namespace Blauhaus.Push.Client.Common._Base
             AnalyticsService = analyticsService;
             _secureStorageService = secureStorageService;
             _pushNotificationTapHandler = pushNotificationTapHandler;
+
+            NewNotificationEvent += HandleNewForegroundNotification;
         }
-        
+
+       
         public async ValueTask<string> GetPushNotificationServiceHandleAsync()
         {
             if (string.IsNullOrWhiteSpace(_currentPnsHandle))
@@ -75,7 +79,23 @@ namespace Blauhaus.Push.Client.Common._Base
                 await _secureStorageService.SetAsync(PnsHandleKey, pnsHandle);
             }
         }
+        
+        #region IAsyncPublisher
+        
+        public Task<IDisposable> SubscribeAsync(Func<IPushNotification, Task> handler)
+        {
+            return base.SubscribeAsync(handler);
+        }
+        
+        private async void HandleNewForegroundNotification(object sender, NewNotificationEventArgs e)
+        {
+            AnalyticsService.TraceVerbose(this, "Foreground notification being published");
+            await UpdateSubscribersAsync(e.NewNotification);
+        }
 
+        #endregion
+        
+        
         public IObservable<IPushNotification> ObserveForegroundNotifications()
         {
             return Observable.Create<IPushNotification>(observer =>
@@ -111,12 +131,14 @@ namespace Blauhaus.Push.Client.Common._Base
         
         #region Tapped Notification
         
-        protected Task InvokeTapHandlersAsync(IPushNotification pushNotification)
+        protected async Task InvokeTapHandlersAsync(IPushNotification pushNotification)
         {
-            return _pushNotificationTapHandler.HandleTapAsync(pushNotification);
+            await UpdateSubscribersAsync(pushNotification);
+            await _pushNotificationTapHandler.HandleTapAsync(pushNotification);
         }
 
         #endregion
 
+     
     }
 }
