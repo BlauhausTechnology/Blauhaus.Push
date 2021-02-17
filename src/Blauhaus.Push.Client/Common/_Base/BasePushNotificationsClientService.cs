@@ -89,7 +89,7 @@ namespace Blauhaus.Push.Client.Common._Base
         
         private async void HandleNewForegroundNotification(object sender, NewNotificationEventArgs e)
         {
-            AnalyticsService.TraceVerbose(this, "Foreground notification being published");
+            AnalyticsService.TraceVerbose(this, "Foreground notification being published", e.NewNotification.ToObjectDictionary("PushNotification"));
             await UpdateSubscribersAsync(e.NewNotification);
         }
 
@@ -103,7 +103,7 @@ namespace Blauhaus.Push.Client.Common._Base
 
                 void HandleNewNotification(object sender, NewNotificationEventArgs e)
                 {
-                    AnalyticsService.TraceVerbose(this, "Foreground notification being published");
+                    AnalyticsService.TraceVerbose(this, "Foreground notification being published", e.NewNotification.ToObjectDictionary("PushNotification"));
                     observer.OnNext(e.NewNotification);
                 } 
                 
@@ -133,7 +133,7 @@ namespace Blauhaus.Push.Client.Common._Base
         
         protected async Task InvokeTapHandlersAsync(IPushNotification pushNotification)
         {
-            await UpdateSubscribersAsync(pushNotification);
+            AnalyticsService.TraceVerbose(this, "BAckground notification tapped", pushNotification.ToObjectDictionary("PushNotification"));
             await _pushNotificationTapHandler.HandleTapAsync(pushNotification);
         }
 
