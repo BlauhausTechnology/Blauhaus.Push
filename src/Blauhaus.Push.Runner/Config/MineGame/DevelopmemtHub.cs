@@ -18,8 +18,8 @@ namespace Blauhaus.Push.Runner.Config.MineGame
     public class DevelopmentAndroidHub : DevelopmemtHub
     {
         public DevelopmentAndroidHub() : base(platform: RuntimePlatform.Android, 
-            pnsHandle: "fQxWegFrTtSqWqO4la1dto:APA91bHx-jvS2PwlDhi7p3mgF5PpOPyIOWRVk8-92CsJB2GqXT08NA74Vj7OpNIPlwRFXOFNqBgBCCYFzuubTMICVFXLm64GXrFZqVAPn9TFFTR7mlh3jINTBrnvqc-zKCdrXCZBp5bd", 
-            deviceId: "c57dc2e6f14ed0d3", 
+            pnsHandle: "cWxlgX1vR-ihmMPF4niGLV:APA91bG7YTTrCg8PQO4J6cO319yvbJmT_0x9RHhZXIJr9X9HbkAYg0Zux5LKVl9UcWeTp_v_L1HLFXwaZnteZbyxRpdFfLajJnKMoXPMAi5ZufIKwsTvWeE-ZeMrguzninbTSenWbo7X", 
+            deviceId: "3973a0b4c2e40272", 
             userId: "6da1ea78-57d1-422f-b7b3-bf160eba9be0")
         {
         }

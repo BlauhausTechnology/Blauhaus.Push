@@ -41,7 +41,7 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                var hub = new StagingAndroidHub();
+                var hub = new StagingIosHub();
                 
                 PushNotificationsService = Setup(hub);
 
@@ -52,9 +52,10 @@ namespace Blauhaus.Push.Runner
                 var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
                 var registrations = await client.GetRegistrationsByChannelAsync(hub.PnsHandle, 10);
 
-                await PushNotificationsService.SendNotificationToUserAsync(
+                await PushNotificationsService.SendNotificationToUserDeviceAsync(
                     notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
-                    userId: hub.UserId.ToLowerInvariant(), 
+                    userId: hub.UserId.ToLowerInvariant(),
+                    deviceIdentifier: hub.DeviceId,
                     hub: Hub);
 
             }
