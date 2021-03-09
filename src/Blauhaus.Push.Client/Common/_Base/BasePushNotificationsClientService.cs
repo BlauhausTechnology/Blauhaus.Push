@@ -82,7 +82,7 @@ namespace Blauhaus.Push.Client.Common._Base
         
         #region IAsyncPublisher
         
-        public Task<IDisposable> SubscribeAsync(Func<IPushNotification, Task> handler)
+        public Task<IDisposable> SubscribeAsync(Func<IPushNotification, Task> handler, Func<IPushNotification, bool>? predicate = null)
         {
             return base.SubscribeAsync(handler);
         }
@@ -138,7 +138,6 @@ namespace Blauhaus.Push.Client.Common._Base
         }
 
         #endregion
-
-     
+         
     }
 }

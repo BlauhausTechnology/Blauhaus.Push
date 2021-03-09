@@ -5,7 +5,7 @@ using Blauhaus.Push.Abstractions.Common.Notifications;
 
 namespace Blauhaus.Push.Abstractions.Client
 {
-    public interface IPushNotificationsClientService : IAsyncPublisher<IPushNotification>
+    public interface IPushNotificationsClientService : Blauhaus.Common.Abstractions.IAsyncPublisher<IPushNotification>
     {
         IObservable<IPushNotification> ObserveForegroundNotifications();
 
