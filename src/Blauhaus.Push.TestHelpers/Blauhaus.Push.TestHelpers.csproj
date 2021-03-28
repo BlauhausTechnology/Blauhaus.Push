@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blauhaus.Common.TestHelpers" Version="1.9.10" />
-    <PackageReference Include="Blauhaus.TestHelpers" Version="1.1.20" />
+    <PackageReference Include="Blauhaus.Common.TestHelpers" Version="1.10.1" />
+    <PackageReference Include="Blauhaus.TestHelpers" Version="1.2.4" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 

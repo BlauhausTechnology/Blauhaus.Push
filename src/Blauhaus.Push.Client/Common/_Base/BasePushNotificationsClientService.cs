@@ -82,9 +82,9 @@ namespace Blauhaus.Push.Client.Common._Base
         
         #region IAsyncPublisher
         
-        public Task<IDisposable> SubscribeAsync(Func<IPushNotification, Task> handler)
+        public Task<IDisposable> SubscribeAsync(Func<IPushNotification, Task> handler, Func<IPushNotification, bool>? filter = null)
         {
-            return base.SubscribeAsync(handler);
+            return Task.FromResult(base.AddSubscriber(handler, filter));
         }
         
         private async void HandleNewForegroundNotification(object sender, NewNotificationEventArgs e)
@@ -138,6 +138,6 @@ namespace Blauhaus.Push.Client.Common._Base
         }
 
         #endregion
-         
+
     }
 }
