@@ -7,7 +7,7 @@ using Blauhaus.Common.Utils.Extensions;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
-using Blauhaus.Push.Client.Common._Base;
+using Blauhaus.Push.Client.Common.Base;
 using Newtonsoft.Json;
 
 namespace Blauhaus.Push.Client.Common.Services

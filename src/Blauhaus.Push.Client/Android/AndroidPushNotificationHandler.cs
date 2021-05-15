@@ -11,13 +11,12 @@ using Android.Gms.Common;
 using System.Linq;
 using Android.OS;
 using Blauhaus.Analytics.Abstractions.Extensions;
-using Blauhaus.Push.Client.Common._Ioc;
 using Microsoft.Extensions.Options;
 using Firebase.Messaging;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Abstractions.Client;
+using Blauhaus.Push.Client.Common.Config;
 using Newtonsoft.Json;
-using Blauhaus.Push.Client.Common._Config;
 
 namespace Blauhaus.Push.Client.Android
 {

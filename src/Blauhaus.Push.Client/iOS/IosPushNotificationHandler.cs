@@ -7,8 +7,8 @@ using Foundation;
 using UserNotifications;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Push.Abstractions.Common;
+using Blauhaus.Push.Client.Common.Config;
 using Blauhaus.Push.Client.Common.Services;
-using Blauhaus.Push.Client.Common._Config;
 
 namespace Blauhaus.Push.Client.iOS
 {

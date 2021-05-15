@@ -9,7 +9,7 @@ using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 
-namespace Blauhaus.Push.Client.Common._Base
+namespace Blauhaus.Push.Client.Common.Base
 {
     public abstract class BasePushNotificationsClientService : BasePublisher, IPushNotificationsClientService
     {

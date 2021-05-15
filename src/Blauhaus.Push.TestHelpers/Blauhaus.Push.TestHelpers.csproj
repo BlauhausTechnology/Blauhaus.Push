@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild> 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blauhaus.Common.TestHelpers" Version="1.10.2" />
-    <PackageReference Include="Blauhaus.TestHelpers" Version="1.2.4" />
+    <PackageReference Include="Blauhaus.Common.TestHelpers" Version="1.10.9" />
+    <PackageReference Include="Blauhaus.TestHelpers" Version="1.2.10" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 

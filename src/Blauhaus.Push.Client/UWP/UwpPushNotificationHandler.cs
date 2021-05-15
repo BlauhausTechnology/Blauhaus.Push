@@ -1,5 +1,4 @@
 ﻿using System;
-using Blauhaus.Push.Client.Common._Ioc;
 using Microsoft.Extensions.Options;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Analytics.Abstractions.Extensions;
@@ -11,7 +10,7 @@ using Windows.UI.Core;
 using System.Diagnostics;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common._Config;
+using Blauhaus.Push.Client.Common.Config;
 
 namespace Blauhaus.Push.Client.UWP
 {

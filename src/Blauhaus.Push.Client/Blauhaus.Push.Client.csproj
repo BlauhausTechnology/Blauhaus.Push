@@ -35,9 +35,21 @@
     <Compile Remove="iOS\**\*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Android\.Ioc\AndroidServiceCollectionExtensions.cs" />
+    <None Include="Common\.Base\BasePushNotificationsClientService.cs" />
+    <None Include="Common\.Config\IPushNotificationsClientConfig.cs" />
+    <None Include="Common\.Config\PushNotificationsClientConfig.cs" />
+    <None Include="Common\.Ioc\EmptyPushNotificationTapHandler.cs" />
+    <None Include="Common\.Ioc\IocServiceExtensions.cs" />
+    <None Include="Common\.Ioc\ServiceCollectionExtensions.cs" />
+    <None Include="iOS\.Ioc\IosServiceCollectionExtensions.cs" />
+    <None Include="UWP\.Ioc\UwpServiceCollectionExtensions.cs" />
+  </ItemGroup>
+
 <ItemGroup>
-    <PackageReference Include="Blauhaus.Common.Utils" Version="1.10.2" />
-    <PackageReference Include="Blauhaus.DeviceServices" Version="0.8.8" />
+    <PackageReference Include="Blauhaus.Common.Utils" Version="1.10.9" />
+    <PackageReference Include="Blauhaus.DeviceServices" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />

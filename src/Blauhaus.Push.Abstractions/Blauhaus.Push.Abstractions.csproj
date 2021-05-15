@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blauhaus.Analytics.Abstractions" Version="1.5.2" />
-    <PackageReference Include="Blauhaus.Common.Abstractions" Version="1.10.2" />
-    <PackageReference Include="Blauhaus.Common.ValueObjects" Version="1.10.2" />
+    <PackageReference Include="Blauhaus.Analytics.Abstractions" Version="1.6.10" />
+    <PackageReference Include="Blauhaus.Common.Abstractions" Version="1.10.9" />
+    <PackageReference Include="Blauhaus.Common.ValueObjects" Version="1.10.9" />
   </ItemGroup>
 
 </Project>

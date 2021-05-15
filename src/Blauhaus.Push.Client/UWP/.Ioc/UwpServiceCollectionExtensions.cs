@@ -3,7 +3,7 @@ using Blauhaus.Push.Client.Common;
 using Blauhaus.Push.Client.Common.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blauhaus.Push.Client.UWP._Ioc
+namespace Blauhaus.Push.Client.UWP.Ioc
 {
     public static class UwpServiceCollectionExtensions
     {

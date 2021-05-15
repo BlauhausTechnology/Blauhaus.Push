@@ -3,7 +3,7 @@ using Blauhaus.Push.Client.Common;
 using Blauhaus.Push.Client.Common.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blauhaus.Push.Client.Android._Ioc
+namespace Blauhaus.Push.Client.Android.Ioc
 {
     public static class AndroidServiceCollectionExtensions
     {

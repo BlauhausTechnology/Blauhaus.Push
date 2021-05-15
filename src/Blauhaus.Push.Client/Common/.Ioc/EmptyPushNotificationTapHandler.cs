@@ -1,9 +1,9 @@
-﻿using Blauhaus.Analytics.Abstractions.Service;
+﻿using System.Threading.Tasks;
+using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Push.Abstractions.Client;
-using System.Threading.Tasks;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 
-namespace Blauhaus.Push.Client.Common._Ioc
+namespace Blauhaus.Push.Client.Common.Ioc
 {
     public class EmptyPushNotificationTapHandler : IPushNotificationTapHandler
     {

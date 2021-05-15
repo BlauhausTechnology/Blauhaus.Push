@@ -1,10 +1,10 @@
-﻿using Blauhaus.DeviceServices.Common._Ioc;
+﻿using Blauhaus.DeviceServices.Common.Ioc;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common._Config;
+using Blauhaus.Push.Client.Common.Config;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Blauhaus.Push.Client.Common._Ioc
+namespace Blauhaus.Push.Client.Common.Ioc
 {
     public static class ServiceCollectionExtensions
     {
