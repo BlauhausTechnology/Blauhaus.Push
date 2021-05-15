@@ -42,7 +42,6 @@ namespace Blauhaus.Push.Client.UWP
                 {
                     try
                     {
-                        
                         currentWindow.Activated += HandleWindowActivated;
 
                         _channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
