@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Console.Ioc;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
@@ -13,10 +12,8 @@ using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
 using Blauhaus.Push.Runner.Config.MineGame;
-using Blauhaus.Push.Runner.Config.Reveye;
-using Blauhaus.Push.Server._Ioc;
 using Blauhaus.Push.Server.HubClientProxy;
-using Blauhaus.Push.Server.Service;
+using Blauhaus.Push.Server.Ioc;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
 

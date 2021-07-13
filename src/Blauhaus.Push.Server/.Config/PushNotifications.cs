@@ -1,6 +1,6 @@
 ﻿using Blauhaus.Push.Abstractions.Server;
 
-namespace Blauhaus.Push.Server._Config
+namespace Blauhaus.Push.Server.Config
 {
     public class PushNotifications : IPushNotificationsHub
     {

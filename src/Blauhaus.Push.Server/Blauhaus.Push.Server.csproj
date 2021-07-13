@@ -8,8 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blauhaus.Analytics.Console" Version="1.6.13" />
-    <PackageReference Include="Blauhaus.Common.Utils" Version="1.10.9" />
+    <Compile Include=".Config\PushNotifications.cs" />
+    <Compile Include=".Ioc\ServiceCollectionExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blauhaus.Analytics.Console" Version="1.6.15" />
+    <PackageReference Include="Blauhaus.Common.Utils" Version="1.11.3" />
     <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.1.0" />
   </ItemGroup>
 
