@@ -38,7 +38,7 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                var hub = new StagingIosHub();
+                var hub = new StagingUwpHub();
                 
                 PushNotificationsService = Setup(hub);
 
