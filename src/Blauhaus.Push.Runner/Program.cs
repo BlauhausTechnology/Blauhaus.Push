@@ -32,7 +32,7 @@ namespace Blauhaus.Push.Runner
 
         private static NotificationHubClient RawClient => NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
         private static NotificationHubClientProxy Client;
-        private static IPushNotificationsServerService PushNotificationsService;
+        private static IPushNotificationsServerService _pushNotificationsService;
 
         private static async Task Main(string[] args)
         {
@@ -40,7 +40,7 @@ namespace Blauhaus.Push.Runner
             {
                 var hub = new StagingUwpHub();
                 
-                PushNotificationsService = Setup(hub);
+                _pushNotificationsService = Setup(hub);
 
                 var reg = await GetAllRegistrationsAsync();
 
@@ -49,7 +49,7 @@ namespace Blauhaus.Push.Runner
                 var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
                 var registrations = await client.GetRegistrationsByChannelAsync(hub.PnsHandle, 10);
 
-                await PushNotificationsService.SendNotificationToUserDeviceAsync(
+                await _pushNotificationsService.SendNotificationToUserDeviceAsync(
                     notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
                     userId: hub.UserId.ToLowerInvariant(),
                     deviceIdentifier: hub.DeviceId,
@@ -95,7 +95,7 @@ namespace Blauhaus.Push.Runner
 
         private async Task UpdateRegistrationAsync()
         {
-            await PushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
+            await _pushNotificationsService.UpdateDeviceRegistrationAsync(new DeviceRegistration
             {
                 AccountId = "myAccountId",
                 UserId = UserId,
