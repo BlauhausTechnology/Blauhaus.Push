@@ -2,7 +2,7 @@ trigger:
 - release/*
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-2022'
 
 variables:
   solution: 'src\Blauhaus.Push.sln'
@@ -12,6 +12,10 @@ variables:
 
 steps:
 - powershell: Write-Host "Branch Name $(Build.SourceBranchName)"
+
+- task: CmdLine@2
+  inputs:
+    script: 'dotnet workload install maui'
 
 - task: NuGetToolInstaller@1
 
