@@ -48,8 +48,8 @@
   </ItemGroup>
 
 <ItemGroup>
-    <PackageReference Include="Blauhaus.Common.Utils" Version="1.12.15" />
-    <PackageReference Include="Blauhaus.DeviceServices" Version="1.0.16" />
+    <PackageReference Include="Blauhaus.Common.Utils" Version="2.1.1" />
+    <PackageReference Include="Blauhaus.DeviceServices" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
