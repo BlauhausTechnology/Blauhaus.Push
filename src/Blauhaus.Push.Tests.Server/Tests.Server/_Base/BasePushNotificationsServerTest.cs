@@ -1,4 +1,5 @@
-﻿using Blauhaus.Analytics.Abstractions.Service;
+﻿using Blauhaus.Analytics.Abstractions;
+using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Analytics.TestHelpers;
 using Blauhaus.Analytics.TestHelpers.MockBuilders;
 using Blauhaus.Push.Abstractions.Server;
@@ -22,13 +23,13 @@ namespace Blauhaus.Push.Tests.Tests.Server._Base
             Services.AddSingleton<TSut>();
             Services.AddSingleton(x => MockNotificationHub.Object);
             Services.AddSingleton(x => MockNotificationHubClientProxy.Object);
-            Services.AddSingleton(x => MockAnalyticsService.Object);
+            Services.AddSingleton(x => MockLogger.Object);
             Services.AddSingleton(x => MockNativeNotificationExtractor.Object);
         }
 
         protected MockBuilder<IPushNotificationsHub> MockNotificationHub => Mocks.AddMock<IPushNotificationsHub>().Invoke();
         protected NotificationHubClientProxyMockBuilder MockNotificationHubClientProxy => Mocks.AddMock<NotificationHubClientProxyMockBuilder, INotificationHubClientProxy>().Invoke();
-        protected AnalyticsServiceMockBuilder MockAnalyticsService => Mocks.AddMock<AnalyticsServiceMockBuilder, IAnalyticsService>().Invoke();
+        protected AnalyticsLoggerMockBuilder<TSut> MockLogger => Mocks.AddMock<AnalyticsLoggerMockBuilder<TSut>, IAnalyticsLogger<TSut>>().Invoke();
         protected NativeNotificationExtractorMockBuilder MockNativeNotificationExtractor => Mocks.AddMock<NativeNotificationExtractorMockBuilder, INativeNotificationExtractor>().Invoke();
     }
 }

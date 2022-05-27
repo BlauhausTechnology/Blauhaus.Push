@@ -11,8 +11,8 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.A
 {
     public class HandleNotificationTappedAsyncTests : BasePushTest<AndroidPushNotificationsClientService>
     {
-        private static readonly Dictionary<string, object> AndroidIntentProperties = new Dictionary<string, object>
-            {
+        private static readonly Dictionary<string, object> AndroidIntentProperties = new()
+        {
                 {"google.delivered_priority", "ignore" },
                 {"google.sent_time", "ignore" },
                 {"google.ttl", "ignore" },
@@ -63,37 +63,8 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.A
             await Sut.HandleNotificationTappedAsync(fakeNotification);
 
             //Assert
-            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.IsAny<IPushNotification>()), Times.Never);
-            MockAnalyticsService.VerifyTrace("Payload is not a notification: ignoring");
-            MockAnalyticsService.VerifyTraceProperty("Raw Notification", fakeNotification);
+            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.IsAny<IPushNotification>()), Times.Never); 
         }
-
-
-        [Test]
-        public async Task SHOULD_log_operation_and_trace_content()
-        {
-            //Test
-            await Sut.HandleNotificationTappedAsync(AndroidIntentProperties);
-
-            //Assert
-            MockAnalyticsService.VerifyStartTrace("Push Notification Tapped");
-            MockAnalyticsService.VerifyTrace("Extracting push notification");
-            MockAnalyticsService.VerifyTraceProperty("Raw Notification", AndroidIntentProperties);
-            MockAnalyticsService.VerifyTrace("Notification processed");
-        }
-
-        [Test]
-        public async Task IF_exception_is_thrown_SHOULD_log()
-        {
-            //Arrange
-            MockPushNotificationTapHandler.Mock.Setup(x => x.HandleTapAsync(It.IsAny<IPushNotification>()))
-                .ThrowsAsync(new ArgumentException("oh no you don't"));
-
-            //Act
-            await Sut.HandleNotificationTappedAsync(AndroidIntentProperties);
-
-            //Assert
-            MockAnalyticsService.VerifyLogException<ArgumentException>("oh no you don't");
-        }
+          
     }
 }

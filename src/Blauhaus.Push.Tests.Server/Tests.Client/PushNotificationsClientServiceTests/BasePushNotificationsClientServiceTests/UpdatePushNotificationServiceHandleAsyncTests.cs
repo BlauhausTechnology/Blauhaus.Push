@@ -27,18 +27,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             //Assert
             MockSecureStorageService.VerifySetAsyncCalled("PnsHandle", "new Handle");
         }
-
-        [Test]
-        public async Task WHEN_saving_new_handle_SHOULD_log_analytics()
-        {
-            //Act
-            await Sut.UpdatePushNotificationServiceHandleAsync("new Handle");
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("PnsHandle saved", LogSeverity.Information);
-            MockAnalyticsService.VerifyTraceProperty("PnsHandle", "new Handle");
-        }
-
+         
         [Test]
         public async Task IF_value_is_same_as_previous_one_SHOULD_not_save()
         {
@@ -73,23 +62,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             //Assert
             MockSecureStorageService.Mock.Verify(x => x.SetAsync("PnsHandle", "new Handle"), Times.Once);
             MockSecureStorageService.Mock.Verify(x => x.SetAsync("PnsHandle", "even newer Handle"), Times.Once);
-        }
-        
-        [Test]
-        public async Task IF_value_is_different_than_previous_one_SHOULD_log_analytics()
-        {
-            //Arrange
-            MockSecureStorageService.Where_GetAsync_returns("new Handle");
-
-            //Act
-            await Sut.UpdatePushNotificationServiceHandleAsync("even newer Handle");
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("PnsHandle updated", LogSeverity.Information);
-            MockAnalyticsService.VerifyTraceProperty("OldPnsHandle", "new Handle");
-            MockAnalyticsService.VerifyTraceProperty("NewPnsHandle", "even newer Handle");
-        }
-        
+        } 
         [Test]
         public async Task IF_value_is_different_than_previous_one_SHOULD_update_cached_value()
         {

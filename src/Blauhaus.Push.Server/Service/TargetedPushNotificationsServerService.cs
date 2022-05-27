@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Push.Abstractions.Common;
@@ -10,22 +11,23 @@ using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Extractors;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Responses;
+using Microsoft.Extensions.Logging;
 
 namespace Blauhaus.Push.Server.Service
 {
     //this does not work on the free tier
     public class TargetedPushNotificationsServerService : ITargetedPushNotificationsServerService
     {
-        private readonly IAnalyticsService _analyticsService;
+        private readonly IAnalyticsLogger<TargetedPushNotificationsServerService> _logger;
         private readonly INativeNotificationExtractor _nativeNotificationExtractor;
         private readonly INotificationHubClientProxy _hubClientProxy;
 
         public TargetedPushNotificationsServerService(
-            IAnalyticsService analyticsService,
+            IAnalyticsLogger<TargetedPushNotificationsServerService> logger,
             INativeNotificationExtractor nativeNotificationExtractor,
             INotificationHubClientProxy hubClientProxy)
         {
-            _analyticsService = analyticsService;
+            _logger = logger;
             _nativeNotificationExtractor = nativeNotificationExtractor;
             _hubClientProxy = hubClientProxy;
         }
@@ -33,9 +35,6 @@ namespace Blauhaus.Push.Server.Service
 
         public async Task<Response> SendNotificationToTargetAsync(IPushNotification pushNotification, IDeviceTarget deviceTarget, IPushNotificationsHub hub)
         {
-            _analyticsService.TraceVerbose(this, "Send push notification to device", new Dictionary<string, object>
-                {{nameof(PushNotification), pushNotification}, {nameof(DeviceTarget), deviceTarget}});
-
             try
             {
                 _hubClientProxy.Initialize(hub);
@@ -45,14 +44,14 @@ namespace Blauhaus.Push.Server.Service
 
                 var notification = nativeNotificationResult.Value.Notification;
                 var devices = new List<string>{ deviceTarget.PushNotificationServicesHandle };
-                _analyticsService.Trace(this, "Native push notification extracted", LogSeverity.Verbose, notification.ToObjectDictionary());
+                _logger.LogTrace("Native push notification extracted {@PushNotification}", notification);
 
                 await _hubClientProxy.SendDirectNotificationAsync(notification, devices);
                 return Response.Success();
             }
             catch (Exception e)
             {
-                return _analyticsService.LogExceptionResponse(this, e, PushErrors.FailedToSendNotification);
+                return _logger.LogErrorResponse(PushErrors.FailedToSendNotification, e);
             }
         }
     }

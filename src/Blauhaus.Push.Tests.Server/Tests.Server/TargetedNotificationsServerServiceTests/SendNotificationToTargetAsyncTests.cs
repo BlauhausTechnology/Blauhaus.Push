@@ -56,19 +56,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.TargetedNotificationsServerServiceTes
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
         }
-
-        [Test]
-        public async Task SHOULD_track_operation()
-        {
-            //Act
-            await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object);
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("Send push notification to device");
-            MockAnalyticsService.VerifyTraceProperty(nameof(PushNotification), _pushNotification);
-            MockAnalyticsService.VerifyTraceProperty(nameof(DeviceTarget), _target);
-        }
-
+         
         [Test]
         public async Task SHOULD_extract_notification_for_target_platform_and_send_to_target_pnsHandle()
         {
@@ -82,21 +70,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.TargetedNotificationsServerServiceTes
             MockNativeNotificationExtractor.Mock.Verify(x=> x.ExtractNotification(RuntimePlatform.iOS, _pushNotification));
             MockNotificationHubClientProxy.Mock.Verify(x => x.SendDirectNotificationAsync(_iosNotification, It.Is<List<string>>(y => 
                 y[0] == "pnsHandle")));
-        }
-
-        [Test]
-        public async Task SHOULD_trace_extracted_notification()
-        {
-            //Arrange
-            _target = DeviceTarget.iOS("pnsHandle");
-
-            //Act
-            await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object);
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("Native push notification extracted");
-            MockAnalyticsService.VerifyTraceProperty(_iosNotification.GetType().Name, _iosNotification);
-        }
+        } 
 
         [Test]
         public async Task IF_extraction_fails_SHOULD_fail()
@@ -123,7 +97,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.TargetedNotificationsServerServiceTes
             var result = await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object);
 
             //Assert
-            result.VerifyResponseException(PushErrors.FailedToSendNotification, "Something bad happened",  MockAnalyticsService);
+            MockLogger.VerifyLogErrorResponse(PushErrors.FailedToSendNotification, result);
         }
     }
 }

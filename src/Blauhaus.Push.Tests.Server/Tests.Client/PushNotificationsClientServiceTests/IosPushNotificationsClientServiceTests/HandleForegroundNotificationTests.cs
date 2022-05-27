@@ -57,27 +57,6 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.I
         }
 
 
-        [Test]
-        public void SHOULD_log_operation_and_trace_content()
-        {
-            //Test
-            Sut.HandleForegroundNotification(IosNotification);
-
-            //Assert
-            MockAnalyticsService.VerifyStartTrace("Foreground Push Notification");
-            MockAnalyticsService.VerifyTrace("Extracting push notification");
-            MockAnalyticsService.VerifyTraceProperty("Raw Notification", IosNotification);
-            MockAnalyticsService.VerifyTrace("Notification processed");
-        }
-
-        [Test]
-        public void IF_exception_is_thrown_SHOULD_log()
-        {
-            //Act
-            Sut.HandleForegroundNotification("Won't parse");
-
-            //Assert
-            MockAnalyticsService.VerifyLogException<Exception>("Unexpected character encountered while parsing value: W. Path '', line 0, position 0.");
-        }
+     
     }
 }

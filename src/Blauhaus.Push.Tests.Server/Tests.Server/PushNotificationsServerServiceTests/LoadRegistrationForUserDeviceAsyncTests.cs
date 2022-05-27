@@ -49,18 +49,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
 
         public class NonPlatformSpecificRegistration : LoadRegistrationForUserDeviceAsyncTests
         {
-            [Test]
-            public async Task SHOULD_track_operation()
-            {
-                //Act
-                await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
-
-                //Assert
-                MockAnalyticsService.VerifyTrace("Load push notification registration for user device");
-                MockAnalyticsService.VerifyTraceProperty("UserId", "myUserId");
-                MockAnalyticsService.VerifyTraceProperty("DeviceIdentifier", "myDeviceId");
-            }
-
+            
             [Test]
             public async Task SHOULD_initialize_client()
             {
@@ -82,7 +71,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                result.VerifyResponseError(PushErrors.RegistrationDoesNotExist, MockAnalyticsService);
+                MockLogger.VerifyLogErrorResponse(PushErrors.RegistrationDoesNotExist, result);
             }
 
             [Test]

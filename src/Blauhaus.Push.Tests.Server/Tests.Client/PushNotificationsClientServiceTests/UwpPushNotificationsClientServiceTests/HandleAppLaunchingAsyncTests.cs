@@ -48,37 +48,9 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.U
             await Sut.HandleAppLaunchingAsync(string.Empty);
 
             //Assert
-            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.IsAny<IPushNotification>()), Times.Never);
-            MockAnalyticsService.Mock.Verify(x => x.LogException(It.IsAny<object>(), It.IsAny<Exception>(), It.IsAny<Dictionary<string, object>>(), 
-                It.IsAny<string>()), Times.Never);
+            MockPushNotificationTapHandler.Mock.Verify(x => x.HandleTapAsync(It.IsAny<IPushNotification>()), Times.Never); 
         }
 
-
-        [Test]
-        public void SHOULD_log_operation_and_trace_content()
-        {
-            //Test
-            Sut.HandleAppLaunchingAsync(Arguments);
-
-            //Assert
-            MockAnalyticsService.VerifyStartTrace("Push Notification Tapped");
-            MockAnalyticsService.VerifyTrace("Extracting push notification");
-            MockAnalyticsService.VerifyTraceProperty("Raw Notification", Arguments);
-            MockAnalyticsService.VerifyTrace("Notification processed");
-        }
-
-        [Test]
-        public void IF_exception_is_thrown_SHOULD_log()
-        {
-            //Arrange
-            MockPushNotificationTapHandler.Mock.Setup(x => x.HandleTapAsync(It.IsAny<IPushNotification>()))
-                .ThrowsAsync(new ArgumentException("oh no you don't"));
-
-            //Test
-            Sut.HandleAppLaunchingAsync(Arguments);
-
-            //Assert
-            MockAnalyticsService.VerifyLogException<ArgumentException>("oh no you don't");
-        }
+  
     }
 }

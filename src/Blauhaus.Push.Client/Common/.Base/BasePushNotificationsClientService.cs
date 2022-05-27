@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.Utils.Disposables;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
+using Microsoft.Extensions.Logging;
 
 namespace Blauhaus.Push.Client.Common.Base
 {
@@ -16,16 +18,16 @@ namespace Blauhaus.Push.Client.Common.Base
         private const string PnsHandleKey = "PnsHandle";
         private string _currentPnsHandle;
 
-        protected readonly IAnalyticsService AnalyticsService;
+        protected readonly IAnalyticsLogger Logger;
         private readonly ISecureStorageService _secureStorageService;
         private readonly IPushNotificationTapHandler _pushNotificationTapHandler;
 
         protected BasePushNotificationsClientService(
-            IAnalyticsService analyticsService,
+            IAnalyticsLogger logger,
             ISecureStorageService secureStorageService,
             IPushNotificationTapHandler pushNotificationTapHandler)
         {
-            AnalyticsService = analyticsService;
+            Logger = logger;
             _secureStorageService = secureStorageService;
             _pushNotificationTapHandler = pushNotificationTapHandler;
 
@@ -41,12 +43,12 @@ namespace Blauhaus.Push.Client.Common.Base
                 if (string.IsNullOrWhiteSpace(storedHandle))
                 {
                     _currentPnsHandle = string.Empty;
-                    AnalyticsService.TraceVerbose(this, "No PnsHandle found");
+                    Logger.LogInformation("No PnsHandle found in secure storage");
                 }
                 else
                 {
                     _currentPnsHandle = storedHandle;
-                    AnalyticsService.TraceVerbose(this, "PnsHandle loaded", "PnsHandle", _currentPnsHandle);
+                    Logger.LogDebug("PnsHandle loaded fro secure storage: {PnsHandler}", _currentPnsHandle);
                 }
             }
             return _currentPnsHandle;
@@ -64,15 +66,11 @@ namespace Blauhaus.Push.Client.Common.Base
             {
                 if (string.IsNullOrWhiteSpace(currentHandle))
                 {
-                    AnalyticsService.TraceInformation(this, "PnsHandle saved", "PnsHandle", pnsHandle);
+                    Logger.LogInformation("PnsHandle saved to storage: {PnsHandle}", pnsHandle);
                 }
                 else
                 {
-                    AnalyticsService.TraceInformation(this, "PnsHandle updated", new Dictionary<string, object>
-                    {
-                        { "OldPnsHandle", currentHandle },
-                        { "NewPnsHandle", pnsHandle },
-                    });
+                    Logger.LogInformation("PnsHandle updated to {PnsHandle}", pnsHandle);
                 }
                 
                 _currentPnsHandle = pnsHandle;
@@ -90,7 +88,7 @@ namespace Blauhaus.Push.Client.Common.Base
         
         private async void HandleNewForegroundNotification(object sender, NewNotificationEventArgs e)
         {
-            AnalyticsService.TraceVerbose(this, "Foreground notification being published", e.NewNotification.ToObjectDictionary("PushNotification"));
+            Logger.LogDebug("Foreground notification being published. Title {PushNotificationTitle}", e.NewNotification.Title);
             await UpdateSubscribersAsync(e.NewNotification);
         }
 
@@ -104,7 +102,7 @@ namespace Blauhaus.Push.Client.Common.Base
 
                 void HandleNewNotification(object sender, NewNotificationEventArgs e)
                 {
-                    AnalyticsService.TraceVerbose(this, "Foreground notification being published", e.NewNotification.ToObjectDictionary("PushNotification"));
+                    Logger.LogDebug("Foreground notification being published. Title {PushNotificationTitle}", e.NewNotification.Title);
                     observer.OnNext(e.NewNotification);
                 } 
                 
@@ -134,7 +132,7 @@ namespace Blauhaus.Push.Client.Common.Base
         
         protected async Task InvokeTapHandlersAsync(IPushNotification pushNotification)
         {
-            AnalyticsService.TraceVerbose(this, "BAckground notification tapped", pushNotification.ToObjectDictionary("PushNotification"));
+            Logger.LogDebug("Background notification tapped. Title {PushNotificationTitle}", pushNotification.Title);
             await _pushNotificationTapHandler.HandleTapAsync(pushNotification);
         }
 

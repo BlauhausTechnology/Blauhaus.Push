@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.Utils.Extensions;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
+using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Client.Common.Base;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Blauhaus.Push.Client.Common.Services
@@ -17,25 +20,22 @@ namespace Blauhaus.Push.Client.Common.Services
 
         public UwpPushNotificationsClientService(
             ISecureStorageService secureStorageService,
-            IAnalyticsService analyticsService,
+            IAnalyticsLogger<UwpPushNotificationsClientService> logger,
             IPushNotificationTapHandler pushNotificationTapHandler) 
-            : base(analyticsService, secureStorageService, pushNotificationTapHandler)
+            : base(logger, secureStorageService, pushNotificationTapHandler)
         {
         }
 
         public void HandleForegroundNotification(string uwpPayload)
         {
 
-            using (var _ = AnalyticsService.StartTrace(this, "Foreground Push Notification"))
+            try
             {
-                try
-                {
-                    PublishNotification(ExtractPushNotification(uwpPayload, true));
-                }
-                catch (Exception e)
-                {
-                    AnalyticsService.LogException(this, e);
-                }
+                PublishNotification(ExtractPushNotification(uwpPayload, true));
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(Error.Unexpected(), e);
             }
 
         }
@@ -43,26 +43,21 @@ namespace Blauhaus.Push.Client.Common.Services
         public async Task HandleAppLaunchingAsync(string uwpPayload)
         {
             if (!string.IsNullOrWhiteSpace(uwpPayload))
-            {
-                using (var _ = AnalyticsService.StartTrace(this, "Push Notification Tapped"))
+                try
                 {
-                    try
-                    {
-                        await InvokeTapHandlersAsync(ExtractPushNotification(uwpPayload, false));
-                    }
-                    catch (Exception e)
-                    {
-                        AnalyticsService.LogException(this, e);
-                        throw;
-                    }
+                    await InvokeTapHandlersAsync(ExtractPushNotification(uwpPayload, false));
                 }
-            }
+                catch (Exception e)
+                {
+                    Logger.LogError(Error.Unexpected(), e);
+                    throw;
+                }
         }
 
 
         private IPushNotification ExtractPushNotification(string uwpPayload, bool isWrappedInXml)
         {
-            AnalyticsService.TraceVerbose(this, "Extracting push notification", "Raw Notification", uwpPayload);
+            Logger.LogTrace("Extracting push notification {RawPushNotification}", uwpPayload);
 
             if (isWrappedInXml)
             {
@@ -103,7 +98,7 @@ namespace Blauhaus.Push.Client.Common.Services
             
             var notification = new PushNotification(type, dataProperties, title, body);
             
-            AnalyticsService.TraceVerbose(this, "Notification processed", notification.ToObjectDictionary());
+            Logger.LogTrace("Notification extracted: {@PushNotification}", notification);
 
             return notification;
         }

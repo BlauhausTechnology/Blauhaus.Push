@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Analytics.TestHelpers;
 using Blauhaus.Analytics.TestHelpers.MockBuilders;
@@ -37,7 +38,7 @@ namespace Blauhaus.Push.Tests.Tests.Client._Base
             ExceptionAwaiter = new TaskCompletionSource<Exception>(CancellationTokenSource);
 
             Services.AddSingleton(x => MockSecureStorageService.Object);
-            Services.AddSingleton(x => MockAnalyticsService.Object);
+            Services.AddSingleton(x => MockLogger.Object);
             Services.AddSingleton(x => MockPushNotificationTapHandler.Object);
 
             Services.AddSingleton<UwpPushNotificationsClientService>();
@@ -46,7 +47,7 @@ namespace Blauhaus.Push.Tests.Tests.Client._Base
         }
 
         protected SecureStorageServiceMockBuilder MockSecureStorageService => Mocks.AddMock<SecureStorageServiceMockBuilder, ISecureStorageService>().Invoke();
-        protected AnalyticsServiceMockBuilder MockAnalyticsService => Mocks.AddMock<AnalyticsServiceMockBuilder, IAnalyticsService>().Invoke();
+        protected AnalyticsLoggerMockBuilder<TSut> MockLogger => Mocks.AddMock<AnalyticsLoggerMockBuilder<TSut>, IAnalyticsLogger<TSut>>().Invoke();
         protected PushNotificationTapHandlerMockBuilder MockPushNotificationTapHandler => Mocks.AddMock<PushNotificationTapHandlerMockBuilder, IPushNotificationTapHandler>().Invoke();
     }
 }

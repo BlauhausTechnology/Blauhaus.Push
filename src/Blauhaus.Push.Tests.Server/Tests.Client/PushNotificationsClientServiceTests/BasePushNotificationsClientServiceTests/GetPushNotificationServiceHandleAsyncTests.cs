@@ -23,9 +23,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             var result = await Sut.GetPushNotificationServiceHandleAsync();
 
             //Assert
-            Assert.AreEqual("stored handle", result);
-            MockAnalyticsService.VerifyTrace("PnsHandle loaded");
-            MockAnalyticsService.VerifyTraceProperty("PnsHandle", "stored handle");
+            Assert.AreEqual("stored handle", result); 
         }
 
         [Test]
@@ -38,8 +36,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             var result = await Sut.GetPushNotificationServiceHandleAsync();
 
             //Assert
-            Assert.AreEqual(string.Empty, result);
-            MockAnalyticsService.VerifyTrace("No PnsHandle found");
+            Assert.AreEqual(string.Empty, result); 
         }
 
         [Test]

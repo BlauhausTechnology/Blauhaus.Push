@@ -47,20 +47,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
             //Assert
             MockNotificationHubClientProxy.Mock.Verify(x => x.Initialize(MockNotificationHub.Object));
         }
-
-        [Test]
-        public async Task SHOULD_track_operation()
-        {
-            //Act
-            await Sut.SendNotificationToUserDeviceAsync(_notification, _userId, _deviceIdentifier, MockNotificationHub.Object);
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("Sending push notification to user device");
-            MockAnalyticsService.VerifyTraceProperty(nameof(IPushNotification), _notification);
-            MockAnalyticsService.VerifyTraceProperty("UserId", _userId);
-            MockAnalyticsService.VerifyTraceProperty("DeviceIdentifier", _deviceIdentifier);
-        }
-
+         
         [Test]
         public async Task SHOULD_compose_tags_into_AND_clause_and_invoke_send_on_hub_client()
         {

@@ -1,21 +1,23 @@
-﻿using Blauhaus.Analytics.Abstractions.Extensions;
+﻿using Blauhaus.Analytics.Abstractions;
+using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Server;
+using Microsoft.Extensions.Logging;
 
 namespace Blauhaus.Push.Server.Extensions
 {
     public static class DeviceRegistrationExtensions
     {
-        public static bool IsNotValid(this IDeviceRegistration deviceRegistration, object sender, IAnalyticsService analyticsService, out Error error)
+        public static bool IsNotValid(this IDeviceRegistration? deviceRegistration, object sender, IAnalyticsLogger logger, out Error error)
         {
 
             if (deviceRegistration == null)
             {
                 error = PushErrors.InvalidDeviceRegistration;
-                analyticsService.TraceError(sender, error);
+                logger.LogError(error);
                 return true;
             }
 
@@ -28,7 +30,8 @@ namespace Blauhaus.Push.Server.Extensions
             if (string.IsNullOrEmpty(deviceRegistration.PushNotificationServiceHandle))
             {
                 error = PushErrors.InvalidPnsHandle;
-                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary()); 
+                logger.LogWarning("Invalid DeviceRegistration: {@DeviceRegistration}", deviceRegistration);
+                logger.LogError(error); 
                 return true;
             }
 
@@ -38,21 +41,24 @@ namespace Blauhaus.Push.Server.Extensions
                 deviceRegistration.Platform.Value != RuntimePlatform.UWP.Value)
             {
                 error = PushErrors.InvalidPlatform;
-                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary()); 
+                logger.LogWarning("Invalid DeviceRegistration: {@DeviceRegistration}", deviceRegistration);
+                logger.LogError(error); 
                 return true;
             }
 
             if (string.IsNullOrEmpty(deviceRegistration.DeviceIdentifier))
             {
                 error = PushErrors.MissingDeviceIdentifier;
-                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary());  
+                logger.LogWarning("Invalid DeviceRegistration: {@DeviceRegistration}", deviceRegistration);
+                logger.LogError(error); 
                 return true;
             }
             
             if (string.IsNullOrEmpty(deviceRegistration.UserId))
             {
                 error = PushErrors.MissingUserId;
-                analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary()); 
+                logger.LogWarning("Invalid DeviceRegistration: {@DeviceRegistration}", deviceRegistration);
+                logger.LogError(error); 
                 return true;
             }
 
@@ -64,7 +70,8 @@ namespace Blauhaus.Push.Server.Extensions
                     if (reservedStrings.Contains(templateDataProperty))
                     {
                         error = PushErrors.ReservedString(templateDataProperty);
-                        analyticsService.TraceError(sender, error, deviceRegistration.ToObjectDictionary());  
+                        logger.LogWarning("Invalid DeviceRegistration: {@DeviceRegistration}", deviceRegistration);
+                        logger.LogError(error); 
                         return true;
                     }
                 }

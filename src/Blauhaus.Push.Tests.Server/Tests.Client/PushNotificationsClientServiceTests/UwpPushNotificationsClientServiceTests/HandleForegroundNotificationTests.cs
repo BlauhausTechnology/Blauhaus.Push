@@ -59,30 +59,6 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.U
             Assert.AreEqual(1, result.DataProperties["integer"]);
             Assert.AreEqual(3, result.DataProperties.Count);
         }
-
-        [Test]
-        public void SHOULD_log_operation_and_trace_content()
-        {
-            //Test
-            Sut.HandleForegroundNotification(ForegroundNotificationWithProperties);
-
-            //Assert
-            MockAnalyticsService.VerifyStartTrace("Foreground Push Notification");
-            MockAnalyticsService.VerifyTrace("Extracting push notification");
-            MockAnalyticsService.VerifyTraceProperty("Raw Notification", ForegroundNotificationWithProperties);
-            MockAnalyticsService.VerifyTrace("Notification processed");
-
-        }
-
-        [Test]
-        public void IF_exception_is_thrown_SHOULD_log()
-        {
-            //Act
-            Sut.HandleForegroundNotification("Won't parse");
-
-            //Assert
-            MockAnalyticsService.VerifyLogException<ArgumentException>("Did not find expected beginning text of '<toast launch=\"'");
-        }
-       
+         
     }
 }

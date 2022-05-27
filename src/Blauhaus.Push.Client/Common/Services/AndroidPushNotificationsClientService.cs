@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
+using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Client.Common.Base;
+using Microsoft.Extensions.Logging;
 
 namespace Blauhaus.Push.Client.Common.Services
 {
@@ -26,64 +29,55 @@ namespace Blauhaus.Push.Client.Common.Services
 
         public AndroidPushNotificationsClientService(
             ISecureStorageService secureStorageService,
-            IAnalyticsService analyticsService, 
+            IAnalyticsLogger<AndroidPushNotificationsClientService> logger, 
             IPushNotificationTapHandler pushNotificationTapHandler) 
-            : base(analyticsService, secureStorageService, pushNotificationTapHandler)
+            : base(logger, secureStorageService, pushNotificationTapHandler)
         {
         }
         
 
         public void HandleForegroundNotification(Dictionary<string, object> androidPayload)
         {
-            using (var _ = AnalyticsService.StartTrace(this, "Foreground Push Notification"))
+            try
             {
-                try
-                {
-                    if(androidPayload ==null) throw new ArgumentNullException();
-                    PublishNotification(ExtractNotification(androidPayload));
-                }
-                catch (Exception e)
-                {
-                    AnalyticsService.LogException(this, e);
-                }
+                if(androidPayload ==null) throw new ArgumentNullException();
+                PublishNotification(ExtractNotification(androidPayload));
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(Error.Unexpected(), e);
             }
         }
 
         public async Task HandleNotificationTappedAsync(Dictionary<string, object>  androidPayload)
         {
-            using (var _ = AnalyticsService.StartTrace(this, "Push Notification Tapped"))
+            try
             {
-                try
+                if (androidPayload == null)
                 {
-                    if (androidPayload == null)
-                    {
-                        throw new ArgumentNullException();
-                    }
+                    throw new ArgumentNullException();
+                }
 
-                    if (androidPayload.ContainsKey("Template_Name"))
-                    {
-                        await InvokeTapHandlersAsync(ExtractNotification(androidPayload));
-                    }
-                    else
-                    {
-                        AnalyticsService.TraceVerbose(this, "Payload is not a notification: ignoring", 
-                            androidPayload.ToObjectDictionary("Raw Notification"));
-                    }
-                }
-                catch (Exception e)
+                if (androidPayload.ContainsKey("Template_Name"))
                 {
-                    AnalyticsService.LogException(this, e);
+                    await InvokeTapHandlersAsync(ExtractNotification(androidPayload));
                 }
+                else
+                {
+                    Logger.LogWarning("Payload is not a notification: ignoring {RawPushNotification}", androidPayload);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(Error.Unexpected(), e);
             }
         }
 
         private IPushNotification ExtractNotification(Dictionary<string, object> payload)
         {
             
-            AnalyticsService.TraceVerbose(this, "Extracting push notification", new Dictionary<string, object>
-            {
-                {"Raw Notification", payload }
-            });
+   
+            Logger.LogTrace("Extracting push notification {RawPushNotification}", payload);
 
             var type = "";
             var title = "";
@@ -126,7 +120,7 @@ namespace Blauhaus.Push.Client.Common.Services
             }
 
             var pushNotification = new PushNotification(type, data, title, body); 
-            AnalyticsService.TraceVerbose(this, "Notification processed", pushNotification.ToObjectDictionary());
+            Logger.LogTrace("Notification extracted: {@PushNotification}", pushNotification);
 
             return pushNotification;
         }

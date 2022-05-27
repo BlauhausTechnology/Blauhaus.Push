@@ -42,19 +42,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
             MockNotificationHubClientProxy.Mock.Setup(x => x.GetInstallationAsync(_installation.InstallationId))
                 .ReturnsAsync(_installation);
         }
-
-        [Test]
-        public async Task SHOULD_track_operation()
-        {
-            //Act
-            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("Deregister user device");
-            MockAnalyticsService.VerifyTraceProperty("UserId", "myUserId");
-            MockAnalyticsService.VerifyTraceProperty("DeviceIdentifier", "myDeviceId");
-        }
-
+         
         [Test]
         public async Task SHOULD_initialize_client()
         {
@@ -76,8 +64,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
             var result = await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
             //Assert
-            Assert.IsTrue(result.IsSuccess);
-            MockAnalyticsService.VerifyTrace("No installation exists for user device, so there is nothing to deregister", LogSeverity.Warning);
+            Assert.IsTrue(result.IsSuccess); 
         }
 
         [Test]
@@ -108,17 +95,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 y.InstallationId == _installation.InstallationId &&
                 y.Templates.Count == 0)));
         }
-
-        [Test]
-        public async Task SHOULD_trace_success()
-        {
-            //Act
-            await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
-
-            //Assert
-            MockAnalyticsService.VerifyTrace("Templates cleared for push notifications registration");
-        }
-
+         
 
     }
 }

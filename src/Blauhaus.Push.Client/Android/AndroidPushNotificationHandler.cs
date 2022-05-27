@@ -10,12 +10,14 @@ using Android.Content.PM;
 using Android.Gms.Common;
 using System.Linq;
 using Android.OS;
+using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Microsoft.Extensions.Options;
 using Firebase.Messaging;
 using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common.Config;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Blauhaus.Push.Client.Android
@@ -23,47 +25,44 @@ namespace Blauhaus.Push.Client.Android
     public class AndroidPushNotificationHandler
     {
 
-        private readonly IAnalyticsService _analyticsService;
+        private readonly IAnalyticsLogger<AndroidPushNotificationHandler> _logger;
         private readonly IPushNotificationsClientConfig _config;
         private readonly AndroidPushNotificationsClientService _pushNotificationsService;
 
         public AndroidPushNotificationHandler(
-            IAnalyticsService analyticsService, 
+            IAnalyticsLogger<AndroidPushNotificationHandler> logger, 
             IPushNotificationsClientService pushNotificationsService,
             IPushNotificationsClientConfig config)
         {
             _pushNotificationsService = (AndroidPushNotificationsClientService)pushNotificationsService;
-            _analyticsService = analyticsService;
+            _logger = logger;
             _config = config;
         }
 
         
         public void Initialize(Context context, Intent intent, NotificationManager notificationManager)
         {
-            using (var _ = _analyticsService.StartTrace(this, "Android Push Notifications Initialization"))
+            var resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(context);
+
+            if (resultCode != ConnectionResult.Success)
             {
-                var resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(context);
-
-                if (resultCode != ConnectionResult.Success)
+                if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
                 {
-                    if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
-                    {
-                        var error = GoogleApiAvailability.Instance.GetErrorString(resultCode);
-                        _analyticsService.TraceWarning(this, "Device does not have Google Play installed", "Error", error);
-                    }
-
-                    _analyticsService.TraceWarning(this, "Device does not have Google Play installed", "ResultCode", resultCode.ToString());
+                    var error = GoogleApiAvailability.Instance.GetErrorString(resultCode);
+                    _logger.LogWarning("Device does not have Google Play installed: {AndroidError}", error);
                 }
-
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-                {
-                    var channel = new NotificationChannel(_config.NotificationHubName, _config.NotificationHubName, NotificationImportance.Default);
-                    notificationManager.CreateNotificationChannel(channel);
-                    _analyticsService.TraceVerbose(this, "Created NotificationChannel for Android device", "BuildVersion", Build.VERSION.SdkInt.ToString());
-                }
-
-                HandleNewIntent(intent);
+                
+                _logger.LogWarning("Device does not have Google Play installed: {AndroidResultCode}", resultCode.ToString());
             }
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                var channel = new NotificationChannel(_config.NotificationHubName, _config.NotificationHubName, NotificationImportance.Default);
+                notificationManager.CreateNotificationChannel(channel);
+                _logger.LogInformation("Created NotificationChannel for Android device using build {BuildVersion}", Build.VERSION.SdkInt.ToString());
+            }
+
+            HandleNewIntent(intent);
         }
 
         public Task HandleNewTokenAsync(string updatedPnsHandle)

@@ -35,32 +35,6 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.I
                 (int) y.DataProperties["integer"] == 1)));
         }
 
-
-        [Test]
-        public async Task SHOULD_log_operation_and_trace_content()
-        {
-            //Test
-            await Sut.HandleNotificationTappedAsync(IosNotification);
-
-            //Assert
-            MockAnalyticsService.VerifyStartTrace("Push Notification Tapped");
-            MockAnalyticsService.VerifyTrace("Extracting push notification");
-            MockAnalyticsService.VerifyTraceProperty("Raw Notification", IosNotification);
-            MockAnalyticsService.VerifyTrace("Notification processed");
-        }
-
-        [Test]
-        public async Task IF_exception_is_thrown_SHOULD_log()
-        {
-            //Arrange
-            MockPushNotificationTapHandler.Mock.Setup(x => x.HandleTapAsync(It.IsAny<IPushNotification>()))
-                .ThrowsAsync(new ArgumentException("oh no you don't"));
-
-            //Act
-            await Sut.HandleNotificationTappedAsync(IosNotification);
-
-            //Assert
-            MockAnalyticsService.VerifyLogException<ArgumentException>("oh no you don't");
-        }
+         
     }
 }

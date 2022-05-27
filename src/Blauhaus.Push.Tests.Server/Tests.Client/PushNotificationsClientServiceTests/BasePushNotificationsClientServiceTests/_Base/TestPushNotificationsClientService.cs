@@ -1,4 +1,5 @@
-﻿using Blauhaus.Analytics.Abstractions.Service;
+﻿using Blauhaus.Analytics.Abstractions;
+using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common.Base;
@@ -9,9 +10,9 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
     {
         public TestPushNotificationsClientService(
             ISecureStorageService secureStorageService,
-            IAnalyticsService analyticsService,
+            IAnalyticsLogger<TestPushNotificationsClientService> logger,
             IPushNotificationTapHandler pushNotificationTapHandler) 
-            : base(analyticsService, secureStorageService, pushNotificationTapHandler)
+            : base(logger, secureStorageService, pushNotificationTapHandler)
         {
         }
     }
