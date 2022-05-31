@@ -16,7 +16,7 @@ namespace Blauhaus.Push.Client.Common.Base
     public abstract class BasePushNotificationsClientService : BasePublisher, IPushNotificationsClientService
     {
         private const string PnsHandleKey = "PnsHandle";
-        private string _currentPnsHandle;
+        private string _currentPnsHandle = string.Empty;
 
         protected readonly IAnalyticsLogger Logger;
         private readonly ISecureStorageService _secureStorageService;
