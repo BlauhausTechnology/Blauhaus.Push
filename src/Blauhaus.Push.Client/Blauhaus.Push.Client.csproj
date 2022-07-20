@@ -48,7 +48,7 @@
   </ItemGroup>
 
 <ItemGroup>
-    <PackageReference Include="Blauhaus.Common.Utils" Version="2.1.7" />
+    <PackageReference Include="Blauhaus.Common.Utils" Version="2.1.9" />
     <PackageReference Include="Blauhaus.DeviceServices" Version="1.1.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
@@ -64,7 +64,7 @@
       <Version>1.1.4.1</Version>
     </PackageReference> 
     <PackageReference Include="Xamarin.GooglePlayServices.Base">
-      <Version>117.6.0.3</Version>
+      <Version>[117.6.0.3]</Version>
     </PackageReference>
   </ItemGroup>
 
@@ -77,6 +77,9 @@
     <PackageReference Include="WindowsAzure.Messaging.Managed">
       <Version>0.1.7.9</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Common\Services\DummyPushNotificationsClientService.cs" />
   </ItemGroup> 
 
 </Project>

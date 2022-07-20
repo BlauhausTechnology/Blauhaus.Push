@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Console.Ioc;
 using Blauhaus.Common.ValueObjects.BuildConfigs;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
@@ -12,6 +13,8 @@ using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
 using Blauhaus.Push.Runner.Config.MineGame;
+using Blauhaus.Push.Runner.Config.Reveye;
+using Blauhaus.Push.Server.Extensions;
 using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Server.Ioc;
 using Microsoft.Azure.NotificationHubs;
@@ -38,22 +41,22 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                var hub = new StagingUwpHub();
+                var hub = new AspersAndroidHub();
                 
                 _pushNotificationsService = Setup(hub);
+                var registrationForUserDevice = await _pushNotificationsService.LoadRegistrationForUserDeviceAsync("f9fcbe14-b94f-4bce-b969-4eb0beb870c0", "52dab57d459926dc", hub);
 
-                var reg = await GetAllRegistrationsAsync();
+                if (registrationForUserDevice.IsSuccess && registrationForUserDevice.Value.Templates.Any())
+                {
+                    await _pushNotificationsService.SendNotificationToUserDeviceAsync(
+                        notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
+                        userId: registrationForUserDevice.Value.UserId,
+                        deviceIdentifier: registrationForUserDevice.Value.DeviceIdentifier,
+                        hub: Hub);
+                }
 
-                var myReg = await GetRegistrationsForUserAsync(hub.UserId.ToLowerInvariant());
 
-                var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
-                var registrations = await client.GetRegistrationsByChannelAsync(hub.PnsHandle, 10);
-
-                await _pushNotificationsService.SendNotificationToUserDeviceAsync(
-                    notification: new MessageNotification(title: "Hi Charles", body: "Let me know if you get this", payload: "Payload data", id: "Payload id"), 
-                    userId: hub.UserId.ToLowerInvariant(),
-                    deviceIdentifier: hub.DeviceId,
-                    hub: Hub);
+               
 
             }
             catch (Exception e)
@@ -74,6 +77,8 @@ namespace Blauhaus.Push.Runner
             var services = new ServiceCollection();
 
             services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
+            services.AddSingleton(typeof(IAnalyticsLogger<>), typeof(DummyLogger<>));
+            
 
             services.AddPushNotificationsServer();
             services.RegisterConsoleLoggerService(new ConsoleTraceListener());
@@ -126,10 +131,10 @@ namespace Blauhaus.Push.Runner
             return registrations.ToList();
         }
 
-        private static async Task<List<RegistrationDescription>> GetAllRegistrationsAsync()
+        private static async Task<List<RegistrationDescription>> GetAllRegistrationsAsync(int limit = 10)
         {
             var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
-            var registrations = await client.GetAllRegistrationsAsync(10);
+            var registrations = await client.GetAllRegistrationsAsync(limit);
             var count = 0;
             foreach (var reg in registrations)
             {
@@ -142,6 +147,26 @@ namespace Blauhaus.Push.Runner
             return registrations.ToList();
         }
 
+        private static async Task<Installation> GetInstallationAsync(RegistrationDescription registrationDescription)
+        {
+            
+            var device = registrationDescription.Tags.First(x => x.StartsWith("Device"));
+            var deviceId = device.Replace("DeviceIdentifier_", "");
+            
+            var user = registrationDescription.Tags.First(x => x.StartsWith("User"));
+            var userId = user.Replace("UserId_", "");
+            var installationId = $"{userId}___{deviceId}";
+
+            var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
+            var installation = await client.GetInstallationAsync(installationId);
+            return installation;
+        }
+        private static async Task ClearAsync(Installation installation)
+        {
+            var client = NotificationHubClient.CreateClientFromConnectionString(ConnectionString, NotificationHubPath);
+            installation.Templates = new Dictionary<string, InstallationTemplate>();
+            await client.CreateOrUpdateInstallationAsync(installation);
+        }
         private static async Task DeleteAllRegistrationsAsync()
         {
             //TODO NB when deleting a registration you cannot use the same device Id again, so we should actually never do this in production
