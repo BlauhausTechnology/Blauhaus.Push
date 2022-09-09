@@ -1,5 +1,4 @@
-﻿using Blauhaus.DeviceServices.Common.Ioc;
-using Blauhaus.Push.Abstractions.Client;
+﻿using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common.Config;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -27,7 +26,6 @@ namespace Blauhaus.Push.Client.Common.Ioc
             where THandler : class,  IPushNotificationTapHandler
         {
             
-            services.AddDeviceServices();
             services.TryAddSingleton<THandler>();
             services.AddSingleton<IPushNotificationTapHandler, THandler>();
             services.AddTransient<IPushNotificationsClientConfig, TConfig>();
