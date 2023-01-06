@@ -59,19 +59,31 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-        dotnet pack ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -f netstandard2.0 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -f net7.0 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f netstandard2.0 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f Xamarin.iOS10 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f MonoAndroid10.0 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f uap10.0.19041 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0-ios -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0-android -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0-windows10.0.19041 -c Release -p:PublishReadyToRun=false -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.Server/Blauhaus.Push.Server.csproj -f net7.0 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
-        dotnet pack ./src/Blauhaus.Push.TestHelpers/Blauhaus.Push.TestHelpers.csproj -f net7.0 -c Release -o $(build.sourcesdirectory) -p:Version=$(VersionName)
+        dotnet publish ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -f netstandard2.0 -c Release
+        dotnet publish ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -f net7.0 -c Release 
+        dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f netstandard2.0 -c Release 
+        #dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f Xamarin.iOS10 -c Release 
+        #dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f MonoAndroid10.0 -c Release 
+        #dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f uap10.0.19041 -c Release 
+        dotnet publish ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0 -c Release 
+        dotnet publish ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0-ios -c Release 
+        dotnet publish ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0-android -c Release 
+        dotnet publish ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0-windows10.0.19041 
+        dotnet publish ./src/Blauhaus.Push.Server/Blauhaus.Push.Server.csproj -f net7.0 -c Release 
+        dotnet publish ./src/Blauhaus.Push.TestHelpers/Blauhaus.Push.TestHelpers.csproj -f net7.0 -c Release 
  
+- task: Bash@3
+  displayName: Pack
+  inputs:
+    targetType: 'inline'
+    script: | 
+        dotnet pack ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=${VERSION_NAME} --no-build
+        dotnet pack ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=${VERSION_NAME} --no-build
+        dotnet pack ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=${VERSION_NAME} --no-build
+        dotnet pack ./src/Blauhaus.Push.Server/Blauhaus.Push.Server.csproj -f net7.0 -c Release --output $(build.sourcesdirectory) -p:PackageVersion=${VERSION_NAME} --no-build
+        dotnet pack ./src/Blauhaus.Push.TestHelpers/Blauhaus.Push.TestHelpers.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=${VERSION_NAME} --no-build
+ 
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(build.sourcesdirectory)'
