@@ -7,6 +7,7 @@ pool:
 variables:
   solution: 'src\Blauhaus.Push.sln'
   buildPlatform: 'Any CPU'
+  DotNetVersion: 7.0.100
   VersionName: $[replace(variables['Build.SourceBranchName'], 'refs/heads/release/', '')]
   buildConfiguration: 'Release'
   appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
