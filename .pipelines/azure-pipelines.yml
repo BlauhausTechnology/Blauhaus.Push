@@ -14,6 +14,7 @@ steps:
 - powershell: Write-Host "Branch Name $(Build.SourceBranchName)"
 
 - task: CmdLine@2
+  displayName: Install MAUI
   inputs:
     script: 'dotnet workload install maui'
 
@@ -24,12 +25,19 @@ steps:
     script: |
         dotnet restore '$(solution)' -p:PublishReadyToRun=true 
 
-- task: VSBuild@1
+- task: Bash@3
+  displayName: Build
   inputs:
-    platform: '$(buildPlatform)'
-    solution: '$(solution)'
-    configuration: '$(buildConfiguration)'
-    msbuildArgs: '/t:restore;build;pack /p:PackageVersion=$(Build.SourceBranchName) /p:PackageOutputPath=$(build.artifactstagingdirectory)/public  /p:AssemblyFileVersion=$(Build.SourceBranchName)'
+    targetType: 'inline'
+    script: | 
+        dotnet publish '$(solution)' -c Release
+
+#- task: VSBuild@1
+#  inputs:
+#    platform: '$(buildPlatform)'
+#    solution: '$(solution)'
+#    configuration: '$(buildConfiguration)'
+#    msbuildArgs: '/t:restore;build;pack /p:PackageVersion=$(Build.SourceBranchName) /p:PackageOutputPath=$(build.artifactstagingdirectory)/public  /p:AssemblyFileVersion=$(Build.SourceBranchName)'
 
 - task: CopyFiles@2
   inputs:
