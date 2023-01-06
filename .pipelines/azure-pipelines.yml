@@ -30,7 +30,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-        dotnet publish '$(solution)' -c Release
+        dotnet build '$(solution)' -c Release
 
 #- task: VSBuild@1
 #  inputs:
