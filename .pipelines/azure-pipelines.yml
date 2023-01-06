@@ -43,7 +43,6 @@ steps:
     configuration: Release
     msbuildArgs: '-f uap10.0.19041 -o $(build.sourcesdirectory)'
 
-
 - task: Bash@3
   displayName: Build
   inputs:

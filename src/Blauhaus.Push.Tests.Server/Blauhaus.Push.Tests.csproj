@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> 
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild> 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
