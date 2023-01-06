@@ -1,21 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild> 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blauhaus.Analytics.TestHelpers" Version="1.9.11" />
-    <PackageReference Include="Blauhaus.DeviceServices.TestHelpers" Version="1.1.19" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Blauhaus.Analytics.TestHelpers" Version="2.0.2" />
+    <PackageReference Include="Blauhaus.DeviceServices.TestHelpers" Version="1.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="nunit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1">
+    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
   </ItemGroup>
 
   <ItemGroup>

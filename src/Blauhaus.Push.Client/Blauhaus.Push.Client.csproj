@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;Xamarin.iOS10;MonoAndroid10.0;uap10.0.19041</TargetFrameworks>
-		<LangVersion>8</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
@@ -48,11 +48,11 @@
   </ItemGroup>
 
 <ItemGroup>
-    <PackageReference Include="Blauhaus.Common.Utils" Version="2.1.15" />
-    <PackageReference Include="Blauhaus.DeviceServices.Abstractions" Version="1.1.19" />
+    <PackageReference Include="Blauhaus.Common.Utils" Version="2.2.8" />
+    <PackageReference Include="Blauhaus.DeviceServices.Abstractions" Version="1.2.2" />
     <PackageReference Include="Blauhaus.Ioc.Abstractions" Version="1.5.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
