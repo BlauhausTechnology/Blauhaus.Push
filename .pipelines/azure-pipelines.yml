@@ -23,7 +23,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        dotnet restore '$(solution)' -p:PublishReadyToRun=true 
+        dotnet restore '$(solution)'
 
 - task: Bash@3
   displayName: Build
