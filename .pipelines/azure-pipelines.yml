@@ -84,16 +84,16 @@ steps:
         dotnet pack ./src/Blauhaus.Push.TestHelpers/Blauhaus.Push.TestHelpers.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=${VERSION_NAME} --no-build
  
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(build.sourcesdirectory)'
-    Contents: '**\bin\$(BuildConfiguration)\**\*.nupkg'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+#- task: CopyFiles@2
+#  inputs:
+#    SourceFolder: '$(build.sourcesdirectory)'
+#    Contents: '**\bin\$(BuildConfiguration)\**\*.nupkg'
+#    TargetFolder: '$(build.artifactstagingdirectory)'
 
 - task: NuGetCommand@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    packagesToPush: '$(build.sourcesdirectory)/**/*.nupkg;!$(build.sourcesdirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'Blauhaus Nuget'
 
