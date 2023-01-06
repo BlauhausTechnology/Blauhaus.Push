@@ -25,23 +25,23 @@ steps:
     script: |
         dotnet restore '$(solution)' 
 
-#- task: MSBuild@1
-#  inputs:
-#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-#    configuration: Release
-#    msbuildArgs: '-f Xamarin.iOS10 -o $(build.sourcesdirectory)'
+- task: MSBuild@1
+  inputs:
+    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+    configuration: Release
+    msbuildArgs: '/p:TargetFramework=Xamarin.iOS10 /t:restore;build;pack /p:PackageVersion=$(Branch Name) /p:PackageOutputPath=$(appxPackageDir)'
     
-#- task: MSBuild@1
-#  inputs:
-#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-#    configuration: Release
-#    msbuildArgs: 'MonoAndroid10.0 -o $(build.sourcesdirectory)'
+- task: MSBuild@1
+  inputs:
+    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+    configuration: Release
+    msbuildArgs: '/p:TargetFramework=MonoAndroid10.0 /t:restore;build;pack /p:PackageVersion=$(Branch Name) /p:PackageOutputPath=$(appxPackageDir)'
     
-#- task: MSBuild@1
-#  inputs:
-#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-#    configuration: Release
-#    msbuildArgs: '-f uap10.0.19041 -o $(build.sourcesdirectory)'
+- task: MSBuild@1
+  inputs:
+    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+    configuration: Release
+    msbuildArgs: '/p:TargetFramework=uap10.0.19041 /t:restore;build;pack /p:PackageVersion=$(Branch Name) /p:PackageOutputPath=$(appxPackageDir)''
 
 - task: Bash@3
   displayName: Build
