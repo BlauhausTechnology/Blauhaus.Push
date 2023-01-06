@@ -23,27 +23,18 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-        dotnet restore '$(solution)'
+        dotnet restore '$(solution)' 
 
-- task: DotNetCoreCLI@2
+- task: Bash@3
+  displayName: Build
   inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/*.csproj'
-
-#- task: Bash@3
-#  displayName: Build
-#  inputs:
-#    targetType: 'inline'
-#    script: | 
-#        dotnet publish Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj -f net7.0 -c Release -o $(build.sourcesdirectory)
-#        dotnet publish Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj -f net7.0-ios -c Release -o $(build.sourcesdirectory)
-#        dotnet publish Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj -f net7.0-android -c Release -o $(build.sourcesdirectory)
-#        dotnet publish Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj -f net7.0-windows10.0.19041 -c Release -o $(build.sourcesdirectory)
-#        dotnet publish Blauhaus.Push.Client\Blauhaus.Push.Client.csproj -f netstandard2.0 -c Release -o $(build.sourcesdirectory)
-#        dotnet publish Blauhaus.Push.Abstractions\Blauhaus.Push.Abstractions.csproj -f netstandard2.0 -c Release -o $(build.sourcesdirectory)
-#        dotnet publish Blauhaus.Push.Server\Blauhaus.Push.Server.csproj -f net7.0 -c Release -o $(build.sourcesdirectory)
-#        dotnet publish Blauhaus.Push.TestHelpers\Blauhaus.Push.TestHelpers.csproj -f net7.0 -c Release -o $(build.sourcesdirectory)
+    targetType: 'inline'
+    script: | 
+        dotnet publish Blauhaus.Push.Client.sln -f net7.0 -c Release -o $(build.sourcesdirectory)
+        dotnet publish Blauhaus.Push.Client.sln -f net7.0-ios -c Release -o $(build.sourcesdirectory)
+        dotnet publish Blauhaus.Push.Client.sln -f net7.0-android -c Release -o $(build.sourcesdirectory)
+        dotnet publish Blauhaus.Push.Client.sln -f net7.0-windows10.0.19041 -c Release -o $(build.sourcesdirectory)
+        dotnet publish Blauhaus.Push.Client.sln -f netstandard2.0 -c Release -o $(build.sourcesdirectory)
 
 #- task: VSBuild@1
 #  inputs:
