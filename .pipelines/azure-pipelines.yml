@@ -30,11 +30,12 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-        dotnet publish Blauhaus.Push.Client.sln -f net7.0 -c Release -o $(build.sourcesdirectory)
-        dotnet publish Blauhaus.Push.Client.sln -f net7.0-ios -c Release -o $(build.sourcesdirectory)
-        dotnet publish Blauhaus.Push.Client.sln -f net7.0-android -c Release -o $(build.sourcesdirectory)
-        dotnet publish Blauhaus.Push.Client.sln -f net7.0-windows10.0.19041 -c Release -o $(build.sourcesdirectory)
-        dotnet publish Blauhaus.Push.Client.sln -f netstandard2.0 -c Release -o $(build.sourcesdirectory)
+        cd src
+        dotnet publish Blauhaus.Push.sln -f netstandard2.0 -c Release 
+        dotnet publish Blauhaus.Push.sln -f net7.0 -c Release 
+        dotnet publish Blauhaus.Push.sln -f net7.0-ios -c Release 
+        dotnet publish Blauhaus.Push.sln -f net7.0-android -c Release 
+        dotnet publish Blauhaus.Push.sln -f net7.0-windows10.0.19041 
 
 #- task: VSBuild@1
 #  inputs:
