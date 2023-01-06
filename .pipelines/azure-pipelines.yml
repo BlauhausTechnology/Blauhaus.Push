@@ -33,36 +33,35 @@ steps:
     script: |
         dotnet restore '$(solution)' 
 
-#- task: MSBuild@1
-#  inputs:
-#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-#    configuration: 'Release'
-#    clean: true
-#    msbuildArgs: '/p:TargetFramework=Xamarin.iOS10 /t:restore;build;pack /p:Version=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
+- task: MSBuild@1
+  inputs:
+    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+    configuration: 'Release'
+    msbuildArgs: '/p:TargetFramework=netstandard2.0 /t:restore;build;pack /p:Version=$(VersionName) /p:PackageOutputPath=$(build.sourcesdirectory)'
+ 
+- task: MSBuild@1
+  inputs:
+    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+    configuration: 'Release'
+    msbuildArgs: '/p:TargetFramework=Xamarin.iOS10 /t:restore;build;pack /p:Version=$(VersionName) /p:PackageOutputPath=$(build.sourcesdirectory)'
     
-#- task: MSBuild@1
-#  inputs:
-#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-#    configuration: 'Release'
-#    clean: true
-#    msbuildArgs: '/p:TargetFramework=MonoAndroid10.0 /t:restore;build;pack /p:Version=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
+- task: MSBuild@1
+  inputs:
+    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+    configuration: 'Release'
+    msbuildArgs: '/p:TargetFramework=MonoAndroid10.0 /t:restore;build;pack /p:Version=$(VersionName) /p:PackageOutputPath=$(build.sourcesdirectory)'
     
-#- task: MSBuild@1
-#  inputs:
-#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-#    configuration: 'Release'
-#    clean: true
-#    msbuildArgs: '/p:TargetFramework=uap10.0.19041 /t:restore;build;pack /p:Version=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
+- task: MSBuild@1
+  inputs:
+    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+    configuration: 'Release'
+    msbuildArgs: '/p:TargetFramework=uap10.0.19041 /t:restore;build;pack /p:Version=$(VersionName) /p:PackageOutputPath=$(build.sourcesdirectory)'
 
 - task: Bash@3
   displayName: Build
   inputs:
     targetType: 'inline'
-    script: | 
-        #dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f netstandard2.0 -c Release 
-        #dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f Xamarin.iOS10 -c Release 
-        #dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f MonoAndroid10.0 -c Release 
-        #dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f uap10.0.19041 -c Release 
+    script: |  
         dotnet publish ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -f netstandard2.0 -c Release
         dotnet publish ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -f net7.0 -c Release 
         dotnet publish ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -f netstandard2.0 -c Release 
@@ -78,7 +77,6 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-        #dotnet pack ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=$(VersionName) --no-build
         dotnet pack ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=$(VersionName) --no-build
         dotnet pack ./src/Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=$(VersionName) --no-build
         dotnet pack ./src/Blauhaus.Push.Server/Blauhaus.Push.Server.csproj -c Release --output $(build.sourcesdirectory) -p:PackageVersion=$(VersionName) --no-build
