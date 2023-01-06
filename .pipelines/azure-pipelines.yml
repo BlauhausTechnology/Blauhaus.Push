@@ -1,5 +1,5 @@
 trigger:
-- release/paused
+- release/*
 
 pool:
   vmImage: 'windows-2022'
@@ -30,9 +30,6 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-        dotnet build .\src\Blauhaus.Push.sln --configuration Release
-        dotnet pack .\src\Blauhaus.Push.Abstractions\Blauhaus.Push.Abstractions.csproj -p:PackageVersion=$(Build.SourceBranchName) --no-build --output $(build.sourcesdirectory) --configuration Release 
-
         dotnet publish Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj -f net7.0-ios -c Release -o $(build.sourcesdirectory)
         dotnet publish Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj -f net7.0-android -c Release -o $(build.sourcesdirectory)
         dotnet publish Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj -f net7.0--windows10.0.19041 -c Release -o $(build.sourcesdirectory)
