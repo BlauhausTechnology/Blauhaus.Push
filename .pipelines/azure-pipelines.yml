@@ -32,26 +32,26 @@ steps:
     script: |
         dotnet restore '$(solution)' 
 
-- task: MSBuild@1
-  inputs:
-    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-    configuration: 'Release'
-    clean: true
-    msbuildArgs: '/p:TargetFramework=Xamarin.iOS10 /t:restore;build;pack /p:PackageVersion=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
+#- task: MSBuild@1
+#  inputs:
+#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+#    configuration: 'Release'
+#    clean: true
+#    msbuildArgs: '/p:TargetFramework=Xamarin.iOS10 /t:restore;build;pack /p:PackageVersion=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
     
-- task: MSBuild@1
-  inputs:
-    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-    configuration: 'Release'
-    clean: true
-    msbuildArgs: '/p:TargetFramework=MonoAndroid10.0 /t:restore;build;pack /p:PackageVersion=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
+#- task: MSBuild@1
+#  inputs:
+#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+#    configuration: 'Release'
+#    clean: true
+#    msbuildArgs: '/p:TargetFramework=MonoAndroid10.0 /t:restore;build;pack /p:PackageVersion=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
     
-- task: MSBuild@1
-  inputs:
-    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
-    configuration: 'Release'
-    clean: true
-    msbuildArgs: '/p:TargetFramework=uap10.0.19041 /t:restore;build;pack /p:PackageVersion=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
+#- task: MSBuild@1
+#  inputs:
+#    solution: './src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj'
+#    configuration: 'Release'
+#    clean: true
+#    msbuildArgs: '/p:TargetFramework=uap10.0.19041 /t:restore;build;pack /p:PackageVersion=$(VersionName) /p:PackageOutputPath=$(appxPackageDir)'
 
 - task: Bash@3
   displayName: Build
