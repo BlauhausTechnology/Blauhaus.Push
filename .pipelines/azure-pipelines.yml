@@ -1,5 +1,5 @@
 trigger:
-- release/*
+- release/paused
 
 pool:
   vmImage: 'windows-2022'
