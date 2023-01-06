@@ -30,7 +30,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-        dotnet build '$(solution)' -c Release
+        dotnet publish Blauhaus.Push.Client.Maui/Blauhaus.Push.Client.Maui.csproj -f net7.0-ios -c Release -o $(build.sourcesdirectory)
 
 #- task: VSBuild@1
 #  inputs:
