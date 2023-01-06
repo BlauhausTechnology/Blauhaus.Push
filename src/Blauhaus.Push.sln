@@ -18,10 +18,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FEADE8DB-5E2C-4505-9001-76390F791072}"
 	ProjectSection(SolutionItems) = preProject
 		..\.pipelines\azure-pipelines.yml = ..\.pipelines\azure-pipelines.yml
+		..\.github\workflows\blauhaus.yml = ..\.github\workflows\blauhaus.yml
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blauhaus.Push.Client.Maui", "Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj", "{E15CFB1C-FA8D-4865-AD44-B14151992D80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blauhaus.Push.Client.Maui", "Blauhaus.Push.Client.Maui\Blauhaus.Push.Client.Maui.csproj", "{E15CFB1C-FA8D-4865-AD44-B14151992D80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
