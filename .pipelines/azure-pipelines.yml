@@ -21,10 +21,10 @@ steps:
     packageType: 'sdk'
     version: '$(DotNetVersion)'
 
-- task: CmdLine@2
-  displayName: Install MAUI
-  inputs:
-    script: 'dotnet workload install maui'
+#- task: CmdLine@2
+#  displayName: Install MAUI
+#  inputs:
+#    script: 'dotnet workload install maui'
 
 - task: Bash@3
   displayName: Restore nuget
