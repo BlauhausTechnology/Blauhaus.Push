@@ -17,11 +17,12 @@ steps:
   inputs:
     script: 'dotnet workload install maui'
 
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
+- task: Bash@3
+  displayName: Restore nuget
   inputs:
-    restoreSolution: '$(solution)'
+    targetType: 'inline'
+    script: |
+        dotnet restore '$(solution)' -p:PublishReadyToRun=true 
 
 - task: VSBuild@1
   inputs:
