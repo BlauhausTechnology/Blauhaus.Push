@@ -18,7 +18,7 @@ jobs:
         echo ${env:Configuration}
         echo ${env:SolutionPath}  
         echo ${env:VersionName}
-        echo${env:GITHUB_REF_NAME}
+        echo ${env:GITHUB_REF_NAME}
      - uses: actions/checkout@v2
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
