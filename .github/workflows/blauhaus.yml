@@ -28,6 +28,7 @@ jobs:
          dotnet workload install maui --ignore-failed-sources  
      - name: Build NuGet Package
        run: |
+         echo $SolutionPath
          dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME  
         
      - name: Deploy NuGet Package
