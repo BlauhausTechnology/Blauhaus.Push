@@ -5,7 +5,7 @@ on:
     - release/*
 
 env:
-  SolutionPath: ./src/Blauhaus.Blauhaus.sln 
+  SolutionPath: ./src/Blauhaus.Push.sln 
 
 jobs:
   
@@ -39,8 +39,7 @@ jobs:
 
   build_windows:
      runs-on: windows-latest
-     env: 
-       SolutionPath: ./src/Blauhaus.Push.sln
+     env:  
        Configuration: 'Release_Xamarin'
      steps:
      - uses: actions/checkout@v2
