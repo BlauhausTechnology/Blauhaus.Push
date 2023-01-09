@@ -12,6 +12,7 @@ jobs:
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release_Xamarin'
      steps:
+     - uses: actions/checkout@v2
      - name: Set Version
        run: |
         npm install @actions/core --save
@@ -22,7 +23,6 @@ jobs:
         echo ${env:SolutionPath} 
         echo ${env:VersionName}
         echo ${env:VERSION_NAME}
-     - uses: actions/checkout@v2
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
        with:
@@ -43,6 +43,7 @@ jobs:
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release'
      steps:
+     - uses: actions/checkout@v2
      - name: Set Version
        run: |
         npm install @actions/core --save
@@ -52,7 +53,6 @@ jobs:
         echo $Configuration   
         echo $SolutionPath  
         echo ${VERSION_NAME}
-     - uses: actions/checkout@v2
      - uses: actions/setup-dotnet@v1
        with:
          dotnet-version: '7.0.x'
