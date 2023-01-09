@@ -6,6 +6,32 @@ on:
 
 jobs:
   
+  build_macos:
+     runs-on: macos-latest
+     env: 
+       SolutionPath: ./src/Blauhaus.Push.sln
+       Configuration: 'Release'
+     steps:
+     - uses: actions/checkout@v2
+     - name: Set Version
+       run: |
+        npm install @actions/core --save
+        node ./scripts/getversion.js           
+     - uses: actions/setup-dotnet@v1
+       with:
+         dotnet-version: '7.x'
+         include-prerelease: true
+     - name: Install MAUI Workloads
+       run: |
+         dotnet workload install maui --ignore-failed-sources  
+     - name: Build NuGet Package
+       run: |
+         dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME
+        
+     - name: Deploy NuGet Package
+       run: |
+         dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+
   build_windows:
      runs-on: windows-latest
      env: 
@@ -20,7 +46,7 @@ jobs:
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
        with:
-         dotnet-version: '7.0.x'
+         dotnet-version: '7.x'
          include-prerelease: true 
      - name: MS Build
        run: | 
@@ -28,31 +54,6 @@ jobs:
          msbuild /m /p:Configuration=${env:Configuration} /t:restore /p:Version=${env:VERSION_NAME} ${env:SolutionPath}
      - name: Deploy NuGet Package
        run: |
-         dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+         dotnet nuget push /Users/runner/work/Blauhaus.Push/Blauhaus.Push/Blauhaus.Push.Client.Xamarin.${env:VERSION_NAME}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
 
-  build_macos:
-     runs-on: macos-latest
-     env: 
-       SolutionPath: ./src/Blauhaus.Push.sln
-       Configuration: 'Release'
-     steps:
-     - uses: actions/checkout@v2
-     - name: Set Version
-       run: |
-        npm install @actions/core --save
-        node ./scripts/getversion.js           
-     - uses: actions/setup-dotnet@v1
-       with:
-         dotnet-version: '7.0.x'
-         include-prerelease: true
-     - name: Install MAUI Workloads
-       run: |
-         dotnet workload install maui --ignore-failed-sources  
-     - name: Build NuGet Package
-       run: |
-         dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME
-        
-     - name: Deploy NuGet Package
-       run: |
-         dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
    
