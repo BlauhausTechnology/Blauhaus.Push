@@ -21,7 +21,6 @@ jobs:
        run: |
         echo ${env:Configuration}
         echo ${env:SolutionPath} 
-        echo ${env:VersionName}
         echo ${env:VERSION_NAME}
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
@@ -32,7 +31,7 @@ jobs:
        run: |
         dotnet workload install maui --ignore-failed-sources 
      - name: MS Build
-       run: msbuild /m /p:Configuration={Configuration} /t:restore /p:Version=${VersionName} ${SolutionPath}
+       run: msbuild /m /p:Configuration={env:Configuration} /t:restore /p:Version=${env:VERSION_NAME} ${env:SolutionPath}
      - name: Deploy NuGet Package
        run: |
          dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
@@ -62,7 +61,7 @@ jobs:
         dotnet workload install maui --ignore-failed-sources  
      - name: Build NuGet Package
        run: |
-        dotnet build ${SolutionPath} --configuration ${Configuration}-p:Version=${VersionName}
+        dotnet build ${SolutionPath} --configuration ${Configuration}-p:Version=${VERSION_NAME}
         
      - name: Deploy NuGet Package
        run: |
