@@ -13,10 +13,10 @@ jobs:
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release_Xamarin'
      steps:
-     - name: Set Version
-       run: |
-        npm install @actions/core --save
-        node ./scripts/getversion.js
+     - name: Extract branch name
+       shell: bash
+       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/release/})"
+       id: extract_branch
      - name: Environment
        run: |
         echo ${env:Configuration}
@@ -24,6 +24,7 @@ jobs:
         echo ${env:SolutionPath  
         echo ${env:VersionName}
         echo ${env:GITHUB_REF##*/}
+        echo ${env:steps.vars.outputs.branch}
      - uses: actions/checkout@v2
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
@@ -46,17 +47,17 @@ jobs:
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release'
      steps:
-     - name: Set Version
-       run: |
-        npm install @actions/core --save
-        node ./scripts/getversion.js
+     - name: Extract branch name
+       shell: bash
+       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/release/})"
+       id: extract_branch
      - name: Environment
        run: |
         echo $Configuration  
         echo $VERSION_NAME
         echo $SolutionPath  
         echo $VersionName  
-        echo $GITHUB_REF##*/
+        echo ${{ steps.vars.outputs.branch }}
      - uses: actions/checkout@v2
      - uses: actions/setup-dotnet@v1
        with:
