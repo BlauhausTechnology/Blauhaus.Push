@@ -28,6 +28,32 @@ jobs:
        run: |
          dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
 
+  build_macos:
+     runs-on: macos-latest
+     env:
+       VersionName: ${GITHUB_REF##*/}
+       SolutionPath: ./src/Blauhaus.DeviceServices.sln
+       Configuration: 'Release'
+     steps:
+     - uses: actions/checkout@v2
+     - uses: microsoft/setup-msbuild@v1.0.2
+     - uses: actions/setup-dotnet@v1
+       with:
+         dotnet-version: '7.0.x'
+         include-prerelease: true
+     - name: Install MAUI Workloads
+       run: |
+        dotnet workload install maui --ignore-failed-sources  
+     - name: Build NuGet Package
+       run: |
+        dotnet build $(SolutionPath) --configuration $(Configuration)-p:Version=$VersionNAme
+        
+     - name: Deploy NuGet Package
+       run: |
+         dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+  
+
+
   #build_windows:
   #   runs-on: windows-latest
   #   env:
