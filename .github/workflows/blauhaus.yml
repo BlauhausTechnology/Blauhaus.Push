@@ -9,16 +9,21 @@ jobs:
   build_windows:
      runs-on: windows-latest
      env:
-       VersionName: ${env:GITHUB_REF_NAME}
+       VersionName: ${GITHUB_REF##*/}
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release_Xamarin'
      steps:
+     - name: Set Version
+       run: |
+        npm install @actions/core --save
+        node ./scripts/getversion.js
      - name: Environment
        run: |
         echo ${env:Configuration}
-        echo ${env:SolutionPath}  
+        echo ${env:VERSION_NAME}
+        echo ${env:SolutionPath  
         echo ${env:VersionName}
-        echo ${env:GITHUB_REF_NAME}
+        echo ${env:GITHUB_REF##*/}
      - uses: actions/checkout@v2
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
@@ -37,16 +42,21 @@ jobs:
   build_macos:
      runs-on: macos-latest
      env:
-       VersionName: $GITHUB_REF_NAME
+       VersionName: ${GITHUB_REF##*/}
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release'
      steps:
+     - name: Set Version
+       run: |
+        npm install @actions/core --save
+        node ./scripts/getversion.js
      - name: Environment
        run: |
         echo $Configuration  
+        echo $VERSION_NAME
         echo $SolutionPath  
         echo $VersionName  
-        echo $GITHUB_REF_NAME  
+        echo $GITHUB_REF##*/
      - uses: actions/checkout@v2
      - uses: actions/setup-dotnet@v1
        with:
