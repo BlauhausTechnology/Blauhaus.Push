@@ -9,7 +9,7 @@ jobs:
   build_windows:
      runs-on: windows-latest
      env:
-       VersionName: ${GITHUB_REF##*/}
+       VersionName: ${env:GITHUB_REF_NAME}
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release_Xamarin'
      steps:
@@ -36,7 +36,7 @@ jobs:
   build_macos:
      runs-on: macos-latest
      env:
-       VersionName: ${GITHUB_REF##*/}
+       VersionName: $GITHUB_REF_NAME
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release'
      steps:
