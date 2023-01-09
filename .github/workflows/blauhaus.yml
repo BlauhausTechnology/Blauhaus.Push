@@ -2,7 +2,7 @@ name: Blauhaus Packages
 on:
   push:
     branches:
-    - release/-
+    - release/*
 
 jobs:
 
