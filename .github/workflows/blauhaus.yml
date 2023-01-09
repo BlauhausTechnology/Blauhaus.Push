@@ -23,10 +23,8 @@ jobs:
         node ./scripts/getversion.js
      - name: Add MSBuild to PATH
        uses: microsoft/setup-msbuild@v1.0.2
-     - name: Build
-       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+     - name: MS Build
+       run: msbuild /m /p:Configuration=Release ./src/Blauhaus.Push.sln
      - name: Build NuGet Package
        run: |
         dotnet build ./src/Blauhaus.Push.sln --configuration Release
