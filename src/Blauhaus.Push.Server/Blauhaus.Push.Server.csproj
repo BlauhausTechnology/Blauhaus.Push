@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild> 
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild> 
   </PropertyGroup>
 
   <ItemGroup>
