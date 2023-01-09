@@ -4,11 +4,11 @@ using Blauhaus.Common.Utils.Disposables;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 
-namespace Blauhaus.Push.Client.Common.Services
+namespace Blauhaus.Push.Client.Services
 {
     public class DummyPushNotificationsClientService : BasePublisher, IPushNotificationsClientService
     {
-        public Task<IDisposable> SubscribeAsync(Func<IPushNotification, Task> handler, Func<IPushNotification, bool>? filter = null)
+        public Task<IDisposable> SubscribeAsync(Func<IPushNotification, Task> handler, Func<IPushNotification, bool> filter = null)
         {
             return Task.FromResult(AddSubscriber(handler, filter));
         }
@@ -18,6 +18,6 @@ namespace Blauhaus.Push.Client.Common.Services
             return new ValueTask<string>(string.Empty);
         }
 
-        public event EventHandler<NewNotificationEventArgs>? NewNotificationEvent;
+        public event EventHandler<NewNotificationEventArgs> NewNotificationEvent;
     }
 }

@@ -8,9 +8,9 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Core;
 using System.Diagnostics;
-using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common.Config;
+using Blauhaus.Push.Client.Services;
 
 namespace Blauhaus.Push.Client.UWP
 {

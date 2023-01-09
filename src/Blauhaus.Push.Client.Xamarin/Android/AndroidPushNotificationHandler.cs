@@ -14,9 +14,9 @@ using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Extensions;
 using Microsoft.Extensions.Options;
 using Firebase.Messaging;
-using Blauhaus.Push.Client.Common.Services;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common.Config;
+using Blauhaus.Push.Client.Services;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 

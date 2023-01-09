@@ -1,6 +1,6 @@
 ﻿using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common;
-using Blauhaus.Push.Client.Common.Services;
+using Blauhaus.Push.Client.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Blauhaus.Push.Client.iOS._Ioc

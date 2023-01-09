@@ -1,5 +1,4 @@
 ﻿using Blauhaus.Analytics.Abstractions;
-using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Common.Base;

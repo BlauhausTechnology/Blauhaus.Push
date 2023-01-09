@@ -2,14 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions;
-using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Analytics.TestHelpers;
 using Blauhaus.Analytics.TestHelpers.MockBuilders;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.DeviceServices.TestHelpers.MockBuilders;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
-using Blauhaus.Push.Client.Common.Services;
+using Blauhaus.Push.Client.Services;
 using Blauhaus.Push.TestHelpers.MockBuilders;
 using Blauhaus.TestHelpers.BaseTests;
 using Microsoft.Extensions.DependencyInjection;

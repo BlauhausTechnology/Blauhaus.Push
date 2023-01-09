@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Analytics.TestHelpers.Extensions;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Common;

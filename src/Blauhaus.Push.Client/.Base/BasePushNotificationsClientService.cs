@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions;
 using Blauhaus.Analytics.Abstractions.Extensions;
@@ -94,27 +93,7 @@ namespace Blauhaus.Push.Client.Common.Base
 
         #endregion
         
-        
-        public IObservable<IPushNotification> ObserveForegroundNotifications()
-        {
-            return Observable.Create<IPushNotification>(observer =>
-            {
-
-                void HandleNewNotification(object sender, NewNotificationEventArgs e)
-                {
-                    Logger.LogDebug("Foreground notification being published. Title {PushNotificationTitle}", e.NewNotification.Title);
-                    observer.OnNext(e.NewNotification);
-                } 
-                
-                var newNotificationSubscription = Observable.FromEventPattern(
-                    x => NewNotificationEvent += HandleNewNotification, 
-                    x => NewNotificationEvent -= HandleNewNotification)
-                        .Subscribe();
-
-                return newNotificationSubscription;
-            });
-
-        }
+  
 
 
         #region New Notification event

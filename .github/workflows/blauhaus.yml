@@ -5,9 +5,38 @@ on:
     - release/*
 
 jobs:
-
-  build:
+  build1:
      runs-on: windows-latest
+     steps:
+     - uses: actions/checkout@v2
+     - uses: actions/setup-dotnet@v1
+       with:
+         dotnet-version: '7.0.x'
+         include-prerelease: true
+     - name: Install MAUI Workloads
+       run: |
+        dotnet workload install maui --ignore-failed-sources
+     - name: Set Version
+       run: |
+        npm install @actions/core --save
+        node ./scripts/getversion.js
+     - name: Add MSBuild to PATH
+       uses: microsoft/setup-msbuild@v1.0.2
+     - name: Restore NuGet packages
+       run: nuget restore ./src/Blauhaus.Push.sln
+     - name: MS Build
+       run: msbuild /m /p:Configuration=Release_Xamarin ./src/Blauhaus.Push.sln
+     - name: Build NuGet Package
+       run: |
+        dotnet pack ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -p:PackageVersion=${VERSION_NAME} --no-build --output ./ --configuration Release 
+        dotnet pack ./src/Blauhaus.Push.Client/Blauhaus.Push.Client.csproj -p:PackageVersion=${VERSION_NAME} --no-build --output ./ --configuration Release 
+        dotnet pack ./src/Blauhaus.Push.Client.Xamarin/Blauhaus.Push.Client.Xamarin.csproj -p:PackageVersion=${VERSION_NAME} --no-build --output ./ --configuration Release 
+     - name: Deploy NuGet Package
+       run:  |
+        dotnet nuget push /Users/runner/work/Blauhaus.Push/Blauhaus.Push/Blauhaus.Push.Client.Xamarin.${VERSION_NAME}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+
+  build2:
+     runs-on: macos-latest
      steps:
      - uses: actions/checkout@v2
      - uses: actions/setup-dotnet@v1

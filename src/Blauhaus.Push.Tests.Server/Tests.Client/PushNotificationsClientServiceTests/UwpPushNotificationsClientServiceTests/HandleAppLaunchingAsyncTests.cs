@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Blauhaus.Push.Abstractions.Common.Notifications;
-using Blauhaus.Push.Client.Common.Services;
+using Blauhaus.Push.Client.Services;
 using Blauhaus.Push.Tests.Tests.Client._Base;
 using Moq;
 using NUnit.Framework;

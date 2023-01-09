@@ -1,87 +1,30 @@
-﻿<Project Sdk="MsBuild.SDK.Extras/2.0.54">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;Xamarin.iOS10;MonoAndroid10.0;uap10.0.19041</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild> 
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>latest</LangVersion>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
-    <Compile Include="Common\**\*.cs" />
-    <Compile Remove="UWP\**\*.cs" />
-    <Compile Remove="Android\**\*.cs" />
-    <Compile Remove="iOS\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
-    <Compile Include="Common\**\*.cs" />
-    <Compile Include="UWP\**\*.cs" />
-    <Compile Remove="Android\**\*.cs" />
-    <Compile Remove="iOS\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
-    <Compile Include="Common\**\*.cs" />
-    <Compile Include="iOS\**\*.cs" />
-    <Compile Remove="UWP\**\*.cs" />
-    <Compile Remove="Android\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-    <Compile Include="Common\**\*.cs" />
-    <Compile Include="Android\**\*.cs" />
-    <Compile Remove="UWP\**\*.cs" />
-    <Compile Remove="iOS\**\*.cs" />
-  </ItemGroup>
-
   <ItemGroup>
-    <None Include="Android\.Ioc\AndroidServiceCollectionExtensions.cs" />
-    <None Include="Common\.Base\BasePushNotificationsClientService.cs" />
-    <None Include="Common\.Config\IPushNotificationsClientConfig.cs" />
-    <None Include="Common\.Config\PushNotificationsClientConfig.cs" />
-    <None Include="Common\.Ioc\EmptyPushNotificationTapHandler.cs" />
-    <None Include="Common\.Ioc\IocServiceExtensions.cs" />
-    <None Include="Common\.Ioc\ServiceCollectionExtensions.cs" />
-    <None Include="iOS\.Ioc\IosServiceCollectionExtensions.cs" />
-    <None Include="UWP\.Ioc\UwpServiceCollectionExtensions.cs" />
+    <Compile Include=".Base\BasePushNotificationsClientService.cs" />
+    <Compile Include=".Config\IPushNotificationsClientConfig.cs" />
+    <Compile Include=".Config\PushNotificationsClientConfig.cs" />
+    <Compile Include=".Ioc\EmptyPushNotificationTapHandler.cs" />
+    <Compile Include=".Ioc\IocServiceExtensions.cs" />
+    <Compile Include=".Ioc\ServiceCollectionExtensions.cs" />
   </ItemGroup>
-
-<ItemGroup>
-    <PackageReference Include="Blauhaus.Common.Utils" Version="2.2.8" />
-    <PackageReference Include="Blauhaus.DeviceServices.Abstractions" Version="1.2.2" />
-    <PackageReference Include="Blauhaus.Ioc.Abstractions" Version="1.5.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Blauhaus.Push.Abstractions\Blauhaus.Push.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
-    <PackageReference Include="Xamarin.Azure.NotificationHubs.Android">
-      <Version>1.1.4.1</Version>
-    </PackageReference> 
-    <PackageReference Include="Xamarin.GooglePlayServices.Base">
-      <Version>[117.6.0.3]</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
-    <PackageReference Include="Xamarin.Azure.NotificationHubs.iOS">
-      <Version>3.1.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
-    <PackageReference Include="WindowsAzure.Messaging.Managed">
-      <Version>0.1.7.9</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Common\Services\DummyPushNotificationsClientService.cs" />
-  </ItemGroup> 
+	
+	<ItemGroup>
+		<PackageReference Include="Blauhaus.Common.Utils" Version="2.2.8" />
+		<PackageReference Include="Blauhaus.DeviceServices.Abstractions" Version="1.2.2" />
+		<PackageReference Include="Blauhaus.Ioc.Abstractions" Version="1.5.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\Blauhaus.Push.Abstractions\Blauhaus.Push.Abstractions.csproj" />
+	</ItemGroup>
 
 </Project>

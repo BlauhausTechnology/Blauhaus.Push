@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Analytics.TestHelpers.Extensions;
 using Blauhaus.Common.ValueObjects.RuntimePlatforms;
 using Blauhaus.Push.Abstractions.Common;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;

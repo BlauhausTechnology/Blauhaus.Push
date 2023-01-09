@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;

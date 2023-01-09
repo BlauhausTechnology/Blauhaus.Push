@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blauhaus.Push.Client\Blauhaus.Push.Client.csproj" />
+    <ProjectReference Include="..\Blauhaus.Push.Client\Blauhaus.Push.Client.Xamarin.csproj" />
     <ProjectReference Include="..\Blauhaus.Push.Server\Blauhaus.Push.Server.csproj" />
     <ProjectReference Include="..\Blauhaus.Push.TestHelpers\Blauhaus.Push.TestHelpers.csproj" />
   </ItemGroup>

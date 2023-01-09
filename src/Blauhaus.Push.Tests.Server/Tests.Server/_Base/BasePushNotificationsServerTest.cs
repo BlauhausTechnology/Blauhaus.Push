@@ -1,6 +1,4 @@
 ﻿using Blauhaus.Analytics.Abstractions;
-using Blauhaus.Analytics.Abstractions.Service;
-using Blauhaus.Analytics.TestHelpers;
 using Blauhaus.Analytics.TestHelpers.MockBuilders;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Server.Extractors;

@@ -11,11 +11,11 @@ using Blauhaus.Push.Abstractions.Common.Notifications;
 using Blauhaus.Push.Client.Common.Base;
 using Microsoft.Extensions.Logging;
 
-namespace Blauhaus.Push.Client.Common.Services
+namespace Blauhaus.Push.Client.Services
 {
     public class AndroidPushNotificationsClientService : BasePushNotificationsClientService
     {
-        private static readonly List<string> IgnoredFields =new List<string>
+        private static readonly List<string> IgnoredFields = new List<string>
         {
             "google.delivered_priority",
             "google.sent_time",
@@ -29,18 +29,18 @@ namespace Blauhaus.Push.Client.Common.Services
 
         public AndroidPushNotificationsClientService(
             ISecureStorageService secureStorageService,
-            IAnalyticsLogger<AndroidPushNotificationsClientService> logger, 
-            IPushNotificationTapHandler pushNotificationTapHandler) 
+            IAnalyticsLogger<AndroidPushNotificationsClientService> logger,
+            IPushNotificationTapHandler pushNotificationTapHandler)
             : base(logger, secureStorageService, pushNotificationTapHandler)
         {
         }
-        
+
 
         public void HandleForegroundNotification(Dictionary<string, object> androidPayload)
         {
             try
             {
-                if(androidPayload ==null) throw new ArgumentNullException();
+                if (androidPayload == null) throw new ArgumentNullException();
                 PublishNotification(ExtractNotification(androidPayload));
             }
             catch (Exception e)
@@ -49,7 +49,7 @@ namespace Blauhaus.Push.Client.Common.Services
             }
         }
 
-        public async Task HandleNotificationTappedAsync(Dictionary<string, object>  androidPayload)
+        public async Task HandleNotificationTappedAsync(Dictionary<string, object> androidPayload)
         {
             try
             {
@@ -75,8 +75,8 @@ namespace Blauhaus.Push.Client.Common.Services
 
         private IPushNotification ExtractNotification(Dictionary<string, object> payload)
         {
-            
-   
+
+
             Logger.LogTrace("Extracting push notification {RawPushNotification}", payload);
 
             var type = "";
@@ -95,7 +95,7 @@ namespace Blauhaus.Push.Client.Common.Services
                 {
                     title = notificationProperty.Value.ToString();
                 }
-                
+
                 else if (string.Equals(notificationProperty.Key, "body", StringComparison.InvariantCultureIgnoreCase))
                 {
                     body = notificationProperty.Value.ToString();
@@ -119,11 +119,11 @@ namespace Blauhaus.Push.Client.Common.Services
                 }
             }
 
-            var pushNotification = new PushNotification(type, data, title, body); 
+            var pushNotification = new PushNotification(type, data, title, body);
             Logger.LogTrace("Notification extracted: {@PushNotification}", pushNotification);
 
             return pushNotification;
         }
-        
+
     }
 }

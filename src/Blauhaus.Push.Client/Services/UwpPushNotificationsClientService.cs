@@ -13,7 +13,7 @@ using Blauhaus.Push.Client.Common.Base;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Blauhaus.Push.Client.Common.Services
+namespace Blauhaus.Push.Client.Services
 {
     public class UwpPushNotificationsClientService : BasePushNotificationsClientService
     {
@@ -21,7 +21,7 @@ namespace Blauhaus.Push.Client.Common.Services
         public UwpPushNotificationsClientService(
             ISecureStorageService secureStorageService,
             IAnalyticsLogger<UwpPushNotificationsClientService> logger,
-            IPushNotificationTapHandler pushNotificationTapHandler) 
+            IPushNotificationTapHandler pushNotificationTapHandler)
             : base(logger, secureStorageService, pushNotificationTapHandler)
         {
         }
@@ -95,9 +95,9 @@ namespace Blauhaus.Push.Client.Common.Services
                     dataProperties[child.Key] = child.Value;
                 }
             }
-            
+
             var notification = new PushNotification(type, dataProperties, title, body);
-            
+
             Logger.LogTrace("Notification extracted: {@PushNotification}", notification);
 
             return notification;

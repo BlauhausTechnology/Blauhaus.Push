@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Blauhaus.Push.Server.HubClientProxy;
+﻿using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.TestHelpers.MockBuilders;
 using Moq;
 

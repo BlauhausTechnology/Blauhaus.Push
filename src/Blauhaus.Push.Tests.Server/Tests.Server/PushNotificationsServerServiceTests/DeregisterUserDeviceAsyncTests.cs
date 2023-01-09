@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Push.Server.Service;
 using Blauhaus.Push.Tests.Tests.Server._Base;
 using Microsoft.Azure.NotificationHubs;
