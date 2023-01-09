@@ -23,7 +23,7 @@ jobs:
        run: |
         dotnet workload install maui --ignore-failed-sources 
      - name: MS Build
-       run: msbuild /m /p:Configuration=$Configuration /t:restore /p:Version$VersionName $SolutionPath
+       run: msbuild /m /p:Configuration=$Configuration /t:restore /p:Version=$VersionName $SolutionPath
      - name: Deploy NuGet Package
        run: |
          dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
