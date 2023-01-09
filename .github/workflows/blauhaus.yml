@@ -9,7 +9,7 @@ jobs:
   build_windows:
      runs-on: windows-latest
      env: 
-       SolutionPath: ./src/Blauhaus.DeviceServices.sln
+       SolutionPath: ./src/Blauhaus.Push.sln
        Configuration: 'Release_Xamarin'
      steps:
      - uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
   build_macos:
      runs-on: macos-latest
      env: 
-       SolutionPath: ./src/Blauhaus.DeviceServices.sln
+       SolutionPath: ./src/Blauhaus.Push.sln
        Configuration: 'Release'
      steps:
      - uses: actions/checkout@v2
