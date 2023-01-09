@@ -5,8 +5,7 @@ on:
     - release/*
 
 env:
-  SolutionPath: ./src/Blauhaus.Blauhaus.sln
-  OutputPath: ./output
+  SolutionPath: ./src/Blauhaus.Blauhaus.sln 
 
 jobs:
   
@@ -29,7 +28,7 @@ jobs:
          dotnet workload install maui --ignore-failed-sources  
      - name: Build NuGet Package
        run: |
-         dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME -o $OutputPath
+         dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME  
         
      - name: Deploy NuGet Package
        run: |
@@ -52,11 +51,9 @@ jobs:
          dotnet-version: '7.x'
          include-prerelease: true 
      - name: MS Build
-       run: | 
-         echo ${env:VERSION_NAME}
-         msbuild /m /p:Configuration=${env:Configuration} /t:restore /p:Version=${env:VERSION_NAME} /p:PackageOutputPath=${env:OutputPath} ${env:SolutionPath}
+       run: |  
+         msbuild /m /p:Configuration=${env:Configuration} /restore /p:Version=${env:VERSION_NAME} /p:PackageOutputPath=${env:GITHUB_WORKSPACE} ${env:SolutionPath}
      - name: Deploy NuGet Package
        run: |
-         dotnet nuget push /Users/runner/work/Blauhaus.Push/Blauhaus.Push/Blauhaus.Push.Client.Xamarin.${env:VERSION_NAME}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
-
+         dotnet nuget push "**/*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
    
