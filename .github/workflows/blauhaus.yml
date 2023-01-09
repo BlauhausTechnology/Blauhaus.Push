@@ -23,6 +23,8 @@ jobs:
         node ./scripts/getversion.js
      - name: Add MSBuild to PATH
        uses: microsoft/setup-msbuild@v1.0.2
+     - name: Restore NuGet packages
+       run: nuget restore ./src/Blauhaus.Push.sln
      - name: MS Build
        run: msbuild /m /p:Configuration=Release ./src/Blauhaus.Push.sln
      - name: Build NuGet Package
