@@ -43,8 +43,8 @@
 
 <ItemGroup>
     <PackageReference Include="Blauhaus.Common.Utils" Version="2.2.8" />
-    <PackageReference Include="Blauhaus.DeviceServices.Abstractions" Version="1.2.2" />
-    <PackageReference Include="Blauhaus.Ioc.Abstractions" Version="1.5.1" />
+    <PackageReference Include="Blauhaus.DeviceServices.Abstractions" Version="1.2.16" />
+    <PackageReference Include="Blauhaus.Ioc.Abstractions" Version="1.5.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
