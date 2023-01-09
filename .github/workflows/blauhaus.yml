@@ -15,6 +15,7 @@ jobs:
      steps:
      - uses: mad9000/actions-find-and-replace-string@2
        with:
+         id: findandreplace
          source: ${{ github.ref }} 
          find: 'ref/heads/release/'       
          replace: ''              
@@ -23,7 +24,7 @@ jobs:
         echo ${env:Configuration}
         echo ${env:SolutionPath} 
         echo ${env:VersionName}
-        echo ${{ steps.findandreplace.outputs.value }}
+        echo ${env:steps.findandreplace.outputs.value}
      - uses: actions/checkout@v2
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
@@ -48,13 +49,10 @@ jobs:
      steps:
      - uses: mad9000/actions-find-and-replace-string@2
        with:
+         id: findandreplace
          source: ${{ github.ref }} 
          find: 'ref/heads/release/'        
-         replace: ''            
-     - name: Extract branch name
-       shell: bash
-       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/release/})"
-       id: extract_branch
+         replace: ''             
      - name: Environment
        run: |
         echo $Configuration   
