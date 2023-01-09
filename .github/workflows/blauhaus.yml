@@ -50,12 +50,10 @@ jobs:
        run: |
         npm install @actions/core --save
         node ./scripts/getversion.js
-     - name: Add MSBuild to PATH
-       uses: microsoft/setup-msbuild@v1.0.2
      - name: Restore NuGet packages
        run: nuget restore ./src/Blauhaus.Push.sln
      - name: MS Build
-       run: msbuild /m /p:Configuration=Release ./src/Blauhaus.Push.sln
+       run: dotnet build ./src/Blauhaus.Push.sln -c Release 
      - name: Build NuGet Package
        run: |
         dotnet pack ./src/Blauhaus.Push.Abstractions/Blauhaus.Push.Abstractions.csproj -p:PackageVersion=$VersionName --no-build --output ./ --configuration Release 
