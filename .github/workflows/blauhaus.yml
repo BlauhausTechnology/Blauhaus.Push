@@ -21,7 +21,7 @@ jobs:
        run: |
         echo ${env:Configuration}
         echo ${env:VERSION_NAME}
-        echo ${env:SolutionPath  
+        echo ${env:SolutionPath} 
         echo ${env:VersionName}
         echo ${env:GITHUB_REF##*/}
         echo ${env:steps.vars.outputs.branch}
