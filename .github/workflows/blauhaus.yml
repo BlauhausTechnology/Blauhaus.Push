@@ -68,7 +68,7 @@ jobs:
         echo $Configuration   
         echo $SolutionPath  
         echo ${VERSION_NAME}
-        dotnet build $SolutionPath --configuration $Configuration-p:Version=$VERSION_NAME
+        dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME
         
      - name: Deploy NuGet Package
        run: |
