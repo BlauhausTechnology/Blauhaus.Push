@@ -13,6 +13,11 @@ jobs:
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release_Xamarin'
      steps:
+     - name: Environment
+       run: |
+        echo ${env:Configuration}
+        echo ${env:SolutionPath}  
+        echo ${env:VersionName}
      - uses: actions/checkout@v2
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
@@ -35,6 +40,11 @@ jobs:
        SolutionPath: ./src/Blauhaus.DeviceServices.sln
        Configuration: 'Release'
      steps:
+     - name: Environment
+       run: |
+        echo $Configuration  
+        echo $SolutionPath  
+        echo $VersionName  
      - uses: actions/checkout@v2
      - uses: actions/setup-dotnet@v1
        with:
