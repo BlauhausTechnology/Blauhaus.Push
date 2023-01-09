@@ -4,12 +4,15 @@ on:
     branches:
     - release/*
 
+env:
+  SolutionPath: ./src/Blauhaus.Blauhaus.sln
+  OutputPath: ./output
+
 jobs:
   
   build_macos:
      runs-on: macos-latest
-     env: 
-       SolutionPath: ./src/Blauhaus.Push.sln
+     env:  
        Configuration: 'Release'
      steps:
      - uses: actions/checkout@v2
@@ -26,7 +29,7 @@ jobs:
          dotnet workload install maui --ignore-failed-sources  
      - name: Build NuGet Package
        run: |
-         dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME
+         dotnet build $SolutionPath --configuration $Configuration -p:Version=$VERSION_NAME -o $OutputPath
         
      - name: Deploy NuGet Package
        run: |
@@ -51,7 +54,7 @@ jobs:
      - name: MS Build
        run: | 
          echo ${env:VERSION_NAME}
-         msbuild /m /p:Configuration=${env:Configuration} /t:restore /p:Version=${env:VERSION_NAME} ${env:SolutionPath}
+         msbuild /m /p:Configuration=${env:Configuration} /t:restore /p:Version=${env:VERSION_NAME} /p:PackageOutputPath=${env:OutputPath} ${env:SolutionPath}
      - name: Deploy NuGet Package
        run: |
          dotnet nuget push /Users/runner/work/Blauhaus.Push/Blauhaus.Push/Blauhaus.Push.Client.Xamarin.${env:VERSION_NAME}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
