@@ -15,17 +15,15 @@ jobs:
      steps:
      - uses: mad9000/actions-find-and-replace-string@2
        with:
-         source: ${{ github.ref }} # this translates to ref/heads/main on the main branch, but can be any arbitrary string 
-         find: 'ref/heads/release/'        # we want to remove ref/heads/ from source 
-         replace: ''               # and replace it with a blank string (ie. removing it)
+         source: ${{ github.ref }} 
+         find: 'ref/heads/release/'       
+         replace: ''              
      - name: Environment
        run: |
         echo ${env:Configuration}
-        echo ${env:VERSION_NAME}
         echo ${env:SolutionPath} 
         echo ${env:VersionName}
-        echo ${env:GITHUB_REF##*/}
-        echo ${{ github.ref }}
+        echo ${{ steps.findandreplace.outputs.value }}
      - uses: actions/checkout@v2
      - uses: microsoft/setup-msbuild@v1.0.2
      - uses: actions/setup-dotnet@v1
@@ -50,20 +48,19 @@ jobs:
      steps:
      - uses: mad9000/actions-find-and-replace-string@2
        with:
-         source: ${{ github.ref }} # this translates to ref/heads/main on the main branch, but can be any arbitrary string 
-         find: 'ref/heads/release/'        # we want to remove ref/heads/ from source 
-         replace: ''               # and replace it with a blank string (ie. removing it)
+         source: ${{ github.ref }} 
+         find: 'ref/heads/release/'        
+         replace: ''            
      - name: Extract branch name
        shell: bash
        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/release/})"
        id: extract_branch
      - name: Environment
        run: |
-        echo $Configuration  
-        echo $VERSION_NAME
+        echo $Configuration   
         echo $SolutionPath  
         echo $VersionName  
-        echo ${{ github.ref }}
+        echo ${{ steps.findandreplace.outputs.value }}
      - uses: actions/checkout@v2
      - uses: actions/setup-dotnet@v1
        with:
