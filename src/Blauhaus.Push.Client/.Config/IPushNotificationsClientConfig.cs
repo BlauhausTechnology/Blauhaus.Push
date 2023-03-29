@@ -1,4 +1,4 @@
-﻿namespace Blauhaus.Push.Client.Common.Config
+﻿namespace Blauhaus.Push.Client.Config
 {
     public interface IPushNotificationsClientConfig
     {

@@ -9,10 +9,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Core;
 using System.Diagnostics;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common.Config;
+using Blauhaus.Push.Client.Config;
 using Blauhaus.Push.Client.Services;
 
-namespace Blauhaus.Push.Client.UWP
+namespace Blauhaus.Push.Client.Xamarin.UWP
 {
     public class UwpPushNotificationHandler
     {

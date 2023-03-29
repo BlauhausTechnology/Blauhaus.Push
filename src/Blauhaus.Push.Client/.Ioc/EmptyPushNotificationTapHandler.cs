@@ -3,7 +3,7 @@ using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 
-namespace Blauhaus.Push.Client.Common.Ioc
+namespace Blauhaus.Push.Client.Ioc
 {
     public class EmptyPushNotificationTapHandler : IPushNotificationTapHandler
     {

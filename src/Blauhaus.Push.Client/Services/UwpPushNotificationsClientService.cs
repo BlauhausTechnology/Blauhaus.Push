@@ -9,7 +9,7 @@ using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
-using Blauhaus.Push.Client.Common.Base;
+using Blauhaus.Push.Client.Base;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 

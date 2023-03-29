@@ -1,9 +1,8 @@
 ﻿using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common;
 using Blauhaus.Push.Client.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blauhaus.Push.Client.UWP.Ioc
+namespace Blauhaus.Push.Client.Xamarin.UWP.Ioc
 {
     public static class UwpServiceCollectionExtensions
     {

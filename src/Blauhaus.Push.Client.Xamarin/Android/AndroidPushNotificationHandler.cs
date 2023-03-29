@@ -15,12 +15,12 @@ using Blauhaus.Analytics.Abstractions.Extensions;
 using Microsoft.Extensions.Options;
 using Firebase.Messaging;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common.Config;
+using Blauhaus.Push.Client.Config;
 using Blauhaus.Push.Client.Services;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Blauhaus.Push.Client.Android
+namespace Blauhaus.Push.Client.Xamarin.Android
 {
     public class AndroidPushNotificationHandler
     {

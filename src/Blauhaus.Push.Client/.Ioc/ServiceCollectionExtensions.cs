@@ -1,9 +1,11 @@
-﻿using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common.Config;
+﻿using Blauhaus.Common.Configuration.Extensions;
+using Blauhaus.Push.Abstractions.Client;
+using Blauhaus.Push.Client.Config;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Blauhaus.Push.Client.Common.Ioc
+namespace Blauhaus.Push.Client.Ioc
 {
     public static class ServiceCollectionExtensions
     {
@@ -19,6 +21,19 @@ namespace Blauhaus.Push.Client.Common.Ioc
             where TConfig : class, IPushNotificationsClientConfig
         {
             return services.AddClient<TConfig, EmptyPushNotificationTapHandler>();
+        }
+        
+        public static IServiceCollection AddPushNotificationsClient<TPushNotificationHandler>(this IServiceCollection services, IConfiguration configuration) 
+            where TPushNotificationHandler : class, IPushNotificationTapHandler 
+        {
+            return services
+                .AddSingleton<TPushNotificationHandler>()
+                .AddSingleton<IPushNotificationTapHandler>(sp => sp.GetRequiredService<TPushNotificationHandler>())
+                .AddSingleton<IPushNotificationsClientConfig>(new PushNotificationsClientConfig
+                {
+                    NotificationHubName = configuration.GetRequiredString("PushNotifications", nameof(IPushNotificationsClientConfig.NotificationHubName)),
+                    ConnectionString = configuration.GetRequiredString("PushNotifications", nameof(IPushNotificationsClientConfig.ConnectionString)),
+                });
         }
 
         private static IServiceCollection AddClient<TConfig, THandler>(this IServiceCollection services) 

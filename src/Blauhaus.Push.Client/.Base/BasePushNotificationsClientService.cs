@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blauhaus.Analytics.Abstractions;
-using Blauhaus.Analytics.Abstractions.Extensions;
-using Blauhaus.Analytics.Abstractions.Service;
 using Blauhaus.Common.Utils.Disposables;
 using Blauhaus.DeviceServices.Abstractions.SecureStorage;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Abstractions.Common.Notifications;
 using Microsoft.Extensions.Logging;
 
-namespace Blauhaus.Push.Client.Common.Base
+namespace Blauhaus.Push.Client.Base
 {
     public abstract class BasePushNotificationsClientService : BasePublisher, IPushNotificationsClientService
     {

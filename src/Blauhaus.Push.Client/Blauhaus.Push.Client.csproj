@@ -10,6 +10,7 @@
   <ItemGroup>
     <Compile Include=".Base\BasePushNotificationsClientService.cs" />
     <Compile Include=".Config\IPushNotificationsClientConfig.cs" />
+    <Compile Include=".Config\ConfigurationPushNotificationsClientConfig.cs" />
     <Compile Include=".Config\PushNotificationsClientConfig.cs" />
     <Compile Include=".Ioc\EmptyPushNotificationTapHandler.cs" />
     <Compile Include=".Ioc\IocServiceExtensions.cs" />
@@ -17,9 +18,11 @@
   </ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Blauhaus.Common.Utils" Version="2.2.11" />
+		<PackageReference Include="Blauhaus.Common.Configuration" Version="2.3.0" />
+		<PackageReference Include="Blauhaus.Common.Utils" Version="2.3.0" />
 		<PackageReference Include="Blauhaus.DeviceServices.Abstractions" Version="1.2.18" />
-		<PackageReference Include="Blauhaus.Ioc.Abstractions" Version="1.5.2" />
+		<PackageReference Include="Blauhaus.Ioc.Abstractions" Version="1.5.3" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
 	</ItemGroup>

@@ -1,8 +1,8 @@
 ﻿using Blauhaus.Ioc.Abstractions;
 using Blauhaus.Push.Abstractions.Client;
-using Blauhaus.Push.Client.Common.Config;
+using Blauhaus.Push.Client.Config;
 
-namespace Blauhaus.Push.Client.Common.Ioc
+namespace Blauhaus.Push.Client.Ioc
 {
     public static class IocServiceExtensions
     {
