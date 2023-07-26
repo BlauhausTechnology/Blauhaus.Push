@@ -61,11 +61,25 @@ Azure Notification Hubs uses Firebase Cloud Messaging (FCM) under the hood, so y
 
 After creating a project, click the Android icon under "Get started by adding Firebase to your app". Enter the package id (bund identifier) for your app and click Register App.
 
-Under "Project Settings" in the FCM portal, select Cloud Messaging and copy the Server Key. Enter this in the Azure Notification Hub Google (GCM / FCM) section. 
+Under "Project Settings" in the FCM portal, select Cloud Messaging and copy the Server Key. 
+If it is disabled click the 3 dots, select "Manage API in Google Cloud Console" and click the enable button there - the server key should now be available. 
+Enter the server key in the Azure Notification Hub Google (GCM / FCM) section. 
 
 ### Device
 
-Install Xamarin.Firebase.Messaging and Blauhaus.Push.Client from nuget. 
+Install Xamarin.Firebase.Messaging and Blauhaus.Push.Client.Maui from nuget:
+
+	<!--Project references-->
+	<ItemGroup>
+	  <ProjectReference Include="..\Lumen.Maui\Lumen.Maui.csproj" />
+	</ItemGroup>
+	
+	<!--Android packages-->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+		<PackageReference Include="Xamarin.Firebase.Messaging">
+			<Version>123.1.2.2</Version>
+		</PackageReference> 
+	</ItemGroup>
 
 At the moment it also looks like we have to install Xamarin.Google.Dagger:
 https://stackoverflow.com/questions/64428377/java-lang-nosuchmethoderror-no-static-method-checkbuilderrequirement
@@ -228,6 +242,8 @@ Register the iOS dependencies with the Service Collection using services.AddIosP
 * Go to the Dev Center and create an app. 
 * Under product management > WNS / MPNS > click the Live Services link
 * Copy the SID and application secret, and enter them in Azure portal under Windows (WNS)
+(NB this has changed! - there is no Live Services link any more and the link they give you to "App Registration portal" on azure doesn't seem to generate valid secrets)
+
 
 ### Device
 

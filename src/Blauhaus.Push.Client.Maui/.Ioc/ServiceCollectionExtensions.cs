@@ -7,15 +7,13 @@ namespace Blauhaus.Push.Client.Maui.Ioc;
 public static class ServiceCollectionExtensions
 {
 
-    public static IServiceCollection AddPushNotificationsClient(this IServiceCollection services, Action<PushNotificationsClientOptions> options)
+    public static IServiceCollection AddPushNotificationsClient(this IServiceCollection services)
     {
-        return services.AddPushNotificationsClient<EmptyPushNotificationTapHandler>(options);
+        return services.AddPushNotificationsClient<EmptyPushNotificationTapHandler>();
     }
 
-    public static IServiceCollection AddPushNotificationsClient<TTapHandler>(this IServiceCollection services, Action<PushNotificationsClientOptions> options) where TTapHandler : class, IPushNotificationTapHandler
+    public static IServiceCollection AddPushNotificationsClient<TTapHandler>(this IServiceCollection services) where TTapHandler : class, IPushNotificationTapHandler
     {
-        services.Configure(options);
-
         services.TryAddSingleton<IPushNotificationTapHandler, TTapHandler>();
 
 #if IOS

@@ -37,7 +37,6 @@
  
 
 	<ItemGroup>
-	  <Compile Include=".Ioc\PushNotificationsClientOptions.cs" />
 	  <Compile Include=".Ioc\ServiceCollectionExtensions.cs" />
 	  <!--<Compile Include="Platforms\iOS\IosPushNotificationsClientService.cs" />
 	  <Compile Include="Platforms\Android\AndroidPushNotificationHandler.cs" />
