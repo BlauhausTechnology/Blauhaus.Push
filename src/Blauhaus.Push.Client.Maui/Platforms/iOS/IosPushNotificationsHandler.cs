@@ -16,17 +16,17 @@ namespace Blauhaus.Push.Client.Maui
     public class IosPushNotificationHandler
     {
         private readonly IAnalyticsService _analyticsService;
-        private readonly PushNotificationsClientOptions _options;
+        private readonly IPushNotificationsClientConfig _options;
         private readonly IosPushNotificationsClientService _pushNotificationsService;
 
         public IosPushNotificationHandler(
             IAnalyticsService analyticsService, 
             IPushNotificationsClientService pushNotificationsService,
-            IOptions<PushNotificationsClientOptions> options)
+            IPushNotificationsClientConfig options)
         {
             _pushNotificationsService = (IosPushNotificationsClientService) pushNotificationsService;
             _analyticsService = analyticsService;
-            _options = options.Value;
+            _options = options;
         }
 
 

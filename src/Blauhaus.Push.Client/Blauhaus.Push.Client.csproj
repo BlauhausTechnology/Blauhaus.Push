@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Compile Include=".Base\BasePushNotificationsClientService.cs" />
-    <Compile Include=".Config\IPushNotificationsClientConfig.cs" />
     <Compile Include=".Config\ConfigurationPushNotificationsClientConfig.cs" />
     <Compile Include=".Config\PushNotificationsClientConfig.cs" />
     <Compile Include=".Ioc\EmptyPushNotificationTapHandler.cs" />

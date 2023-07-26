@@ -18,7 +18,7 @@ namespace Blauhaus.Push.Client.Maui
     {
         
         private readonly IAnalyticsService _analyticsService;
-        private readonly PushNotificationsClientOptions _options;
+        private readonly IPushNotificationsClientConfig _options;
         private readonly WindowsPushNotificationsClientService _pushNotificationsService;
         private bool _appIsActive;
         private static bool _appIsInitialized;
@@ -27,11 +27,11 @@ namespace Blauhaus.Push.Client.Maui
         public WindowsPushNotificationHandler(
             IAnalyticsService analyticsService, 
             IPushNotificationsClientService pushNotificationsService,
-            IOptions<PushNotificationsClientOptions> options)
+            IPushNotificationsClientConfig options)
         {
             _pushNotificationsService = (WindowsPushNotificationsClientService)pushNotificationsService;
             _analyticsService = analyticsService;
-            _options = options.Value;
+            _options = options;
         }
 
         public async Task InitializeAsync(Window currentWindow)

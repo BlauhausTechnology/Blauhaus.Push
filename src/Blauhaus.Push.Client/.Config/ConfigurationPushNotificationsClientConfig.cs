@@ -1,4 +1,5 @@
 ﻿using Blauhaus.Common.Configuration.Extensions;
+using Blauhaus.Push.Abstractions.Client;
 using Microsoft.Extensions.Configuration;
 
 namespace Blauhaus.Push.Client.Config

@@ -69,17 +69,19 @@ Enter the server key in the Azure Notification Hub Google (GCM / FCM) section.
 
 Install Xamarin.Firebase.Messaging and Blauhaus.Push.Client.Maui from nuget:
 
-	<!--Project references-->
-	<ItemGroup>
-	  <ProjectReference Include="..\Lumen.Maui\Lumen.Maui.csproj" />
-	</ItemGroup>
+```xml
+<!--Project references-->
+<ItemGroup>
+	<ProjectReference Include="..\Lumen.Maui\Lumen.Maui.csproj" />
+</ItemGroup>
 	
-	<!--Android packages-->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
-		<PackageReference Include="Xamarin.Firebase.Messaging">
-			<Version>123.1.2.2</Version>
-		</PackageReference> 
-	</ItemGroup>
+<!--Android packages-->
+<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+	<PackageReference Include="Xamarin.Firebase.Messaging">
+		<Version>123.1.2.2</Version>
+	</PackageReference> 
+</ItemGroup>
+```
 
 At the moment it also looks like we have to install Xamarin.Google.Dagger:
 https://stackoverflow.com/questions/64428377/java-lang-nosuchmethoderror-no-static-method-checkbuilderrequirement
@@ -152,7 +154,7 @@ In OnCreate, add a call to Initialize the Android handler:
 ```c#
 protected override void OnCreate(Bundle savedInstanceState)
 {
-    base.OnCreate(message);
+    base.OnCreate(savedInstanceState);
 
     AppServiceLocator.Resolve<AndroidPushNotificationHandler>()
         .Initialize(this, Intent, (NotificationManager)GetSystemService(NotificationService));

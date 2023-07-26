@@ -1,4 +1,6 @@
-﻿namespace Blauhaus.Push.Client.Config
+﻿using Blauhaus.Push.Abstractions.Client;
+
+namespace Blauhaus.Push.Client.Config
 {
     public class PushNotificationsClientConfig : IPushNotificationsClientConfig
     {

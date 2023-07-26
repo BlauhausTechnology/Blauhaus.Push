@@ -29,11 +29,7 @@ namespace Blauhaus.Push.Client.Ioc
             return services
                 .AddSingleton<TPushNotificationHandler>()
                 .AddSingleton<IPushNotificationTapHandler>(sp => sp.GetRequiredService<TPushNotificationHandler>())
-                .AddSingleton<IPushNotificationsClientConfig>(new PushNotificationsClientConfig
-                {
-                    NotificationHubName = configuration.GetRequiredString("PushNotifications", nameof(IPushNotificationsClientConfig.NotificationHubName)),
-                    ConnectionString = configuration.GetRequiredString("PushNotifications", nameof(IPushNotificationsClientConfig.ConnectionString)),
-                });
+                .AddSingleton<IPushNotificationsClientConfig, ConfigurationPushNotificationsClientConfig>();
         }
 
         private static IServiceCollection AddClient<TConfig, THandler>(this IServiceCollection services) 

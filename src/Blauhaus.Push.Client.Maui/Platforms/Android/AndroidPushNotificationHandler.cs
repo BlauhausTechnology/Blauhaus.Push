@@ -17,16 +17,16 @@ namespace Blauhaus.Push.Client.Maui
         private readonly IAnalyticsLogger<AndroidPushNotificationHandler> _logger;
 
         private readonly AndroidPushNotificationsClientService _pushNotificationsService;
-        private readonly PushNotificationsClientOptions _options;
+        private readonly IPushNotificationsClientConfig _options;
 
         public AndroidPushNotificationHandler(
             IAnalyticsLogger<AndroidPushNotificationHandler> logger, 
             IPushNotificationsClientService pushNotificationsService,
-            IOptions<PushNotificationsClientOptions> options)
+            IPushNotificationsClientConfig options)
         {
             _logger = logger;
             _pushNotificationsService = (AndroidPushNotificationsClientService)pushNotificationsService;
-            _options = options.Value;
+            _options = options;
 }
 
         
