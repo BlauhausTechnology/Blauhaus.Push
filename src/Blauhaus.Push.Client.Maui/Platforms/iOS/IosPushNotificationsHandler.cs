@@ -30,7 +30,7 @@ namespace Blauhaus.Push.Client.Maui
         }
 
 
-        public async Task InitializeAsync(UIApplicationDelegate appDelegate, NSDictionary options)
+        public async Task InitializeAsync(MauiUIApplicationDelegate appDelegate, NSDictionary options)
         {
 
             using (var _ = _analyticsService.StartTrace(this, "iOs Push Notifications Initialization"))

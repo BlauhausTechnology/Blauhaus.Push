@@ -45,9 +45,20 @@ namespace Blauhaus.Push.Server.HubClientProxy
             return GetClient().GetInstallationAsync(installationId);
         }
 
-        public Task<bool> InstallationExistsAsync(string installationId)
+        public async Task<bool> InstallationExistsAsync(string installationId)
         {
-            return GetClient().InstallationExistsAsync(installationId);
+            try
+            {
+                NotificationHubClient client = GetClient();
+                bool result = await client.InstallationExistsAsync(installationId);
+                return result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
         }
 
         //the NotificationOutcome only has interesting data when you're on the Standard tier :(

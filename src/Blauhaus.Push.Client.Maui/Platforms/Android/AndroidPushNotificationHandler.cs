@@ -53,12 +53,17 @@ namespace Blauhaus.Push.Client.Maui
                 notificationManager.CreateNotificationChannel(channel);
                 _logger.LogDebug("Created NotificationChannel for Android device using Android SDK {AndroidSdkVersionCode}", Build.VERSION.SdkInt);
             }
+            else
+            {
+                _logger.LogDebug("Did not create NotificationChannel for Android device using Android SDK {AndroidSdkVersionCode}", Build.VERSION.SdkInt);
+            }
 
             HandleNewIntent(intent);
         }
 
         public Task HandleNewTokenAsync(string updatedPnsHandle)
         {
+            _logger.LogDebug("Push notification handle received from android: {PnsHandle}", updatedPnsHandle);
             return _pushNotificationsService.UpdatePushNotificationServiceHandleAsync(updatedPnsHandle);
         }
 

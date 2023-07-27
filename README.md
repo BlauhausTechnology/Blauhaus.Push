@@ -116,7 +116,7 @@ Add the following between the <application></application> tags in the AndroidMan
 Add a class to the Android project called PushService.cs. It must get a reference to the AndroidPushNotificationHandler from the Ioc Container, and invoke the handlers for new tokens and new messages:
 
 ```c#
-[Service]
+[Service(Exported = true)]
 [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
 [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
 public class PushService : FirebaseMessagingService
@@ -177,7 +177,7 @@ Override OnNewIntent:
 #### Service registration
 
 Finally, register the Android dependencies with the Service Collection using services.AddAndroidPushNotifications();
-
+You might need to delete and reinstall the app to get a Pns Handle!
 
 ## iOS
 

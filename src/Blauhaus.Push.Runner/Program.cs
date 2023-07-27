@@ -12,6 +12,7 @@ using Blauhaus.Push.Abstractions.Common.Templates;
 using Blauhaus.Push.Abstractions.Common.Templates._Base;
 using Blauhaus.Push.Abstractions.Server;
 using Blauhaus.Push.Runner.Config;
+using Blauhaus.Push.Runner.Config.Lumen;
 using Blauhaus.Push.Runner.Config.MineGame;
 using Blauhaus.Push.Runner.Config.Reveye;
 using Blauhaus.Push.Server.Extensions;
@@ -41,10 +42,11 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                var hub = new AspersAndroidHub();
-                
+                var hub = new LumenDevelopmentAndroidHub();
                 _pushNotificationsService = Setup(hub);
-                var registrationForUserDevice = await _pushNotificationsService.LoadRegistrationForUserDeviceAsync("f9fcbe14-b94f-4bce-b969-4eb0beb870c0", "52dab57d459926dc", hub);
+                var reg = await GetAllRegistrationsAsync();
+
+                var registrationForUserDevice = await _pushNotificationsService.LoadRegistrationForUserDeviceAsync(hub.UserId, hub.DeviceId, hub);
 
                 if (registrationForUserDevice.IsSuccess && registrationForUserDevice.Value.Templates.Any())
                 {
