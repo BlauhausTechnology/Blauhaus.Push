@@ -197,31 +197,53 @@ You might need to delete and reinstall the app to get a Pns Handle!
 
 #### AppDelegate.cs
 
-In FinishedLaunching, after the call to LoadApplication, call 
+Amend AppDelegate as follows:
 
 ```c#
-AppServiceLocator.Resolve<IosPushNotificationHandler>().InitializeAsync(this, options);
-```
+private NSDictionary _launchOptions;
+ 
+protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp(s =>
+{
+    s.AddPushNotificationsClient<PushNotificationsTapHandler>();
+    s.AddTransient(_=> new StartupTasks(async ()=>
+    {
+        await AppServiceLocator.Resolve<IosPushNotificationHandler>()
+            .InitializeAsync(this, _launchOptions);
+    }));
+});
 
-Add overrides for notification event handlers:
+public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+{
+    _launchOptions = launchOptions;
+    return base.FinishedLaunching(application, launchOptions);
+}
 
-```c#
-public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+[Export("application:didRegisterForRemoteNotificationsWithDeviceToken:")]
+public void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
 {
     AppServiceLocator.Resolve<IosPushNotificationHandler>()
         .HandleNewToken(deviceToken);
 }
 
-public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
+[Export("application:didFailToRegisterForRemoteNotificationsWithError:")]
+public void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
 {
     AppServiceLocator.Resolve<IosPushNotificationHandler>()
         .HandleFailedRegistration(error);
 }
 
-public override void ReceivedRemoteNotification(UIApplication application, NSDictionary options)
+[Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
+public void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
 {
     AppServiceLocator.Resolve<IosPushNotificationHandler>()
-        .HandleMessageReceivedAsync(application.ApplicationState, options);
+        .HandleMessageReceivedAsync(application.ApplicationState, userInfo);
+}
+
+[Export("application:didReceiveRemoteNotification:")]
+public void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo)
+{
+    AppServiceLocator.Resolve<IosPushNotificationHandler>()
+        .HandleMessageReceivedAsync(application.ApplicationState, userInfo);
 }
 ```
 
@@ -232,10 +254,14 @@ public override void ReceivedRemoteNotification(UIApplication application, NSDic
 <string>production</string>
 ```
 
-#### Service registration
+#### Info.plist:
 
-Register the iOS dependencies with the Service Collection using services.AddIosPushNotifications();
-
+```xml
+<key>UIBackgroundModes</key>
+<array>
+	<string>remote-notification</string>
+</array>
+```
 
 ## UWP
 
