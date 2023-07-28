@@ -8,8 +8,11 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Core;
 using System.Diagnostics;
+using Blauhaus.Analytics.Abstractions;
+using Blauhaus.Errors;
 using Blauhaus.Push.Abstractions.Client;
 using Blauhaus.Push.Client.Maui.Ioc;
+using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
 namespace Blauhaus.Push.Client.Maui
@@ -17,7 +20,7 @@ namespace Blauhaus.Push.Client.Maui
     public class WindowsPushNotificationHandler
     {
         
-        private readonly IAnalyticsService _analyticsService;
+        private readonly IAnalyticsLogger<WindowsPushNotificationHandler> _logger;
         private readonly IPushNotificationsClientConfig _options;
         private readonly WindowsPushNotificationsClientService _pushNotificationsService;
         private bool _appIsActive;
@@ -25,12 +28,12 @@ namespace Blauhaus.Push.Client.Maui
         private PushNotificationChannel _channel;
 
         public WindowsPushNotificationHandler(
-            IAnalyticsService analyticsService, 
+            IAnalyticsLogger<WindowsPushNotificationHandler> logger, 
             IPushNotificationsClientService pushNotificationsService,
             IPushNotificationsClientConfig options)
         {
             _pushNotificationsService = (WindowsPushNotificationsClientService)pushNotificationsService;
-            _analyticsService = analyticsService;
+            _logger = logger;
             _options = options;
         }
 
@@ -38,24 +41,22 @@ namespace Blauhaus.Push.Client.Maui
         {
             if (!_appIsInitialized)
             {
-                using (var _ = _analyticsService.StartTrace(this, "UWP Push Notifications Initialization"))
+                using var _ = _logger.BeginTimedScope(LogLevel.Debug, "UWP Push Notifications Initialization");
+                try
                 {
-                    try
-                    {
-                        //currentWindow.Activated += HandleWindowActivated;
+                    //currentWindow.Activated += HandleWindowActivated;
 
-                        _channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-                        _channel.PushNotificationReceived += HandlePushNotificationReceived;
+                    _channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                    _channel.PushNotificationReceived += HandlePushNotificationReceived;
                 
-                        await _pushNotificationsService.UpdatePushNotificationServiceHandleAsync(_channel.Uri);
+                    await _pushNotificationsService.UpdatePushNotificationServiceHandleAsync(_channel.Uri);
                 
-                        _appIsInitialized = true;
-                    }
-                    catch (Exception e)
-                    {
-                        _analyticsService.LogException(this, e);
-                        throw;
-                    }
+                    _appIsInitialized = true;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(Error.Unexpected(), e);
+                    throw;
                 }
             }
         }
@@ -76,13 +77,13 @@ namespace Blauhaus.Push.Client.Maui
                 }
                 catch (Exception e)
                 {
-                    _analyticsService.LogException(this, e);
+                    _logger.LogError(Error.Unexpected(), e);
                     throw;
                 }
             }
             else
             {
-                _analyticsService.TraceWarning(this, "Received a non-toast push notification, ignoring...", "Name", args.NotificationType.ToString());
+                _logger.LogWarning("Received a non-toast push notification of type {NotificationType}, ignoring...", args.NotificationType.ToString());
             }
         }
 
