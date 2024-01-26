@@ -80,7 +80,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.TargetedNotificationsServerServiceTes
             var result = await Sut.SendNotificationToTargetAsync(_pushNotification, _target, MockNotificationHub.Object);
 
             //Assert
-            Assert.AreEqual("fail!", result.Error.Description);
+            Assert.That(result.Error.Description, Is.EqualTo("fail!"));
         } 
 
         [Test]

@@ -23,7 +23,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             var result = await Sut.GetPushNotificationServiceHandleAsync();
 
             //Assert
-            Assert.AreEqual("stored handle", result); 
+            Assert.That(result, Is.EqualTo("stored handle")); 
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             var result = await Sut.GetPushNotificationServiceHandleAsync();
 
             //Assert
-            Assert.AreEqual(string.Empty, result); 
+            Assert.That(result, Is.EqualTo(string.Empty)); 
         }
 
         [Test]
@@ -47,8 +47,8 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             var result2 = await Sut.GetPushNotificationServiceHandleAsync();
 
             //Assert
-            Assert.AreEqual("stored handle", result1);
-            Assert.AreEqual("stored handle", result2);
+            Assert.That(result1, Is.EqualTo("stored handle"));
+            Assert.That(result2, Is.EqualTo("stored handle"));
             MockSecureStorageService.Mock.Verify(x => x.GetAsync("PnsHandle"), Times.Once);
         }
     }

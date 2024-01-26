@@ -73,7 +73,7 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.B
             //Assert
             var result = await Sut.GetPushNotificationServiceHandleAsync();
             MockSecureStorageService.Mock.Verify(x => x.GetAsync("PnsHandle"), Times.Never);
-            Assert.AreEqual("even newer Handle", result);
+            Assert.That(result, Is.EqualTo("even newer Handle"));
         }
 
         [Test]

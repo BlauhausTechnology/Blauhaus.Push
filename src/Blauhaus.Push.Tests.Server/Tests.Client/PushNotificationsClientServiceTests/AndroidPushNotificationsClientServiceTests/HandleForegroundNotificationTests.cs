@@ -29,12 +29,12 @@ namespace Blauhaus.Push.Tests.Tests.Client.PushNotificationsClientServiceTests.A
             var result = await PushNotificationAwaiter.Task;
 
             //Assert
-            Assert.AreEqual("This is the Message", result.DataProperties["message"]);
-            Assert.AreEqual("Win!", result.DataProperties["exclusive"]);
-            Assert.AreEqual(1, result.DataProperties["integer"]);
-            Assert.AreEqual("DefaultTitle", result.Title);
-            Assert.AreEqual("DefaultBody", result.Body);
-            Assert.AreEqual("My Template Name", result.Name);
+            Assert.That(result.DataProperties["message"], Is.EqualTo("This is the Message"));
+            Assert.That(result.DataProperties["exclusive"], Is.EqualTo("Win!"));
+            Assert.That(result.DataProperties["integer"], Is.EqualTo(1));
+            Assert.That(result.Title, Is.EqualTo("DefaultTitle"));
+            Assert.That(result.Body, Is.EqualTo("DefaultBody"));
+            Assert.That(result.Name, Is.EqualTo("My Template Name"));
         }
           
     }

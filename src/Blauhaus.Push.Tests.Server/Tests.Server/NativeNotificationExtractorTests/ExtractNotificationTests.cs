@@ -53,7 +53,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.NativeNotificationExtractorTests
             var result = Sut.ExtractNotification(RuntimePlatform.UWP, _pushNotification);
 
             //Assert
-            Assert.AreEqual(expectedPayload, result.Value.Notification.Body);
+            Assert.That(result.Value.Notification.Body, Is.EqualTo(expectedPayload));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.NativeNotificationExtractorTests
             var result = Sut.ExtractNotification(RuntimePlatform.iOS, _pushNotification);
 
             //Assert
-            Assert.AreEqual(expectedPayload, result.Value.Notification.Body);
+            Assert.That(result.Value.Notification.Body, Is.EqualTo(expectedPayload));
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.NativeNotificationExtractorTests
             var result = Sut.ExtractNotification(RuntimePlatform.Android, _pushNotification);
 
             //Assert
-            Assert.AreEqual(expectedPayload, result.Value.Notification.Body);
+            Assert.That(result.Value.Notification.Body, Is.EqualTo(expectedPayload));
         }
     }
 }

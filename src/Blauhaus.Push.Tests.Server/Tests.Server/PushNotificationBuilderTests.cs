@@ -34,8 +34,8 @@ namespace Blauhaus.Push.Tests.Tests.Server
                 .Create();
 
             //Assert
-            Assert.AreEqual("ValueOne", result.DataProperties["PropertyOne"]);
-            Assert.AreEqual("ValueTwo", result.DataProperties["PropertyTwo"]);
+            Assert.That(result.DataProperties["PropertyOne"], Is.EqualTo("ValueOne"));
+            Assert.That(result.DataProperties["PropertyTwo"], Is.EqualTo("ValueTwo"));
         }
         
         [Test]
@@ -49,8 +49,8 @@ namespace Blauhaus.Push.Tests.Tests.Server
                 .WithContent("Title", "Body").Create();
 
             //Assert
-            Assert.AreEqual("Title", result.Title);
-            Assert.AreEqual("Body", result.Body);
+            Assert.That(result.Title, Is.EqualTo("Title"));
+            Assert.That(result.Body, Is.EqualTo("Body"));
         }
 
         [Test]
@@ -64,10 +64,10 @@ namespace Blauhaus.Push.Tests.Tests.Server
             var result2 = sut.WithContent("Title", "").Create();
 
             //Assert
-            Assert.AreEqual("DefaultTitle", result1.Title);
-            Assert.AreEqual("Body", result1.Body);
-            Assert.AreEqual("Title", result2.Title);
-            Assert.AreEqual("DefaultBody", result2.Body);
+            Assert.That(result1.Title, Is.EqualTo("DefaultTitle"));
+            Assert.That(result1.Body, Is.EqualTo("Body"));
+            Assert.That(result2.Title, Is.EqualTo("Title"));
+            Assert.That(result2.Body, Is.EqualTo("DefaultBody"));
         }
         
         [Test]
@@ -80,8 +80,8 @@ namespace Blauhaus.Push.Tests.Tests.Server
             var result = sut.Create();
 
             //Assert
-            Assert.AreEqual("DefaultTitle", result.Title);
-            Assert.AreEqual("DefaultBody", result.Body);
+            Assert.That(result.Title, Is.EqualTo("DefaultTitle"));
+            Assert.That(result.Body, Is.EqualTo("DefaultBody"));
         }
         
         [Test]

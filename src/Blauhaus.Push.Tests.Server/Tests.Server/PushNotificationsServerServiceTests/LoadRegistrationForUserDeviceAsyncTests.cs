@@ -78,7 +78,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual( "myDeviceId", result.Value.DeviceIdentifier);
+                Assert.That(result.Value.DeviceIdentifier, Is.EqualTo("myDeviceId"));
             }
 
             [Test]
@@ -91,7 +91,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual("MyUser", result.Value.UserId);
+                Assert.That(result.Value.UserId, Is.EqualTo("MyUser"));
             }
 
             [Test]
@@ -101,7 +101,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual("", result.Value.UserId);
+                Assert.That(result.Value.UserId, Is.EqualTo(""));
             }
 
             [Test]
@@ -114,7 +114,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual("MyAccount", result.Value.AccountId);
+                Assert.That(result.Value.AccountId, Is.EqualTo("MyAccount"));
             }
 
             [Test]
@@ -124,7 +124,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual(string.Empty, result.Value.AccountId);
+                Assert.That(result.Value.AccountId, Is.EqualTo(string.Empty));
             }
 
             [Test]
@@ -134,7 +134,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual("myPnsHandle", result.Value.PushNotificationServiceHandle);
+                Assert.That(result.Value.PushNotificationServiceHandle, Is.EqualTo("myPnsHandle"));
             }
 
             [Test]
@@ -144,9 +144,9 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.True(result.Value.Tags.Contains("TagOne"));
-                Assert.True(result.Value.Tags.Contains("TagTwo"));
-                Assert.AreEqual(2, result.Value.Tags.Count);
+                Assert.That(result.Value.Tags.Contains("TagOne"));
+                Assert.That(result.Value.Tags.Contains("TagTwo"));
+                Assert.That(result.Value.Tags.Count, Is.EqualTo(2));
             }
         }
 
@@ -177,7 +177,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual(result.Value.Platform, RuntimePlatform.iOS);
+                Assert.That(RuntimePlatform.iOS, Is.EqualTo(result.Value.Platform));
             }
             
             [Test]
@@ -188,8 +188,8 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.NotificationName);
-                Assert.AreEqual(1, template.DataProperties.Count);
+                Assert.That(template.NotificationName, Is.EqualTo("DummyTemplate"));
+                Assert.That(template.DataProperties.Count, Is.EqualTo(1));
                 Assert.That(template.DataProperties.Contains("VisibleTemplateProperty"));
             }
 
@@ -205,8 +205,8 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("DummyTemplate", template.NotificationName);
-                Assert.AreEqual(2, template.DataProperties.Count);
+                Assert.That(template.NotificationName, Is.EqualTo("DummyTemplate"));
+                Assert.That(template.DataProperties.Count, Is.EqualTo(2));
                 Assert.That(template.DataProperties.Contains("DummyPropertyOne"));
                 Assert.That(template.DataProperties.Contains("DummyPropertyTwo"));
             }
@@ -221,7 +221,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual(result.Value.Platform, RuntimePlatform.Android);
+                Assert.That(RuntimePlatform.Android, Is.EqualTo(result.Value.Platform));
             }
         }
 
@@ -261,7 +261,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
                 var result = await Sut.LoadRegistrationForUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
                 //Assert
-                Assert.AreEqual(result.Value.Platform, RuntimePlatform.UWP);
+                Assert.That(RuntimePlatform.UWP, Is.EqualTo(result.Value.Platform));
             }
             
             [Test]
@@ -272,8 +272,8 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
 
                 //Assert
                 var template = result.Value.Templates.First();
-                Assert.AreEqual("Visible", template.NotificationName);
-                Assert.AreEqual(3, template.DataProperties.Count);
+                Assert.That(template.NotificationName, Is.EqualTo("Visible"));
+                Assert.That(template.DataProperties.Count, Is.EqualTo(3));
                 Assert.That(template.DataProperties.Contains("message"));
                 Assert.That(template.DataProperties.Contains("exclusive"));
                 Assert.That(template.DataProperties.Contains("integer"));

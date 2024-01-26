@@ -62,7 +62,7 @@ namespace Blauhaus.Push.Tests.Tests.Server.PushNotificationsServerServiceTests
             var result = await Sut.DeregisterUserDeviceAsync("myUserId", "myDeviceId", MockNotificationHub.Object);
 
             //Assert
-            Assert.IsTrue(result.IsSuccess); 
+            Assert.That(result.IsSuccess, Is.True); 
         }
 
         [Test]

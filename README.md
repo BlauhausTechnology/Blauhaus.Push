@@ -69,14 +69,9 @@ Enter the server key in the Azure Notification Hub Google (GCM / FCM) section.
 
 Install Xamarin.Firebase.Messaging and Blauhaus.Push.Client.Maui from nuget:
 
-```xml
-<!--Project references-->
-<ItemGroup>
-	<ProjectReference Include="..\Lumen.Maui\Lumen.Maui.csproj" />
-</ItemGroup>
-	
+```xml 
 <!--Android packages-->
-<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
+<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
 	<PackageReference Include="Xamarin.Firebase.Messaging">
 		<Version>123.1.2.2</Version>
 	</PackageReference> 
