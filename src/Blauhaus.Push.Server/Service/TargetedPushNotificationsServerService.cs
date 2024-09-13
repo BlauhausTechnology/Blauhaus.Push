@@ -18,12 +18,12 @@ namespace Blauhaus.Push.Server.Service
     //this does not work on the free tier
     public class TargetedPushNotificationsServerService : ITargetedPushNotificationsServerService
     {
-        private readonly IAnalyticsLogger<TargetedPushNotificationsServerService> _logger;
+        private readonly ILogger<TargetedPushNotificationsServerService> _logger;
         private readonly INativeNotificationExtractor _nativeNotificationExtractor;
         private readonly INotificationHubClientProxy _hubClientProxy;
 
         public TargetedPushNotificationsServerService(
-            IAnalyticsLogger<TargetedPushNotificationsServerService> logger,
+            ILogger<TargetedPushNotificationsServerService> logger,
             INativeNotificationExtractor nativeNotificationExtractor,
             INotificationHubClientProxy hubClientProxy)
         {

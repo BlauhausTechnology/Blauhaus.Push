@@ -7,6 +7,7 @@ using Blauhaus.Push.Tests.MockBuilders;
 using Blauhaus.TestHelpers.BaseTests;
 using Blauhaus.TestHelpers.MockBuilders;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace Blauhaus.Push.Tests.Tests.Server._Base
@@ -27,7 +28,7 @@ namespace Blauhaus.Push.Tests.Tests.Server._Base
 
         protected MockBuilder<IPushNotificationsHub> MockNotificationHub => Mocks.AddMock<IPushNotificationsHub>().Invoke();
         protected NotificationHubClientProxyMockBuilder MockNotificationHubClientProxy => Mocks.AddMock<NotificationHubClientProxyMockBuilder, INotificationHubClientProxy>().Invoke();
-        protected AnalyticsLoggerMockBuilder<TSut> MockLogger => Mocks.AddMock<AnalyticsLoggerMockBuilder<TSut>, IAnalyticsLogger<TSut>>().Invoke();
+        protected LoggerMockBuilder<TSut> MockLogger => Mocks.AddMock<LoggerMockBuilder<TSut>, ILogger<TSut>>().Invoke();
         protected NativeNotificationExtractorMockBuilder MockNativeNotificationExtractor => Mocks.AddMock<NativeNotificationExtractorMockBuilder, INativeNotificationExtractor>().Invoke();
     }
 }

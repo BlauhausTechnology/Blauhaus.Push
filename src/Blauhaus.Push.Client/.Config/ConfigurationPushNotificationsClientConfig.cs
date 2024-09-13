@@ -10,11 +10,9 @@ namespace Blauhaus.Push.Client.Config
         public ConfigurationPushNotificationsClientConfig(IConfiguration configuration)
         {
             NotificationHubName = configuration.GetRequiredString("PushNotifications", nameof(NotificationHubName));
-            ConnectionString = configuration.GetRequiredString("PushNotifications", nameof(ConnectionString));
             
         }
 
         public string NotificationHubName { get; }
-        public string ConnectionString { get; }
     }
 }
