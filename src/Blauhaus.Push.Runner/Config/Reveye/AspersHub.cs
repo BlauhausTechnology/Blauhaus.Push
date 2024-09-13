@@ -13,6 +13,7 @@ namespace Blauhaus.Push.Runner.Config.Reveye
                 "SharedAccessKey=mk4xOnfkwdbOAZ7CvAyAX0FwgOTm8TJFisEhj6hdhOE=";//";" +
                 //"EntityPath=reveye-push-aspers";
 
+
             NotificationHubName = "reveye-push-aspers";
         }
     }

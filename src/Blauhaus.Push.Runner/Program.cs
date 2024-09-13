@@ -20,6 +20,7 @@ using Blauhaus.Push.Server.HubClientProxy;
 using Blauhaus.Push.Server.Ioc;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Blauhaus.Push.Runner
 {
@@ -42,10 +43,10 @@ namespace Blauhaus.Push.Runner
         {
             try
             {
-                var hub = new LumenDevelopmentAndroidHub();
+                var hub = new MobileJackpotHub();
                 _pushNotificationsService = Setup(hub);
                 var reg = await GetAllRegistrationsAsync();
-
+                 
                 var registrationForUserDevice = await _pushNotificationsService.LoadRegistrationForUserDeviceAsync(hub.UserId, hub.DeviceId, hub);
 
                 if (registrationForUserDevice.IsSuccess && registrationForUserDevice.Value.Templates.Any())
@@ -77,9 +78,10 @@ namespace Blauhaus.Push.Runner
         private static IPushNotificationsServerService Setup(BasePushRunnerHub hub)
         {
             var services = new ServiceCollection();
-
+            
             services.AddSingleton<IBuildConfig>(BuildConfig.Debug);
             services.AddSingleton(typeof(IAnalyticsLogger<>), typeof(DummyLogger<>));
+            services.AddSingleton(typeof(ILogger<>), typeof(DummyLogger<>));
             
 
             services.AddPushNotificationsServer();

@@ -66,7 +66,7 @@ namespace Blauhaus.Push.Server.Service
             
             await _hubClientProxy.CreateOrUpdateInstallationAsync(installation);
             
-            _logger.LogInformation("Push notification registration updated: {PushNotificationInstallation}", installation);
+            _logger.LogInformation("Push notification registration updated: {@PushNotificationInstallation}", installation);
             
             return Response.Success(deviceRegistration);
         }
