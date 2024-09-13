@@ -60,7 +60,7 @@
 	    <Version>1.1.4.1</Version>
 	  </PackageReference>
 	  <PackageReference Include="Xamarin.GooglePlayServices.Base">
-	    <Version>118.2.0.5</Version>
+	    <Version>118.5.0.1</Version>
 	  </PackageReference>
 	</ItemGroup>
 
