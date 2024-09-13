@@ -19,11 +19,11 @@ namespace Blauhaus.Push.Server.Service
 {
     public class PushNotificationsServerService : IPushNotificationsServerService
     {
-        private readonly IAnalyticsLogger<PushNotificationsServerService> _logger;
+        private readonly ILogger<PushNotificationsServerService> _logger;
         private readonly INotificationHubClientProxy _hubClientProxy;
 
         public PushNotificationsServerService(
-            IAnalyticsLogger<PushNotificationsServerService> logger,
+            ILogger<PushNotificationsServerService> logger,
             INotificationHubClientProxy hubClientProxy)
         {
             _logger = logger;
@@ -38,7 +38,7 @@ namespace Blauhaus.Push.Server.Service
                 return Response.Failure<IDeviceRegistration>(validationError);
             }
             
-            _logger.BeginTimedScope(LogLevel.Information, "Register device {DeviceIdentifier} for push notifications on {Platform}", deviceRegistration.DeviceIdentifier, deviceRegistration.Platform.Value);
+            _logger.LogInformation("Start to register device {DeviceIdentifier} for push notifications on {Platform}", deviceRegistration.DeviceIdentifier, deviceRegistration.Platform.Value);
 
             _hubClientProxy.Initialize(hub);
 
@@ -73,13 +73,13 @@ namespace Blauhaus.Push.Server.Service
 
         public async Task<Response<IDeviceRegistration>> LoadRegistrationForUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub)
         {
-            using var _ = _logger.BeginTimedScope(LogLevel.Debug, "Load push notification registration for user {UserId}  on device {DeviceIdentifier}", userId, deviceIdentifier);
+            _logger.LogInformation("Attempt to load push notification registration for user {UserId}  on device {DeviceIdentifier}", userId, deviceIdentifier);
 
             _hubClientProxy.Initialize(hub);
 
-            var installationId = userId + "___" + deviceIdentifier;
+            string installationId = userId + "___" + deviceIdentifier;
 
-            var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId);
+            bool installationExists = await _hubClientProxy.InstallationExistsAsync(installationId);
 
             if (!installationExists)
             {
@@ -104,31 +104,27 @@ namespace Blauhaus.Push.Server.Service
             return Response.Success<IDeviceRegistration>(deviceRegistration); 
         }
          
-        public Task SendNotificationToUserAsync(IPushNotification notification, string userId, IPushNotificationsHub hub)
-        {
-            using var _ = _logger.BeginTimedScope(LogLevel.Information, "Send push notification {PushNoticiationName} to user {UserId}", notification.Name, userId);
-            _logger.LogTrace("Push Notification: {@PushNotification}", notification);
-
+        public async Task SendNotificationToUserAsync(IPushNotification notification, string userId, IPushNotificationsHub hub)
+        { 
             var tags = new List<string>
             {
                 $"(UserId_{userId} && {notification.Name})"
             };
 
-            return SendNotificationToTagsAsync(notification, hub, tags);
+            await SendNotificationToTagsAsync(notification, hub, tags);
+            _logger.LogInformation("Sent push notification {PushNoticiationName} to user {UserId}", notification.Name, userId);
         }
 
-        public Task SendNotificationToUserDeviceAsync(IPushNotification notification, string userId, string deviceIdentifier, IPushNotificationsHub hub)
+        public async Task SendNotificationToUserDeviceAsync(IPushNotification notification, string userId, string deviceIdentifier, IPushNotificationsHub hub)
         {
-    
-            using var _ = _logger.BeginTimedScope(LogLevel.Information, "Send push notification {PushNoticiationName} to user {UserId} on device {DeviceIdentifier}", notification.Name, userId, deviceIdentifier);
-            _logger.LogTrace("Push Notification: {@PushNotification}", notification);
-             
+     
             var tags = new List<string>
             {
                 $"(UserId_{userId} && {notification.Name} && DeviceIdentifier_{deviceIdentifier})"
             };
 
-            return SendNotificationToTagsAsync(notification, hub, tags);
+            await  SendNotificationToTagsAsync(notification, hub, tags);
+            _logger.LogInformation("Sent push notification {PushNoticiationName} to user {UserId} on device {DeviceIdentifier}", notification.Name, userId, deviceIdentifier);
 
         }
 
@@ -157,13 +153,11 @@ namespace Blauhaus.Push.Server.Service
 
         public async Task<Response> DeregisterUserDeviceAsync(string userId, string deviceIdentifier, IPushNotificationsHub hub)
         {
-            using var _ = _logger.BeginTimedScope(LogLevel.Information, "Deregister device {DeviceIdentifier} for user {UserId}", deviceIdentifier, userId);
-
             _hubClientProxy.Initialize(hub);
 
-            var installationId = userId + "___" + deviceIdentifier;
+            string installationId = userId + "___" + deviceIdentifier;
 
-            var installationExists = await _hubClientProxy.InstallationExistsAsync(installationId);
+            bool installationExists = await _hubClientProxy.InstallationExistsAsync(installationId);
             if (!installationExists)
             {
                 _logger.LogWarning("No installation exists for user device, so there is nothing to deregister");

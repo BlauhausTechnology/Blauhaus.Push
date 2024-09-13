@@ -11,7 +11,7 @@ namespace Blauhaus.Push.Server.Extensions
 {
     public static class DeviceRegistrationExtensions
     {
-        public static bool IsNotValid(this IDeviceRegistration? deviceRegistration, object sender, IAnalyticsLogger logger, out Error error)
+        public static bool IsNotValid(this IDeviceRegistration? deviceRegistration, object sender, ILogger logger, out Error error)
         {
 
             if (deviceRegistration == null)
